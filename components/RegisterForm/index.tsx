@@ -1,25 +1,13 @@
 import React from "react";
 import { makeStyles } from "@material-ui/core/styles";
 import TextField from "@material-ui/core/TextField";
-import * as Style from "./styles";
-
-// 스타일 적용방식 수정하기
-const useStyles = makeStyles((theme) => ({
-  root: {
-    "& > *": {
-      margin: theme.spacing(1),
-      width: "25ch",
-    },
-  },
-}));
+import * as S from "./styles";
 
 export const RegisterForm = () => {
-  const classes = useStyles();
-
   return (
-    <div>
+    <S.Container>
       <p>회원가입할사람</p>
-      <form className={classes.root} noValidate autoComplete="off">
+      <S.Form noValidate autoComplete="off">
         <TextField
           id="email"
           label="이메일을 입력해주세요"
@@ -38,7 +26,7 @@ export const RegisterForm = () => {
           type="password"
           color="secondary"
         />
-      </form>
-    </div>
+      </S.Form>
+    </S.Container>
   );
 };
