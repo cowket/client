@@ -15,11 +15,13 @@
     "@emotion/styled": "^11.3.0",
     "@material-ui/core": "^4.12.3",
     "babel-plugin-emotion": "^11.0.0",
+    "formik": "^2.2.9",
     "next": "11.1.2",
     "prettier": "^2.3.2",
     "react": "17.0.2",
     "react-dom": "17.0.2",
-    "socket.io-client": "^4.2.0"
+    "socket.io-client": "^4.2.0",
+    "yup": "^0.32.9"
   },
   "devDependencies": {
     "@types/react": "17.0.19",
