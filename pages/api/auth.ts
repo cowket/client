@@ -6,7 +6,19 @@ export const postRegister = async (userInfo: {
   pw: string;
 }): Promise<any> => {
   const response = await client.post<NextApiResponse<any>>(
-    "https://cowket-api.stackunderflow.xyz/auth/new",
+    "/auth/new",
+    userInfo
+  );
+
+  return response;
+};
+
+export const postLogin = async (userInfo: {
+  email: string;
+  pw: string;
+}): Promise<any> => {
+  const response = await client.post<NextApiResponse<any>>(
+    "/auth/login",
     userInfo
   );
 
