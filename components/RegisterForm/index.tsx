@@ -1,9 +1,12 @@
 import React from "react";
+import router from "next/router";
 import { makeStyles } from "@material-ui/core/styles";
 import TextField from "@material-ui/core/TextField";
+import axios from "axios";
 import Button from "@material-ui/core/Button";
 import { useFormik } from "formik";
 import * as Yup from "yup";
+import { postRegister } from "pages/api/auth";
 import * as S from "./styles";
 
 export const RegisterForm = () => {
@@ -14,17 +17,36 @@ export const RegisterForm = () => {
       confirmPassword: "",
     },
     validationSchema: Yup.object({
-      email: Yup.string().email("이메일 형식에맞게 작성해주세요.").required(""),
+      email: Yup.string()
+        .email("이메일 형식에맞게 작성해주세요.")
+        .matches(
+          /[^@ \t\r\n]+@[^@ \t\r\n]+.[^@ \t\r\n]/,
+          "Is not in correct format"
+        )
+        .required(""),
       password: Yup.string()
-        .max(20, "Must be 20 characters or less")
+        .matches(
+          /^(?=.*?[a-z])(?=.*?[0-9])(?=.*?[#?!@$ %^&*-]).{8,}$/,
+          "최소 8자 이상, 특수문자, 숫자, 영어 단어 한개 반드시 포함"
+        )
         .required(""),
       confirmPassword: Yup.string()
         .oneOf([Yup.ref("password"), null], "비밀번호와 일치하지않습니다.")
-        .max(20, "Must be 20 characters or less")
         .required(""),
     }),
     onSubmit: (values) => {
-      console.log(values);
+      if (values.email && values.password) {
+        // 이미 존재하는 이메일에 대한 처리필요
+        postRegister({ email: values.email, pw: values.password }).then(
+          (res) => {
+            if (res.status >= 400) {
+              alert(res.status + "이미 존재하는 유저임");
+            } else {
+              router.replace("/login");
+            }
+          }
+        );
+      }
     },
   });
 
