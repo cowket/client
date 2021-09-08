@@ -1,13 +1,14 @@
-import axios from "axios";
-import client from "api/client";
-import { useQuery } from "react-query";
+import axios from 'axios';
+import client from 'api/client';
+import { useQuery } from 'react-query';
 
+// react-query 테스트를 위한 코드
 export const postRegister = async (userInfo: {
   email: string;
   password: string;
 }): Promise<any> => {
   const { data } = await axios.post(
-    "https://cowket-api.stackunderflow.xyz/auth/new",
+    'https://cowket-api.stackunderflow.xyz/auth/new',
     userInfo,
     { withCredentials: true }
   );

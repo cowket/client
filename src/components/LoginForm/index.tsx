@@ -4,7 +4,7 @@ import Button from '@material-ui/core/Button';
 import { postLogin } from 'api/auth';
 import { useFormik } from 'formik';
 import * as Yup from 'yup';
-import './style.module.scss';
+import './style.scss';
 
 const LoginForm = () => {
   const formik = useFormik({
@@ -41,7 +41,7 @@ const LoginForm = () => {
   });
 
   return (
-    <div className="container">
+    <div className="loginContainer">
       <p className="title">로그인</p>
       <form className="form" id="LoginForm" onSubmit={formik.handleSubmit}>
         <TextField

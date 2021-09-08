@@ -5,7 +5,7 @@ import Button from '@material-ui/core/Button';
 import { useFormik } from 'formik';
 import * as Yup from 'yup';
 import { postRegister } from 'api/auth';
-import './style.module.scss';
+import './style.scss';
 
 const RegisterForm = () => {
   const history = useHistory();
@@ -50,7 +50,7 @@ const RegisterForm = () => {
   });
 
   return (
-    <div className="container">
+    <div className="registerContainer">
       <p className="title">회원가입</p>
       <form className="form" id="registerForm" onSubmit={formik.handleSubmit}>
         <TextField
