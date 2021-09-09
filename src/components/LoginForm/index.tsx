@@ -1,4 +1,5 @@
 import React from 'react';
+import { useHistory } from 'react-router-dom';
 import TextField from '@material-ui/core/TextField';
 import Button from '@material-ui/core/Button';
 import { postLogin } from 'api/auth';
@@ -7,6 +8,7 @@ import * as Yup from 'yup';
 import './style.scss';
 
 const LoginForm = () => {
+  const history = useHistory();
   const formik = useFormik({
     initialValues: {
       email: '',
@@ -74,6 +76,9 @@ const LoginForm = () => {
           로그인
         </Button>
       </form>
+      <div className="redirectLink" onClick={() => history.push('/register')}>
+        회원가입하기
+      </div>
     </div>
   );
 };

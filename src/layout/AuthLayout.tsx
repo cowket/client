@@ -5,6 +5,7 @@ interface AuthLayoutProps {
   children: ReactNode;
 }
 
-export const AuthLayout = ({ children }: AuthLayoutProps) => {
+const AuthLayout = ({ children }: AuthLayoutProps) => {
   return <div className="authLayout">{children}</div>;
 };
+export default AuthLayout;

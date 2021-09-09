@@ -92,6 +92,9 @@ const RegisterForm = () => {
           회원가입
         </Button>
       </form>
+      <div className="redirectLink" onClick={() => history.push('/login')}>
+        로그인하기
+      </div>
     </div>
   );
 };

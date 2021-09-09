@@ -1,5 +1,7 @@
 import React from 'react';
-import { AuthLayout } from 'layout/AuthLayout';
+import AuthLayout from 'layout/AuthLayout';
+import BaseLayout from 'layout/BaseLayout';
+import Chat from 'components/Chat';
 import RegisterForm from 'components/RegisterForm';
 import LoginForm from 'components/LoginForm';
 import { QueryClient, QueryClientProvider } from 'react-query';
@@ -12,20 +14,20 @@ export default function App(): JSX.Element {
   return (
     <BrowserRouter>
       <QueryClientProvider client={queryClient}>
-        <Switch>
-          <Route>
-            {/* 인증결과에따라 다른 layout을 보여줌 */}
-            {needAuth ? (
-              <AuthLayout>
-                <Route path="/register" exact component={RegisterForm} />
-                <Route path="/login" exact component={LoginForm} />
-                {/* <Redirect from="/" to="/login" /> */}
-              </AuthLayout>
-            ) : (
-              <div>dd</div>
-            )}
-          </Route>
-        </Switch>
+        {/* 인증결과에따라 다른 layout을 보여줌 */}
+        {needAuth ? (
+          <AuthLayout>
+            <Switch>
+              <Redirect from="/" to="/login" exact />
+              <Route path="/register" component={RegisterForm} />
+              <Route path="/login" component={LoginForm} />
+            </Switch>
+          </AuthLayout>
+        ) : (
+          <BaseLayout>
+            <Route path="/chat" exact component={Chat} />
+          </BaseLayout>
+        )}
       </QueryClientProvider>
     </BrowserRouter>
   );
