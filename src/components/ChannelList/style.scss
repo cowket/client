@@ -1,0 +1,14 @@
+@import '../../styles/globals.scss';
+
+.channelListContainer {
+  display: flex;
+  flex-direction: column;
+  .roomList {
+    background-color: $orange_1;
+    height: 100px;
+  }
+  .channelList {
+    background-color: $blue_1;
+    height: calc(100vh - 100px);
+  }
+}

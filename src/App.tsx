@@ -1,7 +1,7 @@
 import React from 'react';
 import AuthLayout from 'layout/AuthLayout';
 import BaseLayout from 'layout/BaseLayout';
-import Chat from 'components/Chat';
+import Chat from 'pages/Chat';
 import RegisterForm from 'components/RegisterForm';
 import LoginForm from 'components/LoginForm';
 import { QueryClient, QueryClientProvider } from 'react-query';
@@ -10,7 +10,7 @@ import { BrowserRouter, Switch, Route, Redirect } from 'react-router-dom';
 const queryClient = new QueryClient();
 
 export default function App(): JSX.Element {
-  const needAuth = true;
+  const needAuth = false;
   return (
     <BrowserRouter>
       <QueryClientProvider client={queryClient}>
@@ -25,7 +25,7 @@ export default function App(): JSX.Element {
           </AuthLayout>
         ) : (
           <BaseLayout>
-            <Route path="/chat" exact component={Chat} />
+            <Route path="/:teamId/:channelId?/:chatId?" component={Chat} />
           </BaseLayout>
         )}
       </QueryClientProvider>

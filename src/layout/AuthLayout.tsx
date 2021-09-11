@@ -8,4 +8,5 @@ interface AuthLayoutProps {
 const AuthLayout = ({ children }: AuthLayoutProps) => {
   return <div className="authLayout">{children}</div>;
 };
+
 export default AuthLayout;
