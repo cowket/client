@@ -4,4 +4,19 @@
   width: 100%;
   height: 100vh;
   background-color: $yellow_2;
+  padding: 15px;
+  box-sizing: border-box;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  .messageBox {
+  }
+  .inputBox {
+    height: 80px;
+    background-color: $white;
+    padding: 10px;
+    box-sizing: border-box;
+    border: 1px solid $gray_7;
+    border-radius: 6px;
+  }
 }
