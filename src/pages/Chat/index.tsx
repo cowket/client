@@ -1,6 +1,6 @@
 import React, { useEffect } from 'react';
 import { RouteComponentProps } from 'react-router-dom';
-import useColumnSize from 'hooks/useColumnSize';
+import useDesktopSize from 'hooks/useDesktopSize';
 import ChannelList from 'components/ChannelList';
 import ChatRoom from 'components/ChatRoom';
 import socketIo from 'socket.io-client';
@@ -20,21 +20,22 @@ const Chat = (
       params: { teamId, channelId },
     },
   } = props;
-  const columns = useColumnSize();
+  const isDesktopSize = useDesktopSize();
 
   useEffect(() => {
     // socket.emit('connect', () => console.log('connected....'));
   }, []);
 
-  if (columns.chatroom === 1) {
+  if (isDesktopSize) {
     return (
       <div
         className="chatContainer"
         style={{
-          gridTemplateColumns: `${columns.chatroom}fr`,
+          gridTemplateColumns: '1fr 3fr',
         }}
       >
-        {channelId ? <ChatRoom /> : <ChannelList />}
+        <ChannelList />
+        <ChatRoom />
       </div>
     );
   }
@@ -42,11 +43,10 @@ const Chat = (
     <div
       className="chatContainer"
       style={{
-        gridTemplateColumns: `${columns.channel}fr ${columns.chatroom}fr`,
+        gridTemplateColumns: '1fr',
       }}
     >
-      <ChannelList />
-      <ChatRoom />
+      {channelId ? <ChatRoom /> : <ChannelList />}
     </div>
   );
 };

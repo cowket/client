@@ -1,7 +1,9 @@
 import React from 'react';
 import Input from '@material-ui/core/Input';
+import useDesktopSize from 'hooks/useDesktopSize';
 import Button from '@material-ui/core/Button';
 import ChatItem from 'components/ChatItem';
+import ArrowBackIosOutlinedIcon from '@material-ui/icons/ArrowBackIosOutlined';
 import PhotoCamera from '@material-ui/icons/PhotoCamera';
 import IconButton from '@material-ui/core/IconButton';
 import Icon from '@material-ui/core/Icon';
@@ -63,8 +65,13 @@ const test: Chat[] = [
 ];
 
 const ChatRoom = () => {
+  const isDesktopSize = useDesktopSize();
   return (
     <div className="channelRoomContainer">
+      <div className="targetInfo">
+        {!isDesktopSize && <ArrowBackIosOutlinedIcon fontSize="small" />}
+        <p>누구누구와의 채팅방</p>
+      </div>
       <div className="messageBox">
         {test.map((chat) => (
           <ChatItem chat={chat} />
