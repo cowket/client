@@ -1,0 +1,39 @@
+@import '../../styles/globals.scss';
+
+.teamContainer {
+  & > .searchBox {
+    background-color: $blue_5;
+    height: 70px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 0 30px;
+    box-sizing: border-box;
+
+    & > .inputBox {
+      width: 70%;
+      display: flex;
+      align-items: center;
+    }
+  }
+  & > .myList {
+    height: 100px;
+    margin: 5px 15px;
+    // background-color: $gray_7;
+    border-bottom: 1px solid $gray_7;
+    & > .title {
+      font-size: 16px;
+      font-weight: 800;
+      color: $gray_2;
+    }
+  }
+  & > .searchList {
+    height: 100px;
+    padding: 5px 15px;
+    & > .title {
+      font-size: 16px;
+      font-weight: 800;
+      color: $gray_2;
+    }
+  }
+}

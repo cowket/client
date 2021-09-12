@@ -3,12 +3,28 @@
 .channelListContainer {
   display: flex;
   flex-direction: column;
+  box-shadow: 2px 2px 8px 3px rgba(124, 124, 124, 0.2);
+  z-index: 4;
   .roomList {
-    background-color: $orange_1;
-    height: 100px;
+    background-color: $gray_7;
+    height: 50px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 0 20px;
+    box-sizing: border-box;
+    & > .teamSelect {
+      width: 200px;
+      height: 50px;
+    }
+    & > .settingButton {
+      width: 24px;
+      height: 24px;
+      cursor: pointer;
+    }
   }
   .channelList {
     background-color: $blue_1;
-    height: calc(100vh - 100px);
+    height: calc(100vh - 50px);
   }
 }

@@ -2,6 +2,7 @@ import React from 'react';
 import AuthLayout from 'layout/AuthLayout';
 import BaseLayout from 'layout/BaseLayout';
 import Chat from 'pages/Chat';
+import Team from 'pages/Team';
 import RegisterForm from 'components/RegisterForm';
 import LoginForm from 'components/LoginForm';
 import { QueryClient, QueryClientProvider } from 'react-query';
@@ -18,16 +19,19 @@ export default function App(): JSX.Element {
         {needAuth ? (
           <AuthLayout>
             <Switch>
-              <Redirect from="/" to="/login" exact />
               <Route path="/register" component={RegisterForm} />
               <Route path="/login" component={LoginForm} />
             </Switch>
           </AuthLayout>
         ) : (
           <BaseLayout>
-            <Route path="/:teamId?/:channelId?" component={Chat} />
+            <Route path="/team" component={Team} />
+            <Route path="/chat/:teamId?/:channelId?" component={Chat} />
           </BaseLayout>
         )}
+        <Route exact path="/">
+          {needAuth ? <Redirect to="/login" /> : <Redirect to="/chat" />}
+        </Route>
       </QueryClientProvider>
     </BrowserRouter>
   );
