@@ -17,7 +17,7 @@ const Chat = (
 ) => {
   const {
     match: {
-      params: { teamId, channelId, chatId },
+      params: { teamId, channelId },
     },
   } = props;
   const columns = useColumnSize();
@@ -34,7 +34,7 @@ const Chat = (
           gridTemplateColumns: `${columns.chatroom}fr`,
         }}
       >
-        {chatId ? <ChatRoom /> : <ChannelList />}
+        {channelId ? <ChatRoom /> : <ChannelList />}
       </div>
     );
   }

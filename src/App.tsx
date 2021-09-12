@@ -25,7 +25,7 @@ export default function App(): JSX.Element {
           </AuthLayout>
         ) : (
           <BaseLayout>
-            <Route path="/:teamId/:channelId?/:chatId?" component={Chat} />
+            <Route path="/:teamId?/:channelId?" component={Chat} />
           </BaseLayout>
         )}
       </QueryClientProvider>
