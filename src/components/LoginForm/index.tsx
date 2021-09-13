@@ -1,4 +1,5 @@
-import React from 'react';
+import React, { useContext } from 'react';
+import authContext from 'context/auth';
 import { useHistory } from 'react-router-dom';
 import TextField from '@material-ui/core/TextField';
 import Button from '@material-ui/core/Button';
@@ -8,6 +9,7 @@ import * as Yup from 'yup';
 import './style.scss';
 
 const LoginForm = () => {
+  const { setIsLoggedIn } = useContext(authContext);
   const history = useHistory();
   const formik = useFormik({
     initialValues: {
@@ -35,7 +37,7 @@ const LoginForm = () => {
           if (res.status >= 400) {
             alert(res.status + '이미 존재하는 유저임');
           } else {
-            alert('로그인된다');
+            setIsLoggedIn(true);
           }
         });
       }
