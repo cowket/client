@@ -4,7 +4,9 @@ import BaseLayout from 'layout/BaseLayout';
 import Chat from 'pages/Chat';
 import Team from 'pages/Team';
 import { postLoginByToken } from 'api/auth';
+import { getMyTeams } from 'api/team';
 import AuthContext from 'context/auth';
+import TeamContext from 'context/team';
 import RegisterForm from 'components/RegisterForm';
 import LoginForm from 'components/LoginForm';
 import { QueryClient, QueryClientProvider } from 'react-query';
@@ -14,11 +16,11 @@ const queryClient = new QueryClient();
 
 export default function App(): JSX.Element {
   const [isLoggedIn, setIsLoggedIn] = useState<boolean>(false);
+  const [teamList, setTeamList] = useState<Team[]>([]);
 
   const refreshUserInfo = async (refreshToken: string) => {
     const userInfo = await postLoginByToken(refreshToken);
     console.log(userInfo);
-    // setUser(userInfo);
     setIsLoggedIn(true);
   };
 
@@ -30,27 +32,35 @@ export default function App(): JSX.Element {
     }
   }, []);
 
+  useEffect(() => {
+    if (isLoggedIn) {
+      getMyTeams().then((res) => setTeamList(res));
+    }
+  }, [isLoggedIn]);
+
   return (
     <BrowserRouter>
       <QueryClientProvider client={queryClient}>
         <AuthContext.Provider value={{ isLoggedIn, setIsLoggedIn }}>
-          {/* 인증결과에따라 다른 layout을 보여줌 */}
-          {isLoggedIn ? (
-            <BaseLayout>
-              <Route path="/team" component={Team} />
-              <Route path="/chat/:teamId?/:channelId?" component={Chat} />
-            </BaseLayout>
-          ) : (
-            <AuthLayout>
-              <Switch>
-                <Route path="/register" component={RegisterForm} />
-                <Route path="/login" component={LoginForm} />
-              </Switch>
-            </AuthLayout>
-          )}
-          <Route exact path="*">
-            {isLoggedIn ? <Redirect to="/chat" /> : <Redirect to="/login" />}
-          </Route>
+          <TeamContext.Provider value={{ teamList }}>
+            {/* 인증결과에따라 다른 layout을 보여줌 */}
+            {isLoggedIn ? (
+              <BaseLayout>
+                <Route path="/team" component={Team} />
+                <Route path="/chat/:teamId?/:channelId?" component={Chat} />
+              </BaseLayout>
+            ) : (
+              <AuthLayout>
+                <Switch>
+                  <Route path="/register" component={RegisterForm} />
+                  <Route path="/login" component={LoginForm} />
+                </Switch>
+              </AuthLayout>
+            )}
+            <Route exact path="*">
+              {isLoggedIn ? <Redirect to="/chat" /> : <Redirect to="/login" />}
+            </Route>
+          </TeamContext.Provider>
         </AuthContext.Provider>
       </QueryClientProvider>
     </BrowserRouter>

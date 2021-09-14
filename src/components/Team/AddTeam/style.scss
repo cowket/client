@@ -1,0 +1,17 @@
+@import 'styles/globals.scss';
+
+.addTeamContainer {
+  width: 280px;
+  height: 70px;
+  position: absolute;
+  top: 35px;
+  right: 0;
+  background-color: $white;
+  border: 1px solid $gray_7;
+  border-radius: 6px;
+  padding: 10px;
+  box-sizing: border-box;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}

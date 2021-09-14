@@ -1,6 +1,8 @@
-import React, { useState } from 'react';
+import React, { useState, useContext } from 'react';
 import { useHistory } from 'react-router-dom';
+import TeamContext from 'context/team';
 import { Button, Input } from '@material-ui/core';
+import AddTeam from 'components/Team/AddTeam';
 import KeyboardBackspaceIcon from '@material-ui/icons/KeyboardBackspace';
 import ExpandLessOutlinedIcon from '@material-ui/icons/ExpandLessOutlined';
 import ExpandMoreOutlinedIcon from '@material-ui/icons/ExpandMoreOutlined';
@@ -11,6 +13,7 @@ const Team = () => {
   const history = useHistory();
   const [showMyList, setShowMyList] = useState<boolean>(false);
   const [showTeamModal, setShowTeamModal] = useState<boolean>(false);
+  const teamContext = useContext(TeamContext);
   const test = [
     { image: '', roomName: '구글구글' },
     { image: '', roomName: '구글구글' },
@@ -29,7 +32,12 @@ const Team = () => {
           <Input placeholder="팀 검색하기" fullWidth />
           <Button>검색</Button>
         </div>
-        <Button>팀 추가하기</Button>
+        <div className="addTeamBox">
+          <Button onClick={() => setShowTeamModal(!showTeamModal)}>
+            팀 추가하기
+          </Button>
+          {showTeamModal && <AddTeam />}
+        </div>
       </div>
       <div className="myList">
         <div className="title">
@@ -44,8 +52,8 @@ const Team = () => {
         </div>
         {showMyList && (
           <div className="cardList">
-            {test.map((info) => (
-              <Card key={info.roomName} {...info} join />
+            {teamContext.teamList.map((info) => (
+              <Card key={info.uuid} teamInfo={info} join />
             ))}
           </div>
         )}
@@ -53,8 +61,8 @@ const Team = () => {
       <div className="searchList">
         <p className="title">검색결과</p>
         <div className="cardList">
-          {test.map((info) => (
-            <Card key={info.roomName} {...info} join={false} />
+          {teamContext.teamList.map((info) => (
+            <Card key={info.uuid} teamInfo={info} join={false} />
           ))}
         </div>
       </div>
