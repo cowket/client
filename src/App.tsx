@@ -1,8 +1,9 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import AuthLayout from 'layout/AuthLayout';
 import BaseLayout from 'layout/BaseLayout';
 import Chat from 'pages/Chat';
 import Team from 'pages/Team';
+import { postLoginByToken } from 'api/auth';
 import AuthContext from 'context/auth';
 import RegisterForm from 'components/RegisterForm';
 import LoginForm from 'components/LoginForm';
@@ -13,6 +14,22 @@ const queryClient = new QueryClient();
 
 export default function App(): JSX.Element {
   const [isLoggedIn, setIsLoggedIn] = useState<boolean>(false);
+
+  const refreshUserInfo = async (refreshToken: string) => {
+    const userInfo = await postLoginByToken(refreshToken);
+    console.log(userInfo);
+    // setUser(userInfo);
+    setIsLoggedIn(true);
+  };
+
+  useEffect(() => {
+    // localstorage에 토큰이 있는경우 토큰을 사용해 로그인
+    const refreshToken = localStorage.getItem('cowket-token');
+    if (refreshToken && !isLoggedIn) {
+      refreshUserInfo(refreshToken);
+    }
+  }, []);
+
   return (
     <BrowserRouter>
       <QueryClientProvider client={queryClient}>

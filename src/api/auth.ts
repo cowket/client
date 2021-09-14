@@ -17,3 +17,11 @@ export const postLogin = async (userInfo: {
 
   return response;
 };
+
+export const postLoginByToken = async (refreshToken: string): Promise<any> => {
+  const response = await client.post<any>('/auth/verify', {
+    token: refreshToken,
+  });
+
+  return response;
+};
