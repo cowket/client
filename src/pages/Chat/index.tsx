@@ -1,8 +1,8 @@
 import React, { useEffect } from 'react';
 import { RouteComponentProps } from 'react-router-dom';
 import useDesktopSize from 'hooks/useDesktopSize';
-import ChannelList from 'components/ChannelList';
-import ChatRoom from 'components/ChatRoom';
+import ChannelList from 'components/Chat/ChannelList';
+import ChatRoom from 'components/Chat/ChatRoom';
 import socketIo from 'socket.io-client';
 import './style.scss';
 

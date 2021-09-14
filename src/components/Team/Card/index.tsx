@@ -8,7 +8,7 @@ type RoomCardProps = {
   join: boolean;
 };
 
-const RoomCard = ({ image, roomName, join }: RoomCardProps) => {
+const RoomItem = ({ image, roomName, join }: RoomCardProps) => {
   return (
     <div className="roomCardContainer">
       <div className="imgBox">
@@ -20,4 +20,4 @@ const RoomCard = ({ image, roomName, join }: RoomCardProps) => {
   );
 };
 
-export default RoomCard;
+export default RoomItem;

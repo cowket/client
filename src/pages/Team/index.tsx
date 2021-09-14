@@ -4,12 +4,13 @@ import { Button, Input } from '@material-ui/core';
 import KeyboardBackspaceIcon from '@material-ui/icons/KeyboardBackspace';
 import ExpandLessOutlinedIcon from '@material-ui/icons/ExpandLessOutlined';
 import ExpandMoreOutlinedIcon from '@material-ui/icons/ExpandMoreOutlined';
-import Card from 'components/Card';
+import Card from 'components/Team/Card';
 import './style.scss';
 
 const Team = () => {
   const history = useHistory();
   const [showMyList, setShowMyList] = useState<boolean>(false);
+  const [showTeamModal, setShowTeamModal] = useState<boolean>(false);
   const test = [
     { image: '', roomName: '구글구글' },
     { image: '', roomName: '구글구글' },

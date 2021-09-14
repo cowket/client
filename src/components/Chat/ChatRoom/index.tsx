@@ -2,7 +2,7 @@ import React from 'react';
 import Input from '@material-ui/core/Input';
 import useDesktopSize from 'hooks/useDesktopSize';
 import Button from '@material-ui/core/Button';
-import ChatItem from 'components/ChatItem';
+import ChatItem from 'components/Chat/ChatItem';
 import ArrowBackIosOutlinedIcon from '@material-ui/icons/ArrowBackIosOutlined';
 import PhotoCamera from '@material-ui/icons/PhotoCamera';
 import IconButton from '@material-ui/core/IconButton';
