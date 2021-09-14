@@ -6,7 +6,7 @@ import ChatRoom from 'components/ChatRoom';
 import socketIo from 'socket.io-client';
 import './style.scss';
 
-const socket = socketIo('http://socket.stackunderflow.xyz');
+// const socket = socketIo('http://socket.stackunderflow.xyz');
 
 const Chat = (
   props: RouteComponentProps<{

@@ -9,31 +9,54 @@
     justify-content: space-between;
     padding: 0 30px;
     box-sizing: border-box;
-
+    & > .icon {
+      height: 24px;
+    }
     & > .inputBox {
-      width: 70%;
+      width: 40%;
       display: flex;
       align-items: center;
     }
   }
   & > .myList {
-    height: 100px;
-    margin: 5px 15px;
-    // background-color: $gray_7;
+    margin: 15px;
     border-bottom: 1px solid $gray_7;
     & > .title {
-      font-size: 16px;
+      font-size: 18px;
       font-weight: 800;
       color: $gray_2;
+      margin: 10px 0;
+      display: flex;
+      align-items: center;
+
+      & > span {
+        height: 24px;
+        margin-left: 10px;
+        cursor: pointer;
+      }
+    }
+    & > .cardList {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: space-between;
+      row-gap: 20px;
+      padding-bottom: 20px;
     }
   }
   & > .searchList {
-    height: 100px;
-    padding: 5px 15px;
+    margin: 15px;
+    padding-bottom: 20px;
     & > .title {
-      font-size: 16px;
+      font-size: 18px;
       font-weight: 800;
       color: $gray_2;
+      margin: 10px 0;
+    }
+    & > .cardList {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: space-between;
+      row-gap: 20px;
     }
   }
 }
