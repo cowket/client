@@ -17,7 +17,7 @@ const test: Chat[] = [
   {
     name: '도혜원',
     date: new Date(),
-    text: 'asld;kfjglwaejklwjelgjlkwasjgljdsgkjas;dlgklsadlgkkjasdg',
+    text: 'asld;kfjglwaejklwjelgjlkwasjgljdsgkjaskfjglwaejklwjelgjlkwasjgljdsgkjaskfjglwaejklwjelgjlkwasjgljdsgkjaskfjglwaejklwjelgjlkwasjgljdsgkjas;dlgklsadlgkkjasdg',
   },
   { name: '도혜원', date: new Date(), text: '테스트용' },
   { name: '도혜원', date: new Date(), text: '테스트용' },
@@ -48,12 +48,12 @@ const test: Chat[] = [
   {
     name: '도혜원',
     date: new Date(),
-    text: 'asld;kfjglwaejklwjelgjlkwasjgljdsgkjas;dlgklsadlgkkjasdg',
+    text: 'asld;kfjglwaejklwjelgjlkwasjgljdsgkjaskfjglwaejklwjelgjlkwasjgljdsgkjaskfjglwaejklwjelgjlkwasjgljdsgkjas;dlgklsadlgkkjasdg',
   },
   {
     name: '도혜원',
     date: new Date(),
-    text: 'asld;kfjglwaejklwjelgjlkwasjgljdsgkjas;dlgklsadlgkkjasdg',
+    text: 'asld;kfjglwaejklwjelgjlkwasjgljdsgkjaskfjglwaejklwjelgjlkwasjgljdsgkjaskfjglwaejklwjelgjlkwasjgljdsgkjaskfjglwaejklwjelgjlkwasjgljdsgkjas;dlgklsadlgkkjasdg',
   },
   { name: '도혜원', date: new Date(), text: '테스트용' },
   { name: '도혜원', date: new Date(), text: '테스트용' },
