@@ -25,7 +25,6 @@ client.interceptors.request.use((value) => {
 });
 
 client.interceptors.response.use((value) => {
-  console.log(value);
   if (value.headers.authorization) {
     localStorage.setItem('cowket-token', value.headers.authorization);
     axios.defaults.headers.Authorization = `Bearer ${value.headers.authorization}`;

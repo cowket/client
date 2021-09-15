@@ -1,4 +1,5 @@
 import client from 'api/client';
+import { AxiosResponse } from 'axios';
 
 export const postRegister = async (userInfo: {
   email: string;
@@ -12,16 +13,16 @@ export const postRegister = async (userInfo: {
 export const postLogin = async (userInfo: {
   email: string;
   pw: string;
-}): Promise<any> => {
-  const response = await client.post<any>('/auth/login', userInfo);
+}): Promise<User> => {
+  const response = await client.post<User>('/auth/login', userInfo);
 
-  return response;
+  return response.data;
 };
 
-export const postLoginByToken = async (refreshToken: string): Promise<any> => {
-  const response = await client.post<any>('/auth/verify', {
+export const postLoginByToken = async (refreshToken: string): Promise<User> => {
+  const response = await client.post<User>('/auth/verify', {
     token: refreshToken,
   });
 
-  return response;
+  return response.data;
 };

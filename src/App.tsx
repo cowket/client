@@ -7,6 +7,7 @@ import { postLoginByToken } from 'api/auth';
 import { getMyTeams } from 'api/team';
 import AuthContext from 'context/auth';
 import TeamContext from 'context/team';
+import UserContext from 'context/user';
 import RegisterForm from 'components/RegisterForm';
 import LoginForm from 'components/LoginForm';
 import { QueryClient, QueryClientProvider } from 'react-query';
@@ -17,10 +18,14 @@ const queryClient = new QueryClient();
 export default function App(): JSX.Element {
   const [isLoggedIn, setIsLoggedIn] = useState<boolean>(false);
   const [teamList, setTeamList] = useState<Team[]>([]);
+  const [userInfo, setUserInfo] = useState<User>();
 
   const refreshUserInfo = async (refreshToken: string) => {
     const userInfo = await postLoginByToken(refreshToken);
     console.log(userInfo);
+    setUserInfo(userInfo);
+
+    // 성공/실패에 대한 처리 필요
     setIsLoggedIn(true);
   };
 
@@ -42,13 +47,15 @@ export default function App(): JSX.Element {
     <BrowserRouter>
       <QueryClientProvider client={queryClient}>
         <AuthContext.Provider value={{ isLoggedIn, setIsLoggedIn }}>
-          <TeamContext.Provider value={{ teamList }}>
+          <UserContext.Provider value={{ userInfo, setUserInfo }}>
             {/* 인증결과에따라 다른 layout을 보여줌 */}
             {isLoggedIn ? (
-              <BaseLayout>
-                <Route path="/team" component={Team} />
-                <Route path="/chat/:teamId?/:channelId?" component={Chat} />
-              </BaseLayout>
+              <TeamContext.Provider value={{ teamList }}>
+                <BaseLayout>
+                  <Route path="/team" component={Team} />
+                  <Route path="/chat/:teamId?/:channelId?" component={Chat} />
+                </BaseLayout>
+              </TeamContext.Provider>
             ) : (
               <AuthLayout>
                 <Switch>
@@ -60,7 +67,7 @@ export default function App(): JSX.Element {
             <Route exact path="*">
               {isLoggedIn ? <Redirect to="/chat" /> : <Redirect to="/login" />}
             </Route>
-          </TeamContext.Provider>
+          </UserContext.Provider>
         </AuthContext.Provider>
       </QueryClientProvider>
     </BrowserRouter>

@@ -1,5 +1,6 @@
 import React, { useContext } from 'react';
 import authContext from 'context/auth';
+import userContext from 'context/user';
 import { useHistory } from 'react-router-dom';
 import TextField from '@material-ui/core/TextField';
 import Button from '@material-ui/core/Button';
@@ -10,6 +11,7 @@ import './style.scss';
 
 const LoginForm = () => {
   const { setIsLoggedIn } = useContext(authContext);
+  const { setUserInfo } = useContext(userContext);
   const history = useHistory();
   const formik = useFormik({
     initialValues: {
@@ -34,10 +36,12 @@ const LoginForm = () => {
     onSubmit: (values) => {
       if (values.email && values.password) {
         postLogin({ email: values.email, pw: values.password }).then((res) => {
-          if (res.status >= 400) {
-            alert(res.status + '이미 존재하는 유저임');
-          } else {
+          if ('id' in res) {
+            console.log(res);
+            setUserInfo(res);
             setIsLoggedIn(true);
+          } else {
+            alert(res + '이미 존재하는 유저임');
           }
         });
       }
