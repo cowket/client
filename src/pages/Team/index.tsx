@@ -45,18 +45,26 @@ const Team = () => {
         </div>
         {showMyList && (
           <div className="cardList">
-            {teamContext.teamList.map((info) => (
-              <Card key={info.uuid} teamInfo={info} join />
-            ))}
+            {teamContext.teamList.length ? (
+              teamContext.teamList.map((info) => (
+                <Card key={info.uuid} teamInfo={info} join />
+              ))
+            ) : (
+              <div>소속된 팀이 없습니다</div>
+            )}
           </div>
         )}
       </div>
       <div className="searchList">
         <p className="title">검색결과</p>
         <div className="cardList">
-          {teamContext.teamList.map((info) => (
-            <Card key={info.uuid} teamInfo={info} join={false} />
-          ))}
+          {teamContext.teamList.length > 0 ? (
+            teamContext.teamList.map((info) => (
+              <Card key={info.uuid} teamInfo={info} join={false} />
+            ))
+          ) : (
+            <div>검색 결과가 없습니다</div>
+          )}
         </div>
       </div>
     </div>

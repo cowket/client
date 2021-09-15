@@ -1,17 +1,32 @@
 @import 'styles/globals.scss';
 
 .addTeamContainer {
-  width: 280px;
-  height: 70px;
+  width: 300px;
+  height: 150px;
   position: absolute;
-  top: 35px;
+  top: 44px;
   right: 0;
   background-color: $white;
   border: 1px solid $gray_7;
   border-radius: 6px;
-  padding: 10px;
+  padding: 10px 25px;
   box-sizing: border-box;
   display: flex;
-  align-items: center;
+  flex-direction: column;
+  align-items: flex-start;
   justify-content: space-between;
+  font-size: 18px;
+  font-weight: 500;
+  color: $gray_4;
+  & > .private {
+    font-size: 14px;
+    display: flex;
+    align-items: center;
+  }
+  & > button {
+    background-color: $gray_8;
+    &:hover {
+      background-color: $gray_7;
+    }
+  }
 }
