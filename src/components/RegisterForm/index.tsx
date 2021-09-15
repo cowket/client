@@ -39,7 +39,7 @@ const RegisterForm = () => {
         postRegister({ email: values.email, pw: values.password }).then(
           (res: any) => {
             if (res.status >= 400) {
-              alert(res.status + '이미 존재하는 유저임');
+              alert(res.status + '등록되지않은 사용자입니다.');
             } else {
               history.replace('/login');
             }

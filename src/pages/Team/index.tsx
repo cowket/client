@@ -11,16 +11,9 @@ import './style.scss';
 
 const Team = () => {
   const history = useHistory();
-  const [showMyList, setShowMyList] = useState<boolean>(false);
+  const [showMyList, setShowMyList] = useState<boolean>(true);
   const [showTeamModal, setShowTeamModal] = useState<boolean>(false);
   const teamContext = useContext(TeamContext);
-  const test = [
-    { image: '', roomName: '구글구글' },
-    { image: '', roomName: '구글구글' },
-    { image: '', roomName: '구글구글' },
-    { image: '', roomName: '구글구글' },
-    { image: '', roomName: '구글구글' },
-  ];
 
   return (
     <div className="teamContainer">

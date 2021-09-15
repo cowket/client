@@ -2,16 +2,16 @@
 
 .channelRoomContainer {
   width: 100%;
-  height: 100vh;
   box-sizing: border-box;
   display: flex;
   flex-direction: column;
   justify-content: space-between;
+  height: 100vh;
   .targetInfo {
     height: 60px;
     padding: 14px;
     background-color: $blue_2;
-    // border-bottom: 1px solid $gray_5;
+    box-sizing: border-box;
     display: flex;
     align-items: center;
     & > p {
