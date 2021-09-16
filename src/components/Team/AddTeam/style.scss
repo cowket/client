@@ -26,7 +26,8 @@
   & > button {
     background-color: $gray_8;
     &:hover {
-      background-color: $gray_7;
+      background-color: $blue_3;
+      color: $white;
     }
   }
 }

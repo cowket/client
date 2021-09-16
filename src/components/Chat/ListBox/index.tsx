@@ -1,11 +1,10 @@
 import React from 'react';
 import { useHistory } from 'react-router-dom';
-import Select from '@material-ui/core/Select';
-import MenuItem from '@material-ui/core/MenuItem';
-import AddCircleOutlinedIcon from '@material-ui/icons/AddCircleOutlined';
+import Team from 'components/Chat/List/Team';
+import Channel from 'components/Chat/List/Channel';
 import './style.scss';
 
-const ChannelList = () => {
+const ListBox = () => {
   const history = useHistory();
   const teamList: { teamName: string; id: number; img: string }[] = [
     {
@@ -25,26 +24,30 @@ const ChannelList = () => {
     },
   ];
 
+  const channelList: { channel: string; id: number }[] = [
+    {
+      channel: '카카오',
+      id: 1,
+    },
+    {
+      channel: '다음',
+      id: 2,
+    },
+    {
+      channel: '네이버',
+      id: 3,
+    },
+  ];
+
   return (
     <div className="channelListContainer">
-      <div className="roomList">
-        <Select
-          labelId="demo-simple-select-label"
-          className="teamSelect"
-          disableUnderline
-          // onChange={handleChange}
-        >
-          {teamList.map((team) => (
-            <MenuItem value={team.id}>{team.teamName}</MenuItem>
-          ))}
-        </Select>
-        <div className="settingButton" onClick={() => history.push('/team')}>
-          <AddCircleOutlinedIcon htmlColor="#a5bdfc" />
-        </div>
+      <Team teamList={teamList} />
+      <div className="channelList">
+        <Channel title="Channel" channelList={channelList} />
+        <Channel title="Direct Message" channelList={channelList} />
       </div>
-      <div className="channelList">여긴 채널리스트(채팅방목록)</div>
     </div>
   );
 };
 
-export default ChannelList;
+export default ListBox;

@@ -1,7 +1,7 @@
 import React, { useEffect } from 'react';
 import { RouteComponentProps } from 'react-router-dom';
 import useDesktopSize from 'hooks/useDesktopSize';
-import ChannelList from 'components/Chat/ChannelList';
+import ListBox from 'components/Chat/ListBox';
 import ChatRoom from 'components/Chat/ChatRoom';
 import socketIo from 'socket.io-client';
 import './style.scss';
@@ -31,10 +31,10 @@ const Chat = (
       <div
         className="chatContainer"
         style={{
-          gridTemplateColumns: '1fr 3fr',
+          gridTemplateColumns: '1fr 4fr',
         }}
       >
-        <ChannelList />
+        <ListBox />
         <ChatRoom />
       </div>
     );
@@ -46,7 +46,7 @@ const Chat = (
         gridTemplateColumns: '1fr',
       }}
     >
-      {channelId ? <ChatRoom /> : <ChannelList />}
+      {channelId ? <ChatRoom /> : <ListBox />}
     </div>
   );
 };

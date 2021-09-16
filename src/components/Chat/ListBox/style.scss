@@ -14,7 +14,7 @@
     padding: 0 20px;
     box-sizing: border-box;
     & > .teamSelect {
-      width: 200px;
+      padding: 0 15px;
       height: 50px;
     }
     & > .settingButton {
@@ -24,7 +24,6 @@
     }
   }
   .channelList {
-    background-color: $blue_1;
     height: calc(100vh - 50px);
   }
 }

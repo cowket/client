@@ -46,8 +46,9 @@
     & > .cardList {
       display: flex;
       flex-wrap: wrap;
-      justify-content: space-between;
+      justify-content: flex-start;
       row-gap: 20px;
+      column-gap: 20px;
       padding-bottom: 20px;
     }
   }
@@ -63,7 +64,8 @@
     & > .cardList {
       display: flex;
       flex-wrap: wrap;
-      justify-content: space-between;
+      justify-content: flex-start;
+      column-gap: 20px;
       row-gap: 20px;
     }
   }
