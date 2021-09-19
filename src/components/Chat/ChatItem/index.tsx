@@ -1,4 +1,5 @@
-import React from 'react';
+import React, { useContext } from 'react';
+import profileContext from 'context/profile';
 import { dateToTime } from 'util/dateUtil';
 import './style.scss';
 
@@ -7,9 +8,10 @@ type ItemRrops = {
 };
 
 const Item = ({ chat }: ItemRrops) => {
+  const { setProfileId } = useContext(profileContext);
   return (
     <div className="itemBox">
-      <div className="imgBox">
+      <div className="imgBox" onClick={() => setProfileId(1)}>
         <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSRYqMHzMUsp7gf5ZEQmifMinddKJNovbobVOvNKJsnSPk6TW_oUIOhVqEwpWP4MvS-k8s&usqp=CAU" />
       </div>
       <div className="contentBox">

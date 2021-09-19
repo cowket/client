@@ -1,8 +1,10 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import { RouteComponentProps } from 'react-router-dom';
+import ProfileContext from 'context/profile';
 import useDesktopSize from 'hooks/useDesktopSize';
 import ListBox from 'components/Chat/ListBox';
 import ChatRoom from 'components/Chat/ChatRoom';
+import Profile from 'components/Chat/Profile';
 import socketIo from 'socket.io-client';
 import './style.scss';
 
@@ -21,24 +23,34 @@ const Chat = (
     },
   } = props;
   const isDesktopSize = useDesktopSize();
-
+  const [profileId, setProfileId] = useState<number>();
   useEffect(() => {
     // socket.emit('connect', () => console.log('connected....'));
   }, []);
 
   if (isDesktopSize) {
     return (
-      <div
-        className="chatContainer"
-        style={{
-          gridTemplateColumns: '1fr 4fr',
+      <ProfileContext.Provider
+        value={{
+          profileId,
+          setProfileId,
         }}
       >
-        <ListBox />
-        <ChatRoom />
-      </div>
+        <div
+          className="chatContainer"
+          style={{
+            gridTemplateColumns:
+              profileId !== undefined ? '1fr 4fr auto' : '1fr 4fr',
+          }}
+        >
+          <ListBox />
+          <ChatRoom />
+          {profileId !== undefined && <Profile />}
+        </div>
+      </ProfileContext.Provider>
     );
   }
+
   return (
     <div
       className="chatContainer"

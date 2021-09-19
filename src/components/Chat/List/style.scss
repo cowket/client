@@ -5,6 +5,7 @@
   flex-direction: column;
   padding: 3px 10px;
   box-sizing: border-box;
+  min-width: 200px;
   & > .titleBox {
     display: flex;
     align-items: center;
