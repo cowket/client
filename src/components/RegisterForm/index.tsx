@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { useHistory } from 'react-router-dom';
 import TextField from '@material-ui/core/TextField';
 import Button from '@material-ui/core/Button';
@@ -8,6 +8,8 @@ import { postRegister } from 'api/auth';
 import './style.scss';
 
 const RegisterForm = () => {
+  const [errorMsg, setErrorMsg] = useState<string>();
+
   const history = useHistory();
   const formik = useFormik({
     initialValues: {
@@ -39,7 +41,7 @@ const RegisterForm = () => {
         postRegister({ email: values.email, pw: values.password }).then(
           (res: any) => {
             if (res.status >= 400) {
-              alert(res.status + '등록되지않은 사용자입니다.');
+              setErrorMsg('이미 등록된 이메일입니다.');
             } else {
               history.replace('/login');
             }
@@ -92,6 +94,7 @@ const RegisterForm = () => {
           회원가입
         </Button>
       </form>
+      {errorMsg && <div className="error">{errorMsg}</div>}
       <div className="redirectLink" onClick={() => history.push('/login')}>
         로그인하기
       </div>

@@ -5,8 +5,9 @@ declare global {
     avatar: string;
     create_date: string;
     email: string;
-    id: 6;
+    id: number;
     update_date: string;
     uuid: string;
+    statusCode: number;
   };
 }

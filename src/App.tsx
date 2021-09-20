@@ -16,16 +16,16 @@ import { BrowserRouter, Switch, Route, Redirect } from 'react-router-dom';
 const queryClient = new QueryClient();
 
 export default function App(): JSX.Element {
-  const [isLoggedIn, setIsLoggedIn] = useState<boolean>(false);
+  const [isLoggedIn, setIsLoggedIn] = useState<boolean>(true);
   const [teamList, setTeamList] = useState<Team[]>([]);
   const [userInfo, setUserInfo] = useState<User>();
-
   const refreshUserInfo = async (refreshToken: string) => {
     const userInfo = await postLoginByToken(refreshToken);
-    console.log(userInfo);
+    if (userInfo?.statusCode === 401) {
+      setIsLoggedIn(false);
+      localStorage.removeItem('cowket-token');
+    }
     setUserInfo(userInfo);
-
-    // 성공/실패에 대한 처리 필요
     setIsLoggedIn(true);
   };
 
@@ -50,7 +50,7 @@ export default function App(): JSX.Element {
           <UserContext.Provider value={{ userInfo, setUserInfo }}>
             {/* 인증결과에따라 다른 layout을 보여줌 */}
             {isLoggedIn ? (
-              <TeamContext.Provider value={{ teamList }}>
+              <TeamContext.Provider value={{ teamList, setTeamList }}>
                 <BaseLayout>
                   <Route path="/team" component={Team} />
                   <Route path="/chat/:teamId?/:channelId?" component={Chat} />

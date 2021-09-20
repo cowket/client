@@ -1,4 +1,4 @@
-import React, { useContext } from 'react';
+import React, { useContext, useState } from 'react';
 import authContext from 'context/auth';
 import userContext from 'context/user';
 import { useHistory } from 'react-router-dom';
@@ -12,6 +12,7 @@ import './style.scss';
 const LoginForm = () => {
   const { setIsLoggedIn } = useContext(authContext);
   const { setUserInfo } = useContext(userContext);
+  const [errorMsg, setErrorMsg] = useState<string>();
   const history = useHistory();
   const formik = useFormik({
     initialValues: {
@@ -40,8 +41,8 @@ const LoginForm = () => {
             console.log(res);
             setUserInfo(res);
             setIsLoggedIn(true);
-          } else {
-            alert(res + '이미 존재하는 유저임');
+          } else if ('message' in res) {
+            setErrorMsg('존재하지않는 사용자입니다.');
           }
         });
       }
@@ -82,6 +83,7 @@ const LoginForm = () => {
           로그인
         </Button>
       </form>
+      {errorMsg && <div className="error">{errorMsg}</div>}
       <div className="redirectLink" onClick={() => history.push('/register')}>
         회원가입하기
       </div>
