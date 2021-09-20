@@ -39,8 +39,7 @@ const Chat = (
         <div
           className="chatContainer"
           style={{
-            gridTemplateColumns:
-              profileId !== undefined ? '1fr 4fr auto' : '1fr 4fr',
+            gridTemplateColumns: `300px 4fr ${profileId ? 'auto' : ''}`,
           }}
         >
           <ListBox />

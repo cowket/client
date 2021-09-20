@@ -16,7 +16,7 @@ import { BrowserRouter, Switch, Route, Redirect } from 'react-router-dom';
 const queryClient = new QueryClient();
 
 export default function App(): JSX.Element {
-  const [isLoggedIn, setIsLoggedIn] = useState<boolean>(true);
+  const [isLoggedIn, setIsLoggedIn] = useState<boolean>(false);
   const [teamList, setTeamList] = useState<Team[]>([]);
   const [userInfo, setUserInfo] = useState<User>();
   const refreshUserInfo = async (refreshToken: string) => {

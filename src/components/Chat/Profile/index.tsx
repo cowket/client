@@ -1,5 +1,7 @@
 import React, { useContext } from 'react';
 import profileContext from 'context/profile';
+import { CloseOutlined, MoreVert, ChatOutlined } from '@material-ui/icons';
+import { IconButton } from '@material-ui/core';
 import './style.scss';
 
 const Profile = () => {
@@ -9,20 +11,29 @@ const Profile = () => {
     <div className="profileContainer">
       <header>
         <p>프로필</p>
-        <div onClick={() => setProfileId(undefined)}>끄기</div>
-      </header>
-      <div>
-        <img />
-        <div>
-          <div>dd</div>
-          <p>메시지</p>
+        <div onClick={() => setProfileId(undefined)} className="closeButton">
+          <CloseOutlined />
         </div>
-        <div>
-          <div>dd</div>
-          <p>더보기</p>
+      </header>
+      <div className="imgBox">
+        <img src="http://img.marieclairekorea.com/2017/01/mck_586f3a834b707-375x375.jpg" />
+        <div>이름이름</div>
+        <div className="subBox">
+          <div className="itemBox">
+            <IconButton>
+              <ChatOutlined fontSize="small" />
+            </IconButton>
+            <p>메시지</p>
+          </div>
+          <div className="itemBox">
+            <IconButton>
+              <MoreVert fontSize="small" />
+            </IconButton>
+            <p>더보기</p>
+          </div>
         </div>
       </div>
-      <ul>
+      <ul className="detailBox">
         <li>Display name</li>
         <li>Display name</li>
         <li>Local time</li>
