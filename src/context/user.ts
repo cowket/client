@@ -2,12 +2,12 @@ import React from 'react';
 
 type UserContextType = {
   userInfo?: User;
-  setUserInfo: (info: User) => void;
+  setUserInfo: React.Dispatch<React.SetStateAction<User | undefined>>;
 };
 
 const initialValue: UserContextType = {
   userInfo: undefined,
-  setUserInfo: (info: User) => undefined,
+  setUserInfo: () => undefined,
 };
 
 const userContext = React.createContext<UserContextType>(initialValue);

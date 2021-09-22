@@ -2,7 +2,7 @@ import React from 'react';
 
 type TeamContextType = {
   teamList: Team[];
-  setTeamList: (teams: Team[]) => void;
+  setTeamList: React.Dispatch<React.SetStateAction<Team[]>>;
 };
 
 const initialValue: TeamContextType = {

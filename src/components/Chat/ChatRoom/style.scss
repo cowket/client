@@ -8,12 +8,11 @@
   justify-content: space-between;
   height: 100vh;
   .targetInfo {
-    height: 60px;
-    padding: 14px;
+    padding: 15px;
     background-color: $blue_2;
-    box-sizing: border-box;
     display: flex;
     align-items: center;
+    box-sizing: border-box;
     & > p {
       font-size: 14px;
       font-weight: 700;

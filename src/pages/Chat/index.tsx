@@ -4,7 +4,7 @@ import ProfileContext from 'context/profile';
 import useDesktopSize from 'hooks/useDesktopSize';
 import ListBox from 'components/Chat/ListBox';
 import ChatRoom from 'components/Chat/ChatRoom';
-import Profile from 'components/Chat/Profile';
+import Profile from 'components/Profile/Tab';
 import socketIo from 'socket.io-client';
 import './style.scss';
 
@@ -14,7 +14,6 @@ const Chat = (
   props: RouteComponentProps<{
     teamId: string;
     channelId: string;
-    chatId: string;
   }>
 ) => {
   const {
@@ -51,14 +50,24 @@ const Chat = (
   }
 
   return (
-    <div
-      className="chatContainer"
-      style={{
-        gridTemplateColumns: '1fr',
+    <ProfileContext.Provider
+      value={{
+        profileId,
+        setProfileId,
       }}
     >
-      {channelId ? <ChatRoom /> : <ListBox />}
-    </div>
+      <div
+        className="chatContainer"
+        style={{
+          gridTemplateColumns: '1fr',
+        }}
+      >
+        {/* 조건문을 수정할수있을듯 */}
+        {profileId && <Profile />}
+        {!profileId && channelId && <ChatRoom />}
+        {!profileId && !channelId && <ListBox />}
+      </div>
+    </ProfileContext.Provider>
   );
 };
 
