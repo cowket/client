@@ -24,9 +24,10 @@ export default function App(): JSX.Element {
     if (userInfo?.statusCode === 401) {
       setIsLoggedIn(false);
       localStorage.removeItem('cowket-token');
+    } else {
+      setUserInfo(userInfo);
+      setIsLoggedIn(true);
     }
-    setUserInfo(userInfo);
-    setIsLoggedIn(true);
   };
 
   useEffect(() => {

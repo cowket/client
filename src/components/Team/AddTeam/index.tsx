@@ -1,21 +1,27 @@
-import React, { useState } from 'react';
+import React, { useState, useContext } from 'react';
 import { postTeam } from 'api/team';
+import TeamContext from 'context/team';
 import { Input, Button, Checkbox } from '@material-ui/core';
 import './style.scss';
 
 const AddTeam = () => {
   const [teamName, setTeamName] = useState<string>();
   const [checked, setChecked] = useState<boolean>(false);
-
+  const { setTeamList, teamList } = useContext(TeamContext);
   const onChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     setChecked(event.target.checked);
   };
 
-  const onAddTeam = () => {
+  const onAddTeam = async () => {
     if (teamName) {
-      postTeam(teamName);
+      const newTeam = await postTeam({
+        name: teamName,
+        is_private: checked,
+      });
+      setTeamList([...teamList, newTeam]);
     }
   };
+
   return (
     <div className="addTeamContainer">
       <Input

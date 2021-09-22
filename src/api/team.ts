@@ -1,10 +1,12 @@
 import client from 'api/client';
 
 // 팀 생성
-export const postTeam = async (name: string): Promise<any> => {
-  const response = await client.post<any>('/team/new', { name });
-  console.log(response);
-  return response;
+export const postTeam = async (team: {
+  name: string;
+  is_private: boolean;
+}): Promise<Team> => {
+  const response = await client.post<any>('/team/new', team);
+  return response.data;
 };
 
 // 유저의 팀 조회
