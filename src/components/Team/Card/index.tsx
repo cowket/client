@@ -22,9 +22,10 @@ const RoomItem = ({ teamInfo, join }: RoomCardProps) => {
       <div className="imgBox">
         <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/1/12/Google_Photos_icon_%282020%29.svg/250px-Google_Photos_icon_%282020%29.svg.png" />
       </div>
-      <p className="roomName">
-        {teamInfo.name} {isTeamOwner && <span className="owner">팀장</span>}
-      </p>
+      <div className="roomName">
+        <p>{teamInfo.name}</p>
+        {isTeamOwner && <span className="owner">팀장</span>}
+      </div>
       <Button color="primary">
         {join ? (isTeamOwner ? '팀 삭제' : '나가기') : '참여'}
       </Button>

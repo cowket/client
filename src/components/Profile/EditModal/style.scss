@@ -1,0 +1,75 @@
+@import 'styles/globals.scss';
+
+.modalWrapper {
+  position: fixed;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 100vw;
+  min-height: 100%;
+  background-color: rgba(0, 0, 0, 0.4);
+  z-index: 12;
+  .profileModalContainer {
+    min-width: 500px;
+    min-height: max-content;
+    border-radius: 10px;
+    padding: 20px;
+    box-sizing: border-box;
+    height: max-content;
+    background-color: white;
+    & > header {
+      display: flex;
+      margin-bottom: 20px;
+      justify-content: space-between;
+      & > .title {
+        font-size: 18px;
+        font-weight: 700;
+        color: $gray_3;
+      }
+    }
+    & > .infoBox {
+      display: grid;
+      grid-template-columns: 2fr 1fr;
+      column-gap: 20px;
+      & > section {
+        display: flex;
+        flex-direction: column;
+        & > .title {
+          font-size: 15px;
+          font-weight: 700;
+          color: $gray_4;
+        }
+        &.imgBox {
+          display: flex;
+          flex-direction: column;
+          row-gap: 10px;
+          input {
+            display: none;
+          }
+          & > img {
+            width: 140px;
+            height: 140px;
+            border-radius: 4px;
+            overflow: hidden;
+          }
+          & > .remove {
+            font-size: 12px;
+            font-weight: 600;
+            color: $blue_1;
+            text-align: center;
+            cursor: pointer;
+          }
+        }
+      }
+    }
+    & > .buttonBox {
+      display: flex;
+      margin: 0 auto;
+      width: fit-content;
+      margin-top: 20px;
+      & > button:last-child {
+        margin-left: 15px;
+      }
+    }
+  }
+}
