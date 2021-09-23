@@ -18,7 +18,7 @@ const queryClient = new QueryClient();
 export default function App(): JSX.Element {
   const [isLoggedIn, setIsLoggedIn] = useState<boolean>(false);
   const [teamList, setTeamList] = useState<Team[]>([]);
-  const [userInfo, setUserInfo] = useState<User>();
+  const [userInfo, setUserInfo] = useState<UserDetail>();
   const refreshUserInfo = async (refreshToken: string) => {
     const userInfo = await postLoginByToken(refreshToken);
     if (userInfo?.statusCode === 401) {

@@ -1,8 +1,8 @@
 import React from 'react';
 
 type UserContextType = {
-  userInfo?: User;
-  setUserInfo: React.Dispatch<React.SetStateAction<User | undefined>>;
+  userInfo?: UserDetail;
+  setUserInfo: React.Dispatch<React.SetStateAction<UserDetail | undefined>>;
 };
 
 const initialValue: UserContextType = {

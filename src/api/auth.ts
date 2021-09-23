@@ -13,14 +13,16 @@ export const postRegister = async (userInfo: {
 export const postLogin = async (userInfo: {
   email: string;
   pw: string;
-}): Promise<User> => {
-  const response = await client.post<User>('/auth/login', userInfo);
+}): Promise<UserDetail> => {
+  const response = await client.post<UserDetail>('/auth/login', userInfo);
 
   return response.data;
 };
 
-export const postLoginByToken = async (refreshToken: string): Promise<User> => {
-  const response = await client.post<User>('/auth/verify', {
+export const postLoginByToken = async (
+  refreshToken: string
+): Promise<UserDetail> => {
+  const response = await client.post<UserDetail>('/auth/verify', {
     token: refreshToken,
   });
 

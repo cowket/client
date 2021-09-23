@@ -16,6 +16,10 @@ const Profile = () => {
   const { setProfileId, profileId } = useContext(profileContext);
   const { userInfo } = useContext(userContext);
 
+  if (!userInfo) {
+    return <div>사용자 정보가 없습니다.</div>;
+  }
+
   const onClose = () => {
     setShowModal(false);
   };
@@ -30,23 +34,25 @@ const Profile = () => {
           </div>
         </header>
         <div className="imgBox">
-          <img src="http://img.marieclairekorea.com/2017/01/mck_586f3a834b707-375x375.jpg" />
+          <img src={userInfo.avatar} />
           <div className="name">이름이름</div>
           <div className="subBox">
-            {/* 내 프로필이아니면 메시지, 내 프로필이면 수정하기 버튼 보여주기 */}
-            <div className="itemBox">
-              <IconButton>
-                <ChatOutlined fontSize="small" />
-              </IconButton>
-              <p>메시지</p>
-            </div>
-            <div className="itemBox">
-              {/* {userInfo && profileId && userInfo.id === profileId && '나다'} */}
-              <IconButton onClick={() => setShowModal(true)}>
-                <CreateOutlined fontSize="small" />
-              </IconButton>
-              <p>수정하기</p>
-            </div>
+            {/* {profileId && userInfo.id === profileId ? ( */}
+            {true ? (
+              <div className="itemBox">
+                <IconButton onClick={() => setShowModal(true)}>
+                  <CreateOutlined fontSize="small" />
+                </IconButton>
+                <p>수정하기</p>
+              </div>
+            ) : (
+              <div className="itemBox">
+                <IconButton>
+                  <ChatOutlined fontSize="small" />
+                </IconButton>
+                <p>메시지</p>
+              </div>
+            )}
             <div className="itemBox">
               <IconButton>
                 <MoreVert fontSize="small" />
