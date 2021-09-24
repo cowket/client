@@ -1,5 +1,6 @@
+import useDesktopSize from 'hooks/useDesktopSize';
 import React, { useState } from 'react';
-import { CloseOutlined } from '@material-ui/icons';
+import { CloseOutlined, ArrowBack } from '@material-ui/icons';
 import {
   IconButton,
   Button,
@@ -14,6 +15,7 @@ type EditModalProps = {
 
 const AddModal = ({ onClose }: EditModalProps) => {
   const [channelName, setChannelName] = useState<string>();
+  const isDesktopSize = useDesktopSize();
 
   const onSubmit = async () => {
     onClose();
@@ -23,10 +25,23 @@ const AddModal = ({ onClose }: EditModalProps) => {
     <div className="modalWrapper">
       <div className="channelModalContainer">
         <header>
-          <p className="title">채널 추가하기</p>
-          <IconButton size="small" onClick={onClose}>
-            <CloseOutlined fontSize="small" />
-          </IconButton>
+          <div className="title">
+            {!isDesktopSize && (
+              <IconButton
+                size="small"
+                onClick={onClose}
+                style={{ marginRight: '10px' }}
+              >
+                <ArrowBack fontSize="small" />
+              </IconButton>
+            )}
+            채널 추가하기
+          </div>
+          {isDesktopSize && (
+            <IconButton size="small" onClick={onClose}>
+              <CloseOutlined fontSize="small" />
+            </IconButton>
+          )}
         </header>
         <desc>
           채널은 팀이 소통하는 공간입니다.

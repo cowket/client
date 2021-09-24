@@ -1,9 +1,10 @@
 import React, { ChangeEvent, useState, useContext } from 'react';
 import profileContext from 'context/profile';
 import userContext from 'context/user';
+import useDesktopSize from 'hooks/useDesktopSize';
 import { putUserInfo } from 'api/user';
 import { uploadFile } from 'api/file';
-import { CloseOutlined } from '@material-ui/icons';
+import { CloseOutlined, ArrowBack } from '@material-ui/icons';
 import { IconButton, Button, Input, TextField } from '@material-ui/core';
 import './style.scss';
 
@@ -13,6 +14,7 @@ type EditModalProps = {
 
 const EditModal = ({ onClose }: EditModalProps) => {
   const { userInfo, setUserInfo } = useContext(userContext);
+  const isDesktopSize = useDesktopSize();
   const [fileUrl, setFileUrl] = useState<string>();
 
   if (!userInfo) {
@@ -32,10 +34,23 @@ const EditModal = ({ onClose }: EditModalProps) => {
     <div className="modalWrapper">
       <div className="profileModalContainer">
         <header>
-          <p className="title">프로필 편집</p>
-          <IconButton size="small" onClick={onClose}>
-            <CloseOutlined fontSize="small" />
-          </IconButton>
+          <div className="title">
+            {!isDesktopSize && (
+              <IconButton
+                size="small"
+                onClick={onClose}
+                style={{ marginRight: '10px' }}
+              >
+                <ArrowBack fontSize="small" />
+              </IconButton>
+            )}
+            프로필 편집
+          </div>
+          {isDesktopSize && (
+            <IconButton size="small" onClick={onClose}>
+              <CloseOutlined fontSize="small" />
+            </IconButton>
+          )}
         </header>
         <div className="infoBox">
           <section>
