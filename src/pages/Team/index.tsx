@@ -1,6 +1,6 @@
 import React, { useState, useContext } from 'react';
 import { useHistory } from 'react-router-dom';
-import TeamContext from 'context/team';
+import teamContext from 'context/team';
 import { Button, Input } from '@material-ui/core';
 import AddTeam from 'components/Team/AddTeam';
 import KeyboardBackspaceIcon from '@material-ui/icons/KeyboardBackspace';
@@ -13,7 +13,7 @@ const Team = () => {
   const history = useHistory();
   const [showMyList, setShowMyList] = useState<boolean>(true);
   const [showTeamModal, setShowTeamModal] = useState<boolean>(false);
-  const teamContext = useContext(TeamContext);
+  const { teamList } = useContext(teamContext);
 
   return (
     <div className="teamContainer">
@@ -45,8 +45,8 @@ const Team = () => {
         </div>
         {showMyList && (
           <div className="cardList">
-            {teamContext.teamList.length ? (
-              teamContext.teamList.map((info) => (
+            {teamList.length ? (
+              teamList.map((info) => (
                 <Card key={info.uuid} teamInfo={info} join />
               ))
             ) : (
@@ -58,8 +58,8 @@ const Team = () => {
       <div className="searchList">
         <p className="title">검색결과</p>
         <div className="cardList">
-          {teamContext.teamList.length > 0 ? (
-            teamContext.teamList.map((info) => (
+          {teamList.length > 0 ? (
+            teamList.map((info) => (
               <Card key={info.uuid} teamInfo={info} join={false} />
             ))
           ) : (

@@ -5,6 +5,7 @@ import Chat from 'pages/Chat';
 import Team from 'pages/Team';
 import { postLoginByToken } from 'api/auth';
 import { getMyTeams } from 'api/team';
+import SelectContext from 'context/select';
 import AuthContext from 'context/auth';
 import TeamContext from 'context/team';
 import UserContext from 'context/user';
@@ -19,6 +20,8 @@ export default function App(): JSX.Element {
   const [isLoggedIn, setIsLoggedIn] = useState<boolean>(false);
   const [teamList, setTeamList] = useState<Team[]>([]);
   const [userInfo, setUserInfo] = useState<UserDetail>();
+  const [selectedTeam, setSelectedTeam] = useState<Team>();
+  const [selectedChannel, setSelectedChannel] = useState<string>();
   const refreshUserInfo = async (refreshToken: string) => {
     const userInfo = await postLoginByToken(refreshToken);
     if (userInfo?.statusCode === 401) {
@@ -40,7 +43,12 @@ export default function App(): JSX.Element {
 
   useEffect(() => {
     if (isLoggedIn) {
-      getMyTeams().then((res) => setTeamList(res));
+      getMyTeams().then((res) => {
+        setTeamList(res);
+        if (res.length > 0) {
+          setSelectedTeam(res[0]);
+        }
+      });
     }
   }, [isLoggedIn]);
 
@@ -52,10 +60,19 @@ export default function App(): JSX.Element {
             {/* 인증결과에따라 다른 layout을 보여줌 */}
             {isLoggedIn ? (
               <TeamContext.Provider value={{ teamList, setTeamList }}>
-                <BaseLayout>
-                  <Route path="/team" component={Team} />
-                  <Route path="/chat/:teamId?/:channelId?" component={Chat} />
-                </BaseLayout>
+                <SelectContext.Provider
+                  value={{
+                    selectedTeam,
+                    selectedChannel,
+                    setSelectedTeam,
+                    setSelectedChannel,
+                  }}
+                >
+                  <BaseLayout>
+                    <Route path="/team" component={Team} />
+                    <Route path="/chat" component={Chat} />
+                  </BaseLayout>
+                </SelectContext.Provider>
               </TeamContext.Provider>
             ) : (
               <AuthLayout>
