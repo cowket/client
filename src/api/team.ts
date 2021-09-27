@@ -15,3 +15,9 @@ export const getMyTeams = async (): Promise<Team[]> => {
   console.log(team);
   return team;
 };
+
+// 팀 검색
+export const searchTeam = async (keyword: string): Promise<Team[]> => {
+  const { data: team } = await client.get<Team[]>(`/team/search/${keyword}`);
+  return team;
+};

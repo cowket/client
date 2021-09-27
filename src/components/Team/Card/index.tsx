@@ -12,7 +12,7 @@ const RoomItem = ({ teamInfo, join }: RoomCardProps) => {
   const { userInfo } = useContext(userContext);
   const isTeamOwner = useMemo(() => {
     if (userInfo) {
-      return userInfo?.id === teamInfo.owner.id;
+      return userInfo?.id === teamInfo.owner?.id;
     }
     return false;
   }, [userInfo]);

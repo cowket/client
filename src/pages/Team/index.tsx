@@ -1,8 +1,10 @@
-import React, { useState, useContext } from 'react';
+import React, { useState, useContext, useEffect } from 'react';
 import { useHistory } from 'react-router-dom';
 import teamContext from 'context/team';
 import { Button, Input } from '@material-ui/core';
+import useDebounce from 'hooks/useDebounce';
 import AddTeam from 'components/Team/AddTeam';
+import { searchTeam } from 'api/team';
 import KeyboardBackspaceIcon from '@material-ui/icons/KeyboardBackspace';
 import ExpandLessOutlinedIcon from '@material-ui/icons/ExpandLessOutlined';
 import ExpandMoreOutlinedIcon from '@material-ui/icons/ExpandMoreOutlined';
@@ -13,7 +15,22 @@ const Team = () => {
   const history = useHistory();
   const [showMyList, setShowMyList] = useState<boolean>(true);
   const [showTeamModal, setShowTeamModal] = useState<boolean>(false);
-  const { teamList } = useContext(teamContext);
+  const { teamList: myTeamList } = useContext(teamContext);
+  const [search, setSearch] = useState<string>();
+  const [searchTeamList, setSearchTeamList] = useState<Team[]>([]);
+
+  const debounceSearch = useDebounce(search, 1000);
+
+  const onSearch = async (search: string) => {
+    const result = await searchTeam(search);
+    setSearchTeamList(result);
+  };
+
+  useEffect(() => {
+    if (debounceSearch !== undefined && debounceSearch.length > 2) {
+      onSearch(debounceSearch);
+    }
+  }, [debounceSearch]);
 
   return (
     <div className="teamContainer">
@@ -22,7 +39,12 @@ const Team = () => {
           <KeyboardBackspaceIcon />
         </div>
         <div className="inputBox">
-          <Input placeholder="팀 검색하기" fullWidth />
+          <Input
+            placeholder="팀 검색하기"
+            fullWidth
+            value={search}
+            onChange={(e) => setSearch(e.target.value)}
+          />
           <Button>검색</Button>
         </div>
         <div className="addTeamBox">
@@ -45,8 +67,8 @@ const Team = () => {
         </div>
         {showMyList && (
           <div className="cardList">
-            {teamList.length ? (
-              teamList.map((info) => (
+            {myTeamList.length ? (
+              myTeamList.map((info) => (
                 <Card key={info.uuid} teamInfo={info} join />
               ))
             ) : (
@@ -58,8 +80,8 @@ const Team = () => {
       <div className="searchList">
         <p className="title">검색결과</p>
         <div className="cardList">
-          {teamList.length > 0 ? (
-            teamList.map((info) => (
+          {searchTeamList.length > 0 ? (
+            searchTeamList.map((info) => (
               <Card key={info.uuid} teamInfo={info} join={false} />
             ))
           ) : (
