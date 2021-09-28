@@ -1,5 +1,7 @@
 import React, { useContext, useMemo } from 'react';
 import Button from '@material-ui/core/Button';
+import { deleteTeam } from 'api/team';
+import teamContext from 'context/team';
 import userContext from 'context/user';
 import './style.scss';
 
@@ -10,6 +12,7 @@ type RoomCardProps = {
 
 const RoomItem = ({ teamInfo, join }: RoomCardProps) => {
   const { userInfo } = useContext(userContext);
+  const { setTeamList, teamList } = useContext(teamContext);
   const isTeamOwner = useMemo(() => {
     if (userInfo) {
       return userInfo?.id === teamInfo.owner?.id;
@@ -19,15 +22,38 @@ const RoomItem = ({ teamInfo, join }: RoomCardProps) => {
 
   return (
     <div className="roomCardContainer">
-      <div className="imgBox">
-        <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/1/12/Google_Photos_icon_%282020%29.svg/250px-Google_Photos_icon_%282020%29.svg.png" />
-      </div>
-      <div className="roomName">
-        <p>{teamInfo.name}</p>
-        {isTeamOwner && <span className="owner">팀장</span>}
-      </div>
-      <Button color="primary">
-        {join ? (isTeamOwner ? '팀 삭제' : '나가기') : '참여'}
+      <header>
+        <div className="imgBox">
+          <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/1/12/Google_Photos_icon_%282020%29.svg/250px-Google_Photos_icon_%282020%29.svg.png" />
+        </div>
+        <p className="roomName">{teamInfo.name}</p>
+      </header>
+      <section>
+        <p className="desc">
+          {teamInfo.description ?? '팀에 대한 설명이 없습니다.'}
+        </p>
+      </section>
+      <Button color="primary" fullWidth>
+        {join ? (
+          isTeamOwner ? (
+            <div
+              onClick={async () => {
+                const response = await deleteTeam(teamInfo.uuid);
+                if (response) {
+                  setTeamList(
+                    teamList.filter((team) => team.uuid !== teamInfo.uuid)
+                  );
+                }
+              }}
+            >
+              팀 삭제
+            </div>
+          ) : (
+            '나가기'
+          )
+        ) : (
+          '참여'
+        )}
       </Button>
     </div>
   );

@@ -22,3 +22,9 @@ export const searchTeam = async (keyword: string): Promise<Team[]> => {
   const { data: team } = await client.get<Team[]>(`/team/search/${keyword}`);
   return team;
 };
+
+// 팀 삭제
+export const deleteTeam = async (uuid: string): Promise<boolean> => {
+  const { data } = await client.delete<boolean>(`/team/${uuid}`);
+  return data;
+};
