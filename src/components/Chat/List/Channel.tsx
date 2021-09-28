@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import { useHistory } from 'react-router-dom';
 import ExpandLessOutlinedIcon from '@material-ui/icons/ExpandLessOutlined';
 import ExpandMoreOutlinedIcon from '@material-ui/icons/ExpandMoreOutlined';
-import AddModal from 'components/Chat/AddModal';
+import AddChannel from 'components/Chat/AddChannel';
 import { Add } from '@material-ui/icons';
 import './style.scss';
 
@@ -22,7 +22,7 @@ const Channel = ({ title, channelList }: ChannelProps) => {
 
   return (
     <>
-      {showModal && <AddModal onClose={onClose} />}
+      {showModal && <AddChannel onClose={onClose} />}
       <div className="channelContainer">
         <div className="titleBox">
           <div className="title" onClick={() => setShowList(!showList)}>

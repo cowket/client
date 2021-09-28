@@ -9,11 +9,11 @@ import {
 } from '@material-ui/core';
 import './style.scss';
 
-type EditModalProps = {
+type AddChannelProps = {
   onClose(): void;
 };
 
-const AddModal = ({ onClose }: EditModalProps) => {
+const AddChannel = ({ onClose }: AddChannelProps) => {
   const [channelName, setChannelName] = useState<string>();
   const isDesktopSize = useDesktopSize();
 
@@ -89,4 +89,4 @@ const AddModal = ({ onClose }: EditModalProps) => {
   );
 };
 
-export default AddModal;
+export default AddChannel;
