@@ -8,7 +8,9 @@ import Profile from 'components/Profile/Tab';
 import socketIo from 'socket.io-client';
 import './style.scss';
 
-// const socket = socketIo('http://socket.stackunderflow.xyz');
+// const socket = socketIo('http://socket.stackunderflow.xyz/', {
+//   transports: ['websocket'],
+// });
 
 const Chat = (
   props: RouteComponentProps<{
@@ -23,9 +25,11 @@ const Chat = (
   } = props;
   const isDesktopSize = useDesktopSize();
   const [profileId, setProfileId] = useState<number>();
+
   useEffect(() => {
-    // socket.emit('connect', () => console.log('connected....'));
+    // socket.emit('message', { message: '이건 테스트' });
   }, []);
+  // socket.on('message', (e) => console.log(e));
 
   if (isDesktopSize) {
     return (

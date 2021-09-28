@@ -1,33 +1,79 @@
 @import 'styles/globals.scss';
 
-.addTeamContainer {
-  width: 300px;
-  height: 150px;
-  position: absolute;
-  top: 44px;
-  right: 0;
-  background-color: $white;
-  border: 1px solid $gray_7;
-  border-radius: 6px;
-  padding: 10px 25px;
-  box-sizing: border-box;
+.modalWrapper {
+  position: fixed;
   display: flex;
-  flex-direction: column;
-  align-items: flex-start;
-  justify-content: space-between;
-  font-size: 18px;
-  font-weight: 500;
-  color: $gray_4;
-  & > .private {
-    font-size: 14px;
-    display: flex;
-    align-items: center;
+  top: 0;
+  left: 0;
+  align-items: center;
+  justify-content: center;
+  min-width: 100vw;
+  min-height: 100%;
+  background-color: rgba(0, 0, 0, 0.4);
+  z-index: 12;
+  .channelModalContainer {
+    min-width: 500px;
+    min-height: max-content;
+    border-radius: 10px;
+    padding: 20px;
+    box-sizing: border-box;
+    height: max-content;
+    background-color: white;
+    & > header {
+      display: flex;
+      margin-bottom: 20px;
+      justify-content: space-between;
+      & > .title {
+        font-size: 18px;
+        font-weight: 700;
+        color: $gray_3;
+        display: flex;
+        align-items: center;
+      }
+    }
+    & > desc {
+      font-size: 14px;
+      font-weight: 500;
+      color: $gray_3;
+    }
+    .section {
+      display: flex;
+      row-gap: 15px;
+      flex-direction: column;
+    }
+    .buttonBox {
+      display: flex;
+      margin: 0 auto;
+      width: fit-content;
+      margin-top: 20px;
+      & > button:last-child {
+        margin-left: 15px;
+      }
+    }
   }
-  & > button {
-    background-color: $gray_8;
-    &:hover {
-      background-color: $blue_3;
-      color: $white;
+}
+
+@media screen and (max-width: 959px) {
+  .modalWrapper > .channelModalContainer {
+    width: 100%;
+    min-height: 100vh;
+    min-width: 100%;
+    border-radius: 0px;
+    overflow-y: auto;
+    & > .infoBox {
+      display: flex;
+      flex-direction: column;
+      row-gap: 20px;
+      .imgBox {
+        display: flex;
+        img {
+          display: inline-block;
+          margin: 0 auto;
+        }
+      }
+    }
+    & > .buttonBox {
+      margin-top: 40px;
     }
   }
 }

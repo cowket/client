@@ -1,53 +1,128 @@
 import React, { useState, useContext } from 'react';
 import { postTeam } from 'api/team';
 import TeamContext from 'context/team';
-import { Input, Button, Checkbox } from '@material-ui/core';
+import useDesktopSize from 'hooks/useDesktopSize';
+import { CloseOutlined, ArrowBack } from '@material-ui/icons';
+import { IconButton, Button, TextField, Checkbox } from '@material-ui/core';
+import { useFormik } from 'formik';
+import * as Yup from 'yup';
+import './style.scss';
 import './style.scss';
 
-const AddTeam = () => {
-  const [teamName, setTeamName] = useState<string>();
+type AddTeamProps = {
+  onClose(): void;
+};
+
+const AddTeam = ({ onClose }: AddTeamProps) => {
   const [checked, setChecked] = useState<boolean>(false);
   const { setTeamList, teamList } = useContext(TeamContext);
   const onChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     setChecked(event.target.checked);
   };
 
-  const onAddTeam = async () => {
-    if (teamName) {
-      const newTeam = await postTeam({
-        name: teamName,
-        is_private: checked,
-      });
-      setTeamList([...teamList, newTeam]);
-    }
-  };
+  const formik = useFormik({
+    initialValues: {
+      teamName: '',
+      desc: '',
+      isPrivate: false,
+    },
+    validationSchema: Yup.object({
+      teamName: Yup.string().required(''),
+      desc: Yup.string().required(''),
+      isPrivate: Yup.boolean(),
+    }),
+    onSubmit: async (values) => {
+      if (values.teamName && values.desc) {
+        const newTeam = await postTeam({
+          name: values.teamName,
+          description: values.desc,
+          is_private: checked,
+        });
+        setTeamList([...teamList, newTeam]);
+        onClose();
+      }
+    },
+  });
+
+  const isDesktopSize = useDesktopSize();
 
   return (
-    <div className="addTeamContainer">
-      <Input
-        value={teamName}
-        onChange={(e) => setTeamName(e.currentTarget.value)}
-        placeholder="팀명을 입력해주세요"
-        fullWidth
-      />
-      <div className="private">
-        <Checkbox
-          size="small"
-          defaultChecked={checked}
-          color="primary"
-          onChange={onChange}
-          inputProps={{ 'aria-label': 'secondary checkbox' }}
-        />
-        private team
+    <div className="modalWrapper">
+      <div className="channelModalContainer">
+        <header>
+          <div className="title">
+            {!isDesktopSize && (
+              <IconButton
+                size="small"
+                onClick={onClose}
+                style={{ marginRight: '10px' }}
+              >
+                <ArrowBack fontSize="small" />
+              </IconButton>
+            )}
+            팀 추가하기
+          </div>
+          {isDesktopSize && (
+            <IconButton size="small" onClick={onClose}>
+              <CloseOutlined fontSize="small" />
+            </IconButton>
+          )}
+        </header>
+        <desc>팀은 하나의 그룹단위로 생성하는것이 좋습니다.</desc>
+        <form className="teamForm" id="teamForm" onSubmit={formik.handleSubmit}>
+          <section>
+            <TextField
+              id="teamName"
+              label="팀명"
+              variant="outlined"
+              size="small"
+              margin="normal"
+              fullWidth
+              helperText={formik.errors.teamName}
+              onChange={formik.handleChange}
+              value={formik.values.teamName}
+            />
+            <TextField
+              id="desc"
+              placeholder="팀에대한 설명을 적어주세요"
+              fullWidth
+              label="설명"
+              variant="outlined"
+              size="small"
+              multiline
+              margin="normal"
+              minRows={3}
+              helperText={formik.errors.desc}
+              onChange={formik.handleChange}
+              value={formik.values.desc}
+            />
+            <div className="private">
+              <Checkbox
+                size="small"
+                defaultChecked={checked}
+                color="primary"
+                onChange={onChange}
+                inputProps={{ 'aria-label': 'secondary checkbox' }}
+              />
+              private team
+            </div>
+          </section>
+          <div className="buttonBox">
+            <Button variant="contained" onClick={() => onClose()}>
+              취소
+            </Button>
+            <Button
+              type="submit"
+              id="LoginForm"
+              variant="contained"
+              color="primary"
+              disabled={!(formik.dirty && formik.isValid)}
+            >
+              팀 생성
+            </Button>
+          </div>
+        </form>
       </div>
-      <Button
-        disabled={!teamName}
-        onClick={onAddTeam}
-        fullWidth
-        variant="contained"
-      >
-        팀 생성
-      </Button>
     </div>
   );
 };

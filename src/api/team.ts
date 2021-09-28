@@ -3,6 +3,7 @@ import client from 'api/client';
 // 팀 생성
 export const postTeam = async (team: {
   name: string;
+  description: string;
   is_private: boolean;
 }): Promise<Team> => {
   const response = await client.post<any>('/team/new', team);

@@ -51,7 +51,7 @@ const Team = () => {
           <Button onClick={() => setShowTeamModal(!showTeamModal)}>
             팀 추가하기
           </Button>
-          {showTeamModal && <AddTeam />}
+          {showTeamModal && <AddTeam onClose={() => setShowTeamModal(false)} />}
         </div>
       </div>
       <div className="myList">
