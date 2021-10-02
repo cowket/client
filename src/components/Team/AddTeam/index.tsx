@@ -25,6 +25,7 @@ const AddTeam = ({ onClose }: AddTeamProps) => {
       teamName: '',
       desc: '',
       isPrivate: false,
+      password: '',
     },
     validationSchema: Yup.object({
       teamName: Yup.string().required(''),
@@ -37,6 +38,7 @@ const AddTeam = ({ onClose }: AddTeamProps) => {
           name: values.teamName,
           description: values.desc,
           is_private: checked,
+          password: values.password,
         });
         setTeamList([...teamList, newTeam]);
         onClose();
@@ -97,14 +99,29 @@ const AddTeam = ({ onClose }: AddTeamProps) => {
               value={formik.values.desc}
             />
             <div className="private">
-              <Checkbox
-                size="small"
-                defaultChecked={checked}
-                color="primary"
-                onChange={onChange}
-                inputProps={{ 'aria-label': 'secondary checkbox' }}
-              />
-              private team
+              <div className="check">
+                <Checkbox
+                  size="small"
+                  defaultChecked={checked}
+                  color="primary"
+                  onChange={onChange}
+                  inputProps={{ 'aria-label': 'secondary checkbox' }}
+                />
+                private team
+              </div>
+              {checked && (
+                <TextField
+                  id="password"
+                  placeholder="비밀번호를 설정해주세요"
+                  fullWidth
+                  label="비밀번호"
+                  variant="outlined"
+                  size="small"
+                  helperText={formik.errors.password}
+                  onChange={formik.handleChange}
+                  value={formik.values.password}
+                />
+              )}
             </div>
           </section>
           <div className="buttonBox">

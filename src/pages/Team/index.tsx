@@ -16,7 +16,7 @@ const Team = () => {
   const [showMyList, setShowMyList] = useState<boolean>(true);
   const [showTeamModal, setShowTeamModal] = useState<boolean>(false);
   const { teamList: myTeamList } = useContext(teamContext);
-  const [search, setSearch] = useState<string>();
+  const [search, setSearch] = useState<string>('');
   const [searchTeamList, setSearchTeamList] = useState<Team[]>([]);
 
   const debounceSearch = useDebounce(search, 1000);
@@ -27,7 +27,7 @@ const Team = () => {
   };
 
   useEffect(() => {
-    if (debounceSearch !== undefined && debounceSearch.length > 2) {
+    if (debounceSearch !== undefined) {
       onSearch(debounceSearch);
     }
   }, [debounceSearch]);

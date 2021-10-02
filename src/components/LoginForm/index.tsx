@@ -37,8 +37,7 @@ const LoginForm = () => {
     onSubmit: (values) => {
       if (values.email && values.password) {
         postLogin({ email: values.email, pw: values.password }).then((res) => {
-          if ('id' in res) {
-            console.log(res);
+          if ('email' in res) {
             setUserInfo(res);
             setIsLoggedIn(true);
           } else if ('message' in res) {

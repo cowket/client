@@ -4,7 +4,6 @@ import BaseLayout from 'layout/BaseLayout';
 import Chat from 'pages/Chat';
 import Team from 'pages/Team';
 import { postLoginByToken } from 'api/auth';
-import { getMyTeams } from 'api/team';
 import SelectContext from 'context/select';
 import AuthContext from 'context/auth';
 import TeamContext from 'context/team';
@@ -27,7 +26,7 @@ export default function App(): JSX.Element {
     if (userInfo?.statusCode === 401) {
       setIsLoggedIn(false);
       localStorage.removeItem('cowket-token');
-    } else {
+    } else if (userInfo) {
       setUserInfo(userInfo);
       setIsLoggedIn(true);
     }
@@ -40,17 +39,6 @@ export default function App(): JSX.Element {
       refreshUserInfo(refreshToken);
     }
   }, []);
-
-  useEffect(() => {
-    if (isLoggedIn) {
-      getMyTeams().then((res) => {
-        setTeamList(res);
-        if (res.length > 0) {
-          setSelectedTeam(res[0]);
-        }
-      });
-    }
-  }, [isLoggedIn]);
 
   return (
     <BrowserRouter>

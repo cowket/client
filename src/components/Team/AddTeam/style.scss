@@ -36,10 +36,21 @@
       font-weight: 500;
       color: $gray_3;
     }
-    .section {
+    section {
       display: flex;
       row-gap: 15px;
       flex-direction: column;
+      .private {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        height: 40px;
+        .check {
+          width: 200px;
+          display: flex;
+          align-items: center;
+        }
+      }
     }
     .buttonBox {
       display: flex;

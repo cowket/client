@@ -1,6 +1,9 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState, useContext } from 'react';
 import { RouteComponentProps } from 'react-router-dom';
 import ProfileContext from 'context/profile';
+import { getMyTeams } from 'api/team';
+import teamContext from 'context/team';
+import selectContext from 'context/select';
 import useDesktopSize from 'hooks/useDesktopSize';
 import ListBox from 'components/Chat/ListBox';
 import ChatRoom from 'components/Chat/ChatRoom';
@@ -25,6 +28,17 @@ const Chat = (
   } = props;
   const isDesktopSize = useDesktopSize();
   const [profileId, setProfileId] = useState<number>();
+  const { setTeamList } = useContext(teamContext);
+  const { setSelectedTeam } = useContext(selectContext);
+
+  useEffect(() => {
+    getMyTeams().then((res) => {
+      setTeamList(res.map((team) => team.team_uuid));
+      if (res.length > 0) {
+        setSelectedTeam(res[0].team_uuid);
+      }
+    });
+  }, []);
 
   useEffect(() => {
     // socket.emit('message', { message: '이건 테스트' });

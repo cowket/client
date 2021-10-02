@@ -1,6 +1,6 @@
 import React, { useContext, useMemo } from 'react';
 import Button from '@material-ui/core/Button';
-import { deleteTeam } from 'api/team';
+import { deleteTeam, joinTeam, getMyTeams } from 'api/team';
 import teamContext from 'context/team';
 import userContext from 'context/user';
 import './style.scss';
@@ -52,7 +52,19 @@ const RoomItem = ({ teamInfo, join }: RoomCardProps) => {
             '나가기'
           )
         ) : (
-          '참여'
+          <div
+            onClick={() => {
+              joinTeam(teamInfo.uuid).then((res) => {
+                console.log(res);
+                getMyTeams().then((res) => {
+                  console.log(res);
+                  setTeamList(res.map((team) => team.team_uuid));
+                });
+              });
+            }}
+          >
+            참여
+          </div>
         )}
       </Button>
     </div>

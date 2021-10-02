@@ -10,4 +10,12 @@ declare global {
     update_date: string;
     uuid: string;
   };
+
+  type MyTeam = {
+    channel_uuid: string;
+    create_date: string;
+    id: number;
+    team_uuid: Team;
+    user_uuid: User;
+  };
 }
