@@ -18,4 +18,9 @@ declare global {
     team_uuid: Team;
     user_uuid: User;
   };
+
+  type TeamParticipant = Team & {
+    email: string;
+    team_profile: TeamUser[];
+  };
 }

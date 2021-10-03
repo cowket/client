@@ -15,7 +15,7 @@ const RoomItem = ({ teamInfo, join }: RoomCardProps) => {
   const { setTeamList, teamList } = useContext(teamContext);
   const isTeamOwner = useMemo(() => {
     if (userInfo) {
-      return userInfo?.id === teamInfo.owner?.id;
+      return userInfo?.uuid === teamInfo.owner?.uuid;
     }
     return false;
   }, [userInfo]);
@@ -33,40 +33,56 @@ const RoomItem = ({ teamInfo, join }: RoomCardProps) => {
           {teamInfo.description ?? '팀에 대한 설명이 없습니다.'}
         </p>
       </section>
-      <Button color="primary" fullWidth>
-        {join ? (
-          isTeamOwner ? (
-            <div
-              onClick={async () => {
-                const response = await deleteTeam(teamInfo.uuid);
-                if (response) {
-                  setTeamList(
-                    teamList.filter((team) => team.uuid !== teamInfo.uuid)
-                  );
-                }
-              }}
-            >
-              팀 삭제
-            </div>
-          ) : (
-            '나가기'
-          )
-        ) : (
-          <div
-            onClick={() => {
-              joinTeam(teamInfo.uuid).then((res) => {
-                console.log(res);
-                getMyTeams().then((res) => {
-                  console.log(res);
-                  setTeamList(res.map((team) => team.team_uuid));
-                });
-              });
+      {join ? (
+        isTeamOwner ? (
+          <Button
+            color="primary"
+            fullWidth
+            onClick={async () => {
+              const response = await deleteTeam(teamInfo.uuid);
+              if (response) {
+                setTeamList(
+                  teamList.filter((team) => team.uuid !== teamInfo.uuid)
+                );
+              }
             }}
           >
-            참여
-          </div>
-        )}
-      </Button>
+            팀 삭제
+          </Button>
+        ) : (
+          <Button
+            color="primary"
+            fullWidth
+            onClick={async () => {
+              // const response = await deleteTeam(teamInfo.uuid);
+              // if (response) {
+              //   setTeamList(
+              //     teamList.filter((team) => team.uuid !== teamInfo.uuid)
+              //   );
+              // }
+            }}
+          >
+            나가기
+          </Button>
+        )
+      ) : (
+        <Button
+          color="primary"
+          fullWidth
+          disabled={
+            teamList.findIndex((team: Team) => team.uuid === teamInfo.uuid) >= 0
+          }
+          onClick={() => {
+            joinTeam(teamInfo.uuid).then((res) => {
+              getMyTeams().then((res) => {
+                setTeamList(res.map((team) => team.team_uuid));
+              });
+            });
+          }}
+        >
+          참여
+        </Button>
+      )}
     </div>
   );
 };

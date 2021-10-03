@@ -1,7 +1,9 @@
-import React, { useContext, useState } from 'react';
+import React, { useContext, useState, useEffect } from 'react';
 import profileContext from 'context/profile';
 import Modal from '../EditModal';
 import userContext from 'context/user';
+import selectContext from 'context/select';
+import { getUserDetail } from 'api/user';
 import {
   CloseOutlined,
   MoreVert,
@@ -13,8 +15,18 @@ import './style.scss';
 
 const Profile = () => {
   const [showModal, setShowModal] = useState<boolean>(false);
+  const [userProfile, setUserProfile] = useState<TeamUser>();
   const { setProfileId, profileId } = useContext(profileContext);
   const { userInfo } = useContext(userContext);
+  const { selectedTeam } = useContext(selectContext);
+
+  useEffect(() => {
+    if (selectedTeam?.uuid && profileId) {
+      getUserDetail(selectedTeam.uuid, profileId).then((res) =>
+        setUserProfile(res)
+      );
+    }
+  }, [profileId]);
 
   if (!userInfo) {
     return <div>사용자 정보가 없습니다.</div>;
@@ -25,7 +37,7 @@ const Profile = () => {
   };
   return (
     <>
-      {showModal && <Modal onClose={onClose} />}
+      {showModal && <Modal onClose={onClose} profileInfo={userProfile} />}
       <div className="profileContainer">
         <header>
           <p>프로필</p>
@@ -35,10 +47,9 @@ const Profile = () => {
         </header>
         <div className="imgBox">
           <img src={userInfo.avatar} />
-          <div className="name">이름이름</div>
+          <div className="name">{userProfile?.name ?? '닉네임이 없습니다'}</div>
           <div className="subBox">
-            {/* {profileId && userInfo.id === profileId ? ( */}
-            {true ? (
+            {profileId && userInfo.uuid === profileId ? (
               <div className="itemBox">
                 <IconButton onClick={() => setShowModal(true)}>
                   <CreateOutlined fontSize="small" />
@@ -62,12 +73,12 @@ const Profile = () => {
           </div>
         </div>
         <ul className="detailBox">
-          <li>Display name</li>
-          <li>Display name</li>
-          <li>Local time</li>
-          <li>Display name</li>
+          <li>Position</li>
+          <li>{userProfile?.position}</li>
+          <li>Contact</li>
+          <li>{userProfile?.contact}</li>
           <li>Email address</li>
-          <li>Display name</li>
+          <li>{userInfo?.email}</li>
         </ul>
       </div>
     </>

@@ -8,7 +8,7 @@ import './style.scss';
 
 type ChannelProps = {
   title: 'Channel' | 'Direct Message';
-  channelList: { channel: string; id: number }[];
+  channelList: TeamParticipant[] | any[];
 };
 
 const Channel = ({ title, channelList }: ChannelProps) => {
@@ -32,7 +32,7 @@ const Channel = ({ title, channelList }: ChannelProps) => {
         </div>
         <div className="channelItems">
           {showList &&
-            channelList.map((chan, index) => {
+            channelList.map((chan: TeamParticipant, index: number) => {
               const isAddButton =
                 title === 'Channel' && index === channelList.length - 1;
               return (
@@ -45,7 +45,7 @@ const Channel = ({ title, channelList }: ChannelProps) => {
                   {isAddButton ? (
                     <div className="addButton">채널 추가하기</div>
                   ) : (
-                    chan.channel
+                    chan.email
                   )}
                 </div>
               );

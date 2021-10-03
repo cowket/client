@@ -1,8 +1,8 @@
 import React from 'react';
 
 type ProfileContextType = {
-  profileId?: number;
-  setProfileId: React.Dispatch<React.SetStateAction<number | undefined>>;
+  profileId?: string;
+  setProfileId: React.Dispatch<React.SetStateAction<string | undefined>>;
 };
 
 const initialValue: ProfileContextType = {

@@ -1,8 +1,9 @@
-import React, { ChangeEvent, useState, useContext } from 'react';
+import React, { useEffect, useState, useContext } from 'react';
 import profileContext from 'context/profile';
 import userContext from 'context/user';
+import selectContext from 'context/select';
 import useDesktopSize from 'hooks/useDesktopSize';
-import { putUserInfo } from 'api/user';
+import { putUserInfo, postUserInfo } from 'api/user';
 import { uploadFile } from 'api/file';
 import { CloseOutlined, ArrowBack } from '@material-ui/icons';
 import { IconButton, Button, Input, TextField } from '@material-ui/core';
@@ -10,22 +11,39 @@ import './style.scss';
 
 type EditModalProps = {
   onClose(): void;
+  profileInfo?: TeamUser;
 };
 
-const EditModal = ({ onClose }: EditModalProps) => {
+const EditModal = ({ onClose, profileInfo }: EditModalProps) => {
   const { userInfo, setUserInfo } = useContext(userContext);
+  const { selectedTeam } = useContext(selectContext);
+  if (!userInfo || !selectedTeam) {
+    return <div>사용자 정보가 없습니다</div>;
+  }
+
+  const [edittedInfo, setEdittedInfo] = useState<TeamUser>({
+    ...profileInfo,
+    avatar: userInfo.avatar,
+    team_uuid: selectedTeam.uuid,
+  });
+
   const isDesktopSize = useDesktopSize();
   const [fileUrl, setFileUrl] = useState<string>();
 
-  if (!userInfo) {
-    return <div>사용자 정보가 없습니다.</div>;
-  }
-
   const onSubmit = async () => {
-    const response = await putUserInfo({
-      ...userInfo,
-      ...(fileUrl && { avatar: fileUrl }),
-    });
+    let response;
+    if (edittedInfo.id) {
+      response = await putUserInfo({
+        ...edittedInfo,
+        ...(fileUrl && { avatar: fileUrl }),
+      });
+    } else {
+      response = await postUserInfo({
+        ...edittedInfo,
+        ...(fileUrl && { avatar: fileUrl }),
+      });
+    }
+
     setUserInfo(response);
     onClose();
   };
@@ -58,7 +76,7 @@ const EditModal = ({ onClose }: EditModalProps) => {
             <TextField
               id="outlined-basic"
               label="이메일"
-              defaultValue={userInfo?.email}
+              defaultValue={userInfo.email}
               InputProps={{
                 readOnly: true,
               }}
@@ -68,19 +86,36 @@ const EditModal = ({ onClose }: EditModalProps) => {
             />
             <TextField
               id="outlined-basic"
-              label="상세설명"
+              label="닉네임"
+              defaultValue={edittedInfo?.name}
+              onChange={(e) =>
+                setEdittedInfo({ ...edittedInfo, name: e.target.value })
+              }
               variant="outlined"
               size="small"
-              multiline
               margin="normal"
-              minRows={3}
             />
             <TextField
               id="outlined-basic"
-              label="또뭐하지"
+              label="포지션"
+              defaultValue={edittedInfo?.position}
+              onChange={(e) =>
+                setEdittedInfo({ ...edittedInfo, position: e.target.value })
+              }
               variant="outlined"
-              margin="normal"
               size="small"
+              margin="normal"
+            />
+            <TextField
+              id="outlined-basic"
+              label="연락처"
+              defaultValue={edittedInfo?.contact}
+              onChange={(e) =>
+                setEdittedInfo({ ...edittedInfo, contact: e.target.value })
+              }
+              variant="outlined"
+              size="small"
+              margin="normal"
             />
           </section>
           <section className="imgBox">
@@ -89,7 +124,7 @@ const EditModal = ({ onClose }: EditModalProps) => {
               src={
                 fileUrl
                   ? `https://cowket-api.stackunderflow.xyz/uploads/${fileUrl}`
-                  : userInfo.avatar
+                  : edittedInfo.avatar
               }
             />
             <label htmlFor="contained-button-file">

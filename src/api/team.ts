@@ -11,6 +11,17 @@ export const postTeam = async (team: {
   return response.data;
 };
 
+// 팀 참여자 리스트 받아오기
+export const getTeamParticipants = async (
+  teamUuid: string
+): Promise<TeamParticipant[]> => {
+  const { data: team } = await client.get<TeamParticipant[]>(
+    `/team/grant/all/${teamUuid}`
+  );
+  console.log(team);
+  return team;
+};
+
 // 유저의 팀 조회
 export const getMyTeams = async (): Promise<MyTeam[]> => {
   const { data: team } = await client.get<MyTeam[]>('/users/grant/team');

@@ -27,7 +27,7 @@ const Chat = (
     },
   } = props;
   const isDesktopSize = useDesktopSize();
-  const [profileId, setProfileId] = useState<number>();
+  const [profileId, setProfileId] = useState<string>();
   const { setTeamList } = useContext(teamContext);
   const { setSelectedTeam } = useContext(selectContext);
 
