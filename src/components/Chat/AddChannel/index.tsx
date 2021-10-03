@@ -1,5 +1,8 @@
 import useDesktopSize from 'hooks/useDesktopSize';
-import React, { useState } from 'react';
+import React, { useState, useContext } from 'react';
+import { postChannel } from 'api/channel';
+import selectContext from 'context/select';
+import channelContext from 'context/channel';
 import { CloseOutlined, ArrowBack } from '@material-ui/icons';
 import {
   IconButton,
@@ -16,8 +19,15 @@ type AddChannelProps = {
 const AddChannel = ({ onClose }: AddChannelProps) => {
   const [channelName, setChannelName] = useState<string>();
   const isDesktopSize = useDesktopSize();
+  const { setChannelList, channelList } = useContext(channelContext);
+  const { selectedTeam } = useContext(selectContext);
 
   const onSubmit = async () => {
+    if (channelName && selectedTeam?.uuid) {
+      postChannel({ team_uuid: selectedTeam.uuid, name: channelName }).then(
+        (res) => setChannelList([...channelList, res])
+      );
+    }
     onClose();
   };
 
