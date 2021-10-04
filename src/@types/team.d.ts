@@ -12,7 +12,7 @@ declare global {
   };
 
   type MyTeam = {
-    channel_uuid: string;
+    channel_uuid: Channel;
     create_date: string;
     id: number;
     team_uuid: Team;
@@ -21,6 +21,6 @@ declare global {
 
   type TeamParticipant = Team & {
     email: string;
-    team_profile: TeamUser[];
+    team_profile: TeamUser;
   };
 }

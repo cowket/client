@@ -2,6 +2,7 @@ import React, { useEffect, useContext, useState } from 'react';
 import Team from 'components/Chat/List/Team';
 import Channel from 'components/Chat/List/Channel';
 import { getTeamParticipants } from 'api/team';
+import { getChannel } from 'api/channel';
 import ChannelContext from 'context/channel';
 import selectContext from 'context/select';
 import './style.scss';
@@ -14,6 +15,9 @@ const ListBox = () => {
     if (selectedTeam) {
       getTeamParticipants(selectedTeam.uuid).then((res) => {
         setTeamDMList(res);
+      });
+      getChannel(selectedTeam.uuid).then((res) => {
+        setChannelList(res.map((value) => value.channel_uuid));
       });
     }
   }, [selectedTeam]);

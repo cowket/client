@@ -2,9 +2,11 @@ import React from 'react';
 
 type SelectContextType = {
   selectedTeam?: Team;
-  selectedChannel?: string;
+  selectedChannel?: Channel | TeamParticipant;
   setSelectedTeam: React.Dispatch<React.SetStateAction<Team | undefined>>;
-  setSelectedChannel: React.Dispatch<React.SetStateAction<string | undefined>>;
+  setSelectedChannel: React.Dispatch<
+    React.SetStateAction<Channel | TeamParticipant | undefined>
+  >;
 };
 
 const initialValue: SelectContextType = {

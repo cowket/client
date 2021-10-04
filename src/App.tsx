@@ -20,7 +20,9 @@ export default function App(): JSX.Element {
   const [teamList, setTeamList] = useState<Team[]>([]);
   const [userInfo, setUserInfo] = useState<UserDetail>();
   const [selectedTeam, setSelectedTeam] = useState<Team>();
-  const [selectedChannel, setSelectedChannel] = useState<string>();
+  const [selectedChannel, setSelectedChannel] = useState<
+    Channel | TeamParticipant
+  >();
   const refreshUserInfo = async (refreshToken: string) => {
     const userInfo = await postLoginByToken(refreshToken);
     if (userInfo?.statusCode === 401) {
