@@ -22,7 +22,6 @@ const Channel = ({ title, channelList }: ChannelProps) => {
   const onClose = () => {
     setShowModal(false);
   };
-  console.log(channelList);
   return (
     <>
       {showModal && <AddChannel onClose={onClose} />}

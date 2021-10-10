@@ -10,13 +10,16 @@ import './style.scss';
 const ListBox = () => {
   const [teamDMList, setTeamDMList] = useState<TeamParticipant[]>([]);
   const [channelList, setChannelList] = useState<Channel[]>([]);
-  const { selectedTeam } = useContext(selectContext);
+  const { selectedTeam, setSelectedChannel } = useContext(selectContext);
   useEffect(() => {
     if (selectedTeam) {
       getTeamParticipants(selectedTeam.uuid).then((res) => {
         setTeamDMList(res);
       });
       getChannel(selectedTeam.uuid).then((res) => {
+        if (res.length > 0) {
+          setSelectedChannel(res[0].channel_uuid);
+        }
         setChannelList(res.map((value) => value.channel_uuid));
       });
     }

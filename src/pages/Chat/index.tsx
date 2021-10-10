@@ -5,15 +5,16 @@ import { getMyTeams } from 'api/team';
 import teamContext from 'context/team';
 import selectContext from 'context/select';
 import useDesktopSize from 'hooks/useDesktopSize';
+import SocketContext from 'context/socket';
 import ListBox from 'components/Chat/ListBox';
+import socketIo from 'socket.io-client';
 import ChatRoom from 'components/Chat/ChatRoom';
 import Profile from 'components/Profile/Tab';
-import socketIo from 'socket.io-client';
 import './style.scss';
 
-// const socket = socketIo('http://socket.stackunderflow.xyz/', {
-//   transports: ['websocket'],
-// });
+const socket = socketIo('http://socket.stackunderflow.xyz/cowket', {
+  transports: ['websocket'],
+});
 
 const Chat = (
   props: RouteComponentProps<{
@@ -29,7 +30,12 @@ const Chat = (
   const isDesktopSize = useDesktopSize();
   const [profileId, setProfileId] = useState<string>();
   const { setTeamList } = useContext(teamContext);
-  const { setSelectedTeam } = useContext(selectContext);
+  const { setSelectedTeam, selectedTeam, selectedChannel } =
+    useContext(selectContext);
+
+  if (!socket) {
+    return <div>connecting....</div>;
+  }
 
   useEffect(() => {
     getMyTeams().then((res) => {
@@ -41,12 +47,38 @@ const Chat = (
   }, []);
 
   useEffect(() => {
-    // socket.emit('message', { message: '이건 테스트' });
-  }, []);
-  // socket.on('message', (e) => console.log(e));
+    if (socket && selectedChannel) {
+      console.log(selectedChannel);
+      socket.emit('joinRoom', { channel_uuid: selectedChannel.uuid });
+    }
+  }, [selectedChannel]);
 
   if (isDesktopSize) {
     return (
+      <SocketContext.Provider value={{ socket }}>
+        <ProfileContext.Provider
+          value={{
+            profileId,
+            setProfileId,
+          }}
+        >
+          <div
+            className="chatContainer"
+            style={{
+              gridTemplateColumns: `300px 4fr ${profileId ? 'auto' : ''}`,
+            }}
+          >
+            <ListBox />
+            {selectedChannel && <ChatRoom />}
+            {profileId !== undefined && <Profile />}
+          </div>
+        </ProfileContext.Provider>
+      </SocketContext.Provider>
+    );
+  }
+
+  return (
+    <SocketContext.Provider value={{ socket }}>
       <ProfileContext.Provider
         value={{
           profileId,
@@ -56,36 +88,16 @@ const Chat = (
         <div
           className="chatContainer"
           style={{
-            gridTemplateColumns: `300px 4fr ${profileId ? 'auto' : ''}`,
+            gridTemplateColumns: '1fr',
           }}
         >
-          <ListBox />
-          <ChatRoom />
-          {profileId !== undefined && <Profile />}
+          {/* 조건문을 수정할수있을듯 */}
+          {profileId && <Profile />}
+          {!profileId && channelId && <ChatRoom />}
+          {!profileId && !channelId && <ListBox />}
         </div>
       </ProfileContext.Provider>
-    );
-  }
-
-  return (
-    <ProfileContext.Provider
-      value={{
-        profileId,
-        setProfileId,
-      }}
-    >
-      <div
-        className="chatContainer"
-        style={{
-          gridTemplateColumns: '1fr',
-        }}
-      >
-        {/* 조건문을 수정할수있을듯 */}
-        {profileId && <Profile />}
-        {!profileId && channelId && <ChatRoom />}
-        {!profileId && !channelId && <ListBox />}
-      </div>
-    </ProfileContext.Provider>
+    </SocketContext.Provider>
   );
 };
 
