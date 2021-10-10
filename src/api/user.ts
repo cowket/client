@@ -6,7 +6,7 @@ export const postUserInfo = async (userInfo: TeamUser): Promise<UserDetail> => {
   return response.data;
 };
 
-// 팀 내 사용자 정보 수정 > 아직안된듯?
+// 팀 내 사용자 정보 수정
 export const putUserInfo = async (userInfo: TeamUser): Promise<UserDetail> => {
   const response = await client.put<UserDetail>('/team/profile', userInfo);
   return response.data;

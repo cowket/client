@@ -5,58 +5,81 @@ import selectContext from 'context/select';
 import useDesktopSize from 'hooks/useDesktopSize';
 import { putUserInfo, postUserInfo } from 'api/user';
 import { uploadFile } from 'api/file';
+import { useFormik } from 'formik';
+import * as Yup from 'yup';
 import { CloseOutlined, ArrowBack } from '@material-ui/icons';
 import { IconButton, Button, Input, TextField } from '@material-ui/core';
 import './style.scss';
 
 type EditModalProps = {
-  onClose(): void;
+  onClose(info?: TeamUser): void;
   profileInfo?: TeamUser;
 };
 
 const EditModal = ({ onClose, profileInfo }: EditModalProps) => {
-  const { userInfo, setUserInfo } = useContext(userContext);
+  const { userInfo } = useContext(userContext);
+
   const { selectedTeam } = useContext(selectContext);
   if (!userInfo || !selectedTeam) {
     return <div>사용자 정보가 없습니다</div>;
   }
 
-  const [edittedInfo, setEdittedInfo] = useState<TeamUser>({
-    ...profileInfo,
-    avatar: userInfo.avatar,
-    team_uuid: selectedTeam.uuid,
-  });
-
   const isDesktopSize = useDesktopSize();
-  const [fileUrl, setFileUrl] = useState<string>();
+  const [fileUrl, setFileUrl] = useState<string | undefined>(
+    profileInfo?.avatar
+  );
 
-  const onSubmit = async () => {
-    let response;
-    if (edittedInfo.id) {
-      response = await putUserInfo({
-        ...edittedInfo,
-        ...(fileUrl && { avatar: fileUrl }),
-      });
-    } else {
-      response = await postUserInfo({
-        ...edittedInfo,
-        ...(fileUrl && { avatar: fileUrl }),
-      });
-    }
+  const formik = useFormik({
+    initialValues: {
+      name: profileInfo?.name,
+      position: profileInfo?.position,
+      contact: profileInfo?.contact,
+    },
+    validationSchema: Yup.object({
+      name: Yup.string().required(''),
+      position: Yup.string().required(''),
+      contact: Yup.string(),
+    }),
+    onSubmit: async (values) => {
+      if (values.name && values.position) {
+        let response: TeamUser;
+        console.log(userInfo);
+        if (profileInfo?.name) {
+          response = await putUserInfo({
+            name: values.name,
+            position: values.position,
+            team_uuid: selectedTeam.uuid,
+            ...(values?.contact && { contact: values.contact }),
+            ...(fileUrl && { avatar: fileUrl }),
+          });
+        } else {
+          response = await postUserInfo({
+            name: values.name,
+            position: values.position,
+            team_uuid: selectedTeam.uuid,
+            ...(values?.contact && { contact: values.contact }),
+            ...(fileUrl && { avatar: fileUrl }),
+          });
+        }
 
-    setUserInfo(response);
-    onClose();
-  };
+        onClose(response);
+      }
+    },
+  });
 
   return (
     <div className="modalWrapper">
-      <div className="profileModalContainer">
+      <form
+        id="profileForm"
+        onSubmit={formik.handleSubmit}
+        className="profileModalContainer"
+      >
         <header>
           <div className="title">
             {!isDesktopSize && (
               <IconButton
                 size="small"
-                onClick={onClose}
+                onClick={() => onClose()}
                 style={{ marginRight: '10px' }}
               >
                 <ArrowBack fontSize="small" />
@@ -65,7 +88,7 @@ const EditModal = ({ onClose, profileInfo }: EditModalProps) => {
             프로필 편집
           </div>
           {isDesktopSize && (
-            <IconButton size="small" onClick={onClose}>
+            <IconButton size="small" onClick={() => onClose()}>
               <CloseOutlined fontSize="small" />
             </IconButton>
           )}
@@ -85,34 +108,28 @@ const EditModal = ({ onClose, profileInfo }: EditModalProps) => {
               margin="normal"
             />
             <TextField
-              id="outlined-basic"
-              label="닉네임"
-              defaultValue={edittedInfo?.name}
-              onChange={(e) =>
-                setEdittedInfo({ ...edittedInfo, name: e.target.value })
-              }
+              label="닉네임*"
+              id="name"
+              onChange={formik.handleChange}
+              value={formik.values.name}
               variant="outlined"
               size="small"
               margin="normal"
             />
             <TextField
-              id="outlined-basic"
-              label="포지션"
-              defaultValue={edittedInfo?.position}
-              onChange={(e) =>
-                setEdittedInfo({ ...edittedInfo, position: e.target.value })
-              }
+              label="포지션*"
+              id="position"
+              onChange={formik.handleChange}
+              value={formik.values.position}
               variant="outlined"
               size="small"
               margin="normal"
             />
             <TextField
-              id="outlined-basic"
               label="연락처"
-              defaultValue={edittedInfo?.contact}
-              onChange={(e) =>
-                setEdittedInfo({ ...edittedInfo, contact: e.target.value })
-              }
+              id="contact"
+              onChange={formik.handleChange}
+              value={formik.values.contact}
               variant="outlined"
               size="small"
               margin="normal"
@@ -124,7 +141,7 @@ const EditModal = ({ onClose, profileInfo }: EditModalProps) => {
               src={
                 fileUrl
                   ? `https://cowket-api.stackunderflow.xyz/uploads/${fileUrl}`
-                  : edittedInfo.avatar
+                  : userInfo.avatar
               }
             />
             <label htmlFor="contained-button-file">
@@ -161,11 +178,19 @@ const EditModal = ({ onClose, profileInfo }: EditModalProps) => {
           <Button variant="contained" onClick={() => onClose()}>
             취소
           </Button>
-          <Button variant="contained" color="primary" onClick={onSubmit}>
+          <Button
+            variant="contained"
+            color="primary"
+            id="profileForm"
+            type="submit"
+            size="medium"
+            className="button"
+            disabled={!(formik.dirty && formik.isValid)}
+          >
             변경사항 저장
           </Button>
         </div>
-      </div>
+      </form>
     </div>
   );
 };
