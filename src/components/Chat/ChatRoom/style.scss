@@ -35,6 +35,23 @@
       font-weight: 500;
       color: $gray_2;
     }
+    .divideDate {
+      width: 100%;
+      display: flex;
+      align-items: center;
+      p {
+        font-size: 14px;
+        color: $gray_4;
+        width: 100px;
+        text-align: center;
+      }
+      hr {
+        height: 1px;
+        border: none;
+        background-color: $gray_5;
+        width: calc(50% - 65px);
+      }
+    }
   }
   .inputBox {
     background-color: $white;
