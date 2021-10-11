@@ -3,6 +3,7 @@ export {};
 declare global {
   type Team = {
     avatar: string;
+    is_private: boolean;
     create_date: string;
     description: string;
     name: string;
