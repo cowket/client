@@ -1,0 +1,81 @@
+@import 'styles/globals.scss';
+
+.modalWrapper {
+  position: fixed;
+  display: flex;
+  top: 0;
+  align-items: center;
+  justify-content: center;
+  min-width: 100vw;
+  min-height: 100%;
+  background-color: rgba(0, 0, 0, 0.4);
+  z-index: 12;
+  .searchModalContainer {
+    min-width: 500px;
+    min-height: 700px;
+    border-radius: 10px;
+    padding: 20px;
+    box-sizing: border-box;
+    height: max-content;
+    background-color: white;
+    & > header {
+      display: flex;
+      margin-bottom: 20px;
+      justify-content: space-between;
+      & > .title {
+        font-size: 18px;
+        font-weight: 700;
+        color: $gray_3;
+        display: flex;
+        align-items: center;
+      }
+    }
+    & > desc {
+      font-size: 14px;
+      font-weight: 500;
+      color: $gray_3;
+    }
+    & > section {
+      display: flex;
+      flex-direction: column;
+      margin-top: 10px;
+      overflow-y: auto;
+      .channel {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        padding: 10px;
+        border-radius: 6px;
+        &:hover {
+          background-color: $gray_9;
+        }
+      }
+    }
+  }
+}
+
+@media screen and (max-width: 959px) {
+  .modalWrapper > .searchModalContainer {
+    width: 100%;
+    min-height: 100vh;
+    // height: 100%;
+    min-width: 100%;
+    border-radius: 0px;
+    overflow-y: auto;
+    & > .infoBox {
+      display: flex;
+      flex-direction: column;
+      row-gap: 20px;
+      .imgBox {
+        display: flex;
+        img {
+          display: inline-block;
+          margin: 0 auto;
+        }
+      }
+    }
+    & > .buttonBox {
+      margin-top: 40px;
+    }
+  }
+}
