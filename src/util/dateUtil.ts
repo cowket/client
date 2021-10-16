@@ -15,8 +15,8 @@ export function dateToShortDate(date: Date): string {
 
 export function isFirstMessage(prevDate: Date, nextDate: Date): boolean {
   return (
-    prevDate.getFullYear() !== nextDate.getFullYear() &&
-    prevDate.getMonth() !== nextDate.getMonth() &&
+    prevDate.getFullYear() !== nextDate.getFullYear() ||
+    prevDate.getMonth() !== nextDate.getMonth() ||
     prevDate.getDate() !== nextDate.getDate()
   );
 }

@@ -2,6 +2,7 @@ import React, { useContext, useState, useEffect, useRef } from 'react';
 import Input from '@material-ui/core/Input';
 import useDesktopSize from 'hooks/useDesktopSize';
 import selectContext from 'context/select';
+import { getPrevChat } from 'api/chat';
 import { isFirstMessage, dateToShortDate } from 'util/dateUtil';
 import Button from '@material-ui/core/Button';
 import socketContext from 'context/socket';
@@ -42,6 +43,17 @@ const ChatRoom = () => {
   useEffect(() => {
     socket?.on('newMessage', (value: any) => onAddNewMessage(value));
   }, [chatBuffer]);
+
+  useEffect(() => {
+    if (selectedChannel) {
+      getPrevChat(selectedChannel.uuid).then((res) => {
+        const reversed = res.reverse();
+        chatBuffer.current = reversed;
+        setChatList(reversed);
+      });
+    }
+  }, [selectedChannel]);
+
   return (
     <div className="channelRoomContainer">
       <div className="targetInfo">
@@ -63,8 +75,8 @@ const ChatRoom = () => {
               index === 0 ||
               (chatArr.length - 1 !== index &&
                 isFirstMessage(
-                  new Date(chatArr[index].create_date),
-                  new Date(chatArr[index + 1].create_date)
+                  new Date(chatArr[index - 1].create_date),
+                  new Date(chatArr[index].create_date)
                 ))
             ) {
               return (
