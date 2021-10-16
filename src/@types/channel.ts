@@ -5,6 +5,9 @@ declare global {
     team_uuid?: string;
     channel_uuid?: string;
     name?: string;
+    description?: string;
+    password?: string;
+    isPrivate: boolean;
   };
 
   type Channel = {

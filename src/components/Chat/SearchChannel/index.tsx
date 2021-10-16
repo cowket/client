@@ -23,11 +23,6 @@ const SearchChannel = ({ onClose }: SearchChannelProps) => {
   const { selectedTeam } = useContext(selectContext);
 
   const onSubmit = async () => {
-    if (channelName && selectedTeam?.uuid) {
-      postChannel({ team_uuid: selectedTeam.uuid, name: channelName }).then(
-        (res) => setChannelList([...channelList, res])
-      );
-    }
     onClose();
   };
 
