@@ -13,6 +13,7 @@ declare global {
     is_updated: boolean;
     sender: UserDetail;
     team: Team;
+    team_user_profile: TeamUser;
     update_date: string;
     uuid: string;
   };

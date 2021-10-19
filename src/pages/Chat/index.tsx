@@ -4,6 +4,7 @@ import ProfileContext from 'context/profile';
 import { getMyTeams } from 'api/team';
 import teamContext from 'context/team';
 import selectContext from 'context/select';
+import userContext from 'context/user';
 import useDesktopSize from 'hooks/useDesktopSize';
 import SocketContext from 'context/socket';
 import ListBox from 'components/Chat/ListBox';
@@ -30,6 +31,7 @@ const Chat = (
   const isDesktopSize = useDesktopSize();
   const [profileId, setProfileId] = useState<string>();
   const { setTeamList } = useContext(teamContext);
+  const { userInfo } = useContext(userContext);
   const { setSelectedTeam, selectedTeam, selectedChannel } =
     useContext(selectContext);
 
@@ -48,8 +50,14 @@ const Chat = (
 
   useEffect(() => {
     if (socket && selectedChannel) {
-      console.log(selectedChannel);
-      socket.emit('joinRoom', { channel_uuid: selectedChannel.uuid });
+      if ('email' in selectedChannel) {
+        socket.emit('cowket:connection', {
+          user_uuid: userInfo?.uuid,
+          team_uuid: teamId,
+        });
+      } else {
+        socket.emit('joinRoom', { channel_uuid: selectedChannel.uuid });
+      }
     }
   }, [selectedChannel]);
 

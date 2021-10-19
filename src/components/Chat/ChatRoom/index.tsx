@@ -30,18 +30,31 @@ const ChatRoom = () => {
   };
 
   const onSendMessage = () => {
-    const newMessage = {
-      teamUuid: selectedTeam?.uuid,
-      channelUuid: selectedChannel?.uuid,
-      senderUuid: userInfo?.uuid,
-      content: message,
-    };
-    socket?.emit('pushMessage', newMessage);
+    if (selectedChannel) {
+      if ('email' in selectedChannel) {
+        const newMessage = {
+          team_uuid: selectedTeam?.uuid,
+          sender_uuid: userInfo?.uuid,
+          receiver_uuid: selectedChannel.uuid,
+          content: message,
+        };
+        socket?.emit('pushDirectMessage', newMessage);
+      } else {
+        const newMessage = {
+          teamUuid: selectedTeam?.uuid,
+          channelUuid: selectedChannel?.uuid,
+          senderUuid: userInfo?.uuid,
+          content: message,
+        };
+        socket?.emit('pushMessage', newMessage);
+      }
+    }
     console.log(socket);
   };
 
   useEffect(() => {
     socket?.on('newMessage', (value: any) => onAddNewMessage(value));
+    socket?.on('newDirectMessage', (value: any) => onAddNewMessage(value));
   }, [chatBuffer]);
 
   useEffect(() => {
