@@ -1,5 +1,6 @@
 import useDesktopSize from 'hooks/useDesktopSize';
-import React, { useState, useContext } from 'react';
+import React, { useState, useContext, useEffect, useMemo } from 'react';
+import { getAllChannelList } from 'api/channel';
 import { postChannel } from 'api/channel';
 import selectContext from 'context/select';
 import channelContext from 'context/channel';
@@ -17,15 +18,25 @@ type SearchChannelProps = {
 };
 
 const SearchChannel = ({ onClose }: SearchChannelProps) => {
-  const [channelName, setChannelName] = useState<string>();
+  const [publicChanList, setPublicChannelList] = useState<Team[]>([]);
   const isDesktopSize = useDesktopSize();
   const { setChannelList, channelList } = useContext(channelContext);
   const { selectedTeam } = useContext(selectContext);
+  const alreadyJoined = useMemo(
+    () => channelList.map((chan) => chan.uuid),
+    [channelList]
+  );
 
+  useEffect(() => {
+    if (selectedTeam) {
+      getAllChannelList(selectedTeam?.uuid).then((res) => {
+        setPublicChannelList(res);
+      });
+    }
+  }, [selectedTeam]);
   const onSubmit = async () => {
     onClose();
   };
-
   return (
     <div className="modalWrapper">
       <div className="searchModalContainer">
@@ -51,8 +62,14 @@ const SearchChannel = ({ onClose }: SearchChannelProps) => {
         <desc>모든 공개채널 중 참여하고 싶은 채널에 가입하세요.</desc>
         <section>
           <div className="channel">
-            <p>ddddd</p>
-            <Button>참여</Button>
+            {publicChanList.map((chan) => (
+              <div className="item">
+                <p>{chan.name}</p>
+                <Button>
+                  {alreadyJoined.includes(chan.uuid) ? '탈퇴' : '참여'}
+                </Button>
+              </div>
+            ))}
           </div>
         </section>
       </div>

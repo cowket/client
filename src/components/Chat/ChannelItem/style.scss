@@ -1,0 +1,47 @@
+@import 'styles/globals.scss';
+.channelItem {
+  font-size: 13px;
+  font-weight: 400;
+  color: $gray_3;
+  line-height: 26px;
+  padding: 3px 10px;
+  box-sizing: border-box;
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  cursor: pointer;
+  &:hover {
+    background-color: $gray_9;
+    // .editButton {
+    //   position: relative;
+    //   .button {
+    //     opacity: 1;
+    //     display: flex;
+    //     align-items: center;
+    //     justify-content: center;
+    //   }
+    // }
+  }
+  .chanName {
+    display: flex;
+    align-items: center;
+    & > span {
+      font-weight: 600;
+      font-size: 16px;
+    }
+  }
+  & > .editButton {
+    position: relative;
+    .button {
+      // opacity: 0;
+      height: 24px;
+      width: 24px;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      // background-color: $gray_7;
+    }
+  }
+}

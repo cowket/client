@@ -33,7 +33,6 @@
     flex-direction: column;
     align-items: flex-start;
     padding: 2px 0;
-
     & > .channelItem {
       font-size: 13px;
       font-weight: 400;
@@ -44,13 +43,42 @@
       width: 100%;
       display: flex;
       align-items: center;
+      justify-content: space-between;
+      position: relative;
       cursor: pointer;
       &:hover {
         background-color: $gray_9;
+        .editButton {
+          opacity: 1;
+          position: relative;
+          .button {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+          }
+        }
       }
-      & > span {
-        font-weight: 600;
-        font-size: 16px;
+      .chanName {
+        display: flex;
+        align-items: center;
+        & > span {
+          font-weight: 600;
+          font-size: 16px;
+        }
+      }
+      & > .editButton {
+        opacity: 0;
+        position: relative;
+
+        .button {
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          height: 24px;
+          width: 24px;
+          border-radius: 50%;
+          // background-color: $gray_7;
+        }
       }
     }
   }

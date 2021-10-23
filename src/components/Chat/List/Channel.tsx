@@ -1,11 +1,14 @@
-import React, { useState, useContext } from 'react';
+import React, { useState, useContext, useRef } from 'react';
 import { useHistory } from 'react-router-dom';
 import ExpandLessOutlinedIcon from '@material-ui/icons/ExpandLessOutlined';
 import ExpandMoreOutlinedIcon from '@material-ui/icons/ExpandMoreOutlined';
+import useOutsideClick from 'hooks/useOutsideClick';
 import AddChannel from 'components/Chat/AddChannel';
+import SearchChannel from 'components/Chat/SearchChannel';
 import selectContext from 'context/select';
 import userContext from 'context/user';
-import { Create } from '@material-ui/icons';
+import DropDown from 'components/Common/DropDown';
+import ChannelItem from '../ChannelItem';
 import './style.scss';
 
 type ChannelProps = {
@@ -15,16 +18,24 @@ type ChannelProps = {
 
 const Channel = ({ title, channelList }: ChannelProps) => {
   const history = useHistory();
-  const { setSelectedChannel } = useContext(selectContext);
-  const [showModal, setShowModal] = useState<boolean>(false);
+  const { setSelectedChannel, selectedTeam } = useContext(selectContext);
+  const [showModal, setShowModal] = useState<'add' | 'search' | undefined>(
+    undefined
+  );
+  const [showDropDown, setShowDropDown] = useState<boolean>(false);
   const [showList, setShowList] = useState<boolean>(true);
   const { userInfo } = useContext(userContext);
+  const dropdownRef = useRef<HTMLDivElement>(null);
+
+  useOutsideClick(dropdownRef, () => setShowDropDown(false));
   const onClose = () => {
-    setShowModal(false);
+    setShowModal(undefined);
   };
+
   return (
     <>
-      {showModal && <AddChannel onClose={onClose} />}
+      {showModal === 'add' && <AddChannel onClose={onClose} />}
+      {showModal === 'search' && <SearchChannel onClose={onClose} />}
       <div className="channelContainer">
         <div className="titleBox">
           <div className="title" onClick={() => setShowList(!showList)}>
@@ -36,25 +47,41 @@ const Channel = ({ title, channelList }: ChannelProps) => {
           {showList &&
             channelList.map(
               (chan: TeamParticipant | Channel, index: number) => {
-                return (
-                  <div
-                    className="channelItem"
-                    onClick={() => setSelectedChannel(chan)}
-                  >
-                    <span>#</span>
-                    &nbsp;
-                    <div>{'email' in chan ? chan.email : chan.name}</div>
-                    {/* {chan?.owner?.uuid === userInfo?.uuid && (
-                      <div className="editButton">수정하기</div>
-                    )} */}
-                  </div>
-                );
+                return <ChannelItem channel={chan} />;
               }
             )}
-          {title === 'Channel' && (
-            <div onClick={() => setShowModal(true)} className="channelItem">
-              <span>+</span>&nbsp;
-              <div className="addButton">채널 추가하기</div>
+          {title === 'Channel' && selectedTeam && (
+            <div
+              onClick={() => setShowDropDown(true)}
+              className="channelItem"
+              ref={dropdownRef}
+            >
+              <div className="chanName">
+                <span>+</span>&nbsp;
+                <div className="addButton">채널 추가하기</div>
+              </div>
+              {showDropDown && (
+                <DropDown
+                  list={[
+                    {
+                      label: '새 채널 생성',
+                      onClick: () => {
+                        setShowModal('add');
+                        setShowDropDown(false);
+                      },
+                    },
+                    {
+                      label: '모든 채널 탐색',
+                      onClick: () => {
+                        setShowModal('search');
+                        setShowDropDown(false);
+                      },
+                    },
+                  ]}
+                  top={30}
+                  left={70}
+                />
+              )}
             </div>
           )}
         </div>
