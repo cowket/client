@@ -17,7 +17,7 @@ const Item = ({ chat }: ItemRrops) => {
       >
         <img
           src={
-            chat.team_user_profile.avatar
+            chat.team_user_profile?.avatar
               ? `https://cowket-api.stackunderflow.xyz/uploads/${chat.team_user_profile.avatar}`
               : 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSRYqMHzMUsp7gf5ZEQmifMinddKJNovbobVOvNKJsnSPk6TW_oUIOhVqEwpWP4MvS-k8s&usqp=CAU'
           }
@@ -26,7 +26,7 @@ const Item = ({ chat }: ItemRrops) => {
       <div className="contentBox">
         <div className="userInfo">
           <p className="nickname">
-            {chat.team_user_profile.name ?? chat.sender.email}
+            {chat.team_user_profile?.name ?? chat.sender.email}
           </p>
           <p className="time">{dateToTime(new Date(chat.create_date))}</p>
         </div>

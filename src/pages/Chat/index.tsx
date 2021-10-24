@@ -53,7 +53,7 @@ const Chat = (
       if ('email' in selectedChannel) {
         socket.emit('cowket:connection', {
           user_uuid: userInfo?.uuid,
-          team_uuid: teamId,
+          team_uuid: selectedTeam?.uuid,
         });
       } else {
         socket.emit('joinRoom', { channel_uuid: selectedChannel.uuid });
