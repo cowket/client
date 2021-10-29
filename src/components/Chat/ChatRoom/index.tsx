@@ -21,13 +21,24 @@ const ChatRoom = () => {
   const { selectedChannel, selectedTeam } = useContext(selectContext);
   const [chatList, setChatList] = useState<DetailChat[]>([]);
   const chatBuffer = useRef<DetailChat[]>([]);
+  const chatRoomRef = useRef<HTMLDivElement>(null);
   const { userInfo } = useContext(userContext);
   const { socket } = useContext(socketContext);
 
   const onAddNewMessage = (chat: DetailChat) => {
     chatBuffer.current = [...chatBuffer.current, chat];
     setChatList(chatBuffer.current);
+    chatRoomRef.current?.scrollIntoView({ behavior: 'smooth' });
   };
+
+  const scrollToBottom = () => {
+    if (chatRoomRef.current) {
+      chatRoomRef.current.scrollTop = chatRoomRef.current.scrollHeight;
+    }
+  };
+  useEffect(() => {
+    scrollToBottom();
+  }, [chatList]);
 
   const onSendMessage = (message: string) => {
     console.log(message);
@@ -94,7 +105,7 @@ const ChatRoom = () => {
             : '채널을 선택해주세요'}
         </p>
       </div>
-      <div className="messageBox">
+      <div className="messageBox" ref={chatRoomRef}>
         {chatList.length > 0 ? (
           chatList.map((chat, index, chatArr) => {
             if (
