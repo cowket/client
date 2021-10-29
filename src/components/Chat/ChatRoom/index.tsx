@@ -12,11 +12,12 @@ import ArrowBackIosOutlinedIcon from '@material-ui/icons/ArrowBackIosOutlined';
 import PhotoCamera from '@material-ui/icons/PhotoCamera';
 import IconButton from '@material-ui/core/IconButton';
 import Icon from '@material-ui/core/Icon';
+import EditBox from 'components/Common/EditBox';
 import './style.scss';
 
 const ChatRoom = () => {
   const isDesktopSize = useDesktopSize();
-  const [message, setMessage] = useState<string>();
+  // const [message, setMessage] = useState<string>();
   const { selectedChannel, selectedTeam } = useContext(selectContext);
   const [chatList, setChatList] = useState<DetailChat[]>([]);
   const chatBuffer = useRef<DetailChat[]>([]);
@@ -26,10 +27,10 @@ const ChatRoom = () => {
   const onAddNewMessage = (chat: DetailChat) => {
     chatBuffer.current = [...chatBuffer.current, chat];
     setChatList(chatBuffer.current);
-    setMessage('');
   };
 
-  const onSendMessage = () => {
+  const onSendMessage = (message: string) => {
+    console.log(message);
     if (selectedChannel) {
       if ('email' in selectedChannel) {
         const newMessage = {
@@ -121,7 +122,7 @@ const ChatRoom = () => {
           <div className="empty">아직 작성된 메시지가 없습니다.</div>
         )}
       </div>
-      <div className="inputBox">
+      {/* <div className="inputBox">
         <Input
           color="primary"
           maxRows={2}
@@ -148,7 +149,8 @@ const ChatRoom = () => {
             <PhotoCamera fontSize="small" color="primary" />
           </IconButton>
         </div>
-      </div>
+      </div> */}
+      <EditBox onSendMessage={onSendMessage} />
     </div>
   );
 };
