@@ -31,3 +31,15 @@ export const getAllChannelList = async (team_uuid: string): Promise<Team[]> => {
   );
   return response.data;
 };
+
+// 공개 채널 참여
+export const joinChannel = async (
+  team_uuid: string,
+  channel_uuid: string
+): Promise<boolean> => {
+  const response = await client.post<boolean>('/channel/public', {
+    team_uuid,
+    channel_uuid,
+  });
+  return response.data;
+};

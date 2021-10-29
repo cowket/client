@@ -1,7 +1,7 @@
 import useDesktopSize from 'hooks/useDesktopSize';
 import React, { useState, useContext, useEffect, useMemo } from 'react';
 import { getAllChannelList } from 'api/channel';
-import { postChannel } from 'api/channel';
+import { postChannel, joinChannel } from 'api/channel';
 import selectContext from 'context/select';
 import channelContext from 'context/channel';
 import { CloseOutlined, ArrowBack } from '@material-ui/icons';
@@ -24,19 +24,17 @@ const SearchChannel = ({ onClose }: SearchChannelProps) => {
   const { selectedTeam } = useContext(selectContext);
   const alreadyJoined = useMemo(
     () => channelList.map((chan) => chan.uuid),
-    [channelList]
+    [publicChanList]
   );
 
   useEffect(() => {
     if (selectedTeam) {
-      getAllChannelList(selectedTeam?.uuid).then((res) => {
+      getAllChannelList(selectedTeam.uuid).then((res) => {
         setPublicChannelList(res);
       });
     }
   }, [selectedTeam]);
-  const onSubmit = async () => {
-    onClose();
-  };
+
   return (
     <div className="modalWrapper">
       <div className="searchModalContainer">
@@ -65,9 +63,19 @@ const SearchChannel = ({ onClose }: SearchChannelProps) => {
             {publicChanList.map((chan) => (
               <div className="item">
                 <p>{chan.name}</p>
-                <Button>
-                  {alreadyJoined.includes(chan.uuid) ? '탈퇴' : '참여'}
-                </Button>
+                {alreadyJoined.includes(chan.uuid) ? (
+                  <Button>탈퇴</Button>
+                ) : (
+                  <Button
+                    onClick={() => {
+                      if (selectedTeam) {
+                        joinChannel(selectedTeam.uuid, chan.uuid);
+                      }
+                    }}
+                  >
+                    참여
+                  </Button>
+                )}
               </div>
             ))}
           </div>
