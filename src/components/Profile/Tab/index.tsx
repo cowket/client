@@ -48,9 +48,7 @@ const Profile = () => {
           </div>
         </header>
         <div className="imgBox">
-          <img
-            src={`https://cowket-api.stackunderflow.xyz/uploads/${userProfile?.avatar}`}
-          />
+          <img src={userProfile?.avatar} />
           <div className="name">{userProfile?.name ?? '닉네임이 없습니다'}</div>
           <div className="subBox">
             {profileId && userInfo.uuid === profileId ? (

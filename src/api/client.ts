@@ -4,7 +4,7 @@ const client = axios.create({
   withCredentials: true,
   timeout: 30000,
   timeoutErrorMessage: 'time out error',
-  baseURL: 'https://cowket-api.stackunderflow.xyz',
+  baseURL: 'https://cw.malrang.dev',
   headers: {
     Accept: 'application/json',
     // 'Access-Control-Allow-Origin': '*',

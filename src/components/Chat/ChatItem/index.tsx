@@ -18,7 +18,7 @@ const Item = ({ chat }: ItemRrops) => {
         <img
           src={
             chat.team_user_profile?.avatar
-              ? `https://cowket-api.stackunderflow.xyz/uploads/${chat.team_user_profile.avatar}`
+              ? chat.team_user_profile.avatar
               : 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSRYqMHzMUsp7gf5ZEQmifMinddKJNovbobVOvNKJsnSPk6TW_oUIOhVqEwpWP4MvS-k8s&usqp=CAU'
           }
         />
