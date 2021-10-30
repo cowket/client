@@ -137,13 +137,7 @@ const EditModal = ({ onClose, profileInfo }: EditModalProps) => {
           </section>
           <section className="imgBox">
             <p className="title">프로필 사진</p>
-            <img
-              src={
-                fileUrl
-                  ? `https://cowket-api.stackunderflow.xyz/uploads/${fileUrl}`
-                  : userInfo.avatar
-              }
-            />
+            <img src={fileUrl ? fileUrl : userInfo.avatar} />
             <label htmlFor="contained-button-file">
               <input
                 accept="image/*"
