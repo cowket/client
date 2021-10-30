@@ -1,7 +1,7 @@
 import useDesktopSize from 'hooks/useDesktopSize';
 import React, { useState, useContext, useEffect, useMemo } from 'react';
 import { getAllChannelList } from 'api/channel';
-import { postChannel, joinChannel } from 'api/channel';
+import { getChannel, joinChannel } from 'api/channel';
 import selectContext from 'context/select';
 import channelContext from 'context/channel';
 import { CloseOutlined, ArrowBack } from '@material-ui/icons';
@@ -24,7 +24,7 @@ const SearchChannel = ({ onClose }: SearchChannelProps) => {
   const { selectedTeam } = useContext(selectContext);
   const alreadyJoined = useMemo(
     () => channelList.map((chan) => chan.uuid),
-    [publicChanList]
+    [channelList]
   );
 
   useEffect(() => {
@@ -69,7 +69,17 @@ const SearchChannel = ({ onClose }: SearchChannelProps) => {
                   <Button
                     onClick={() => {
                       if (selectedTeam) {
-                        joinChannel(selectedTeam.uuid, chan.uuid);
+                        joinChannel(selectedTeam.uuid, chan.uuid).then(
+                          (res) => {
+                            if (res) {
+                              getChannel(selectedTeam.uuid).then((res) => {
+                                setChannelList(
+                                  res.map((value) => value.channel_uuid)
+                                );
+                              });
+                            }
+                          }
+                        );
                       }
                     }}
                   >

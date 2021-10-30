@@ -18,7 +18,8 @@ type ChannelProps = {
 
 const Channel = ({ title, channelList }: ChannelProps) => {
   const history = useHistory();
-  const { setSelectedChannel, selectedTeam } = useContext(selectContext);
+  const { setSelectedChannel, selectedTeam, selectedChannel } =
+    useContext(selectContext);
   const [showModal, setShowModal] = useState<'add' | 'search' | undefined>(
     undefined
   );

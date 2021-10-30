@@ -12,17 +12,23 @@ type ChannelProps = {
 };
 
 const ChannelItem = ({ channel }: ChannelProps) => {
-  const { setSelectedChannel } = useContext(selectContext);
+  const { setSelectedChannel, selectedChannel } = useContext(selectContext);
   const [showDropDown, setShowDropDown] = useState<boolean>(false);
   const [showModal, setShowModal] = useState<boolean>(false);
   const { userInfo } = useContext(userContext);
   const dropdownRef = useRef<HTMLDivElement>(null);
 
   useOutsideClick(dropdownRef, () => setShowDropDown(false));
+  console.log(selectedChannel?.uuid === channel.uuid);
   return (
     <>
       {showModal && <AddChannel onClose={() => setShowModal(false)} />}
-      <div className="channelItem" onClick={() => setSelectedChannel(channel)}>
+      <div
+        className={`channelItem ${
+          selectedChannel?.uuid === channel.uuid && 'selected'
+        }`}
+        onClick={() => setSelectedChannel(channel)}
+      >
         <div className="chanName">
           <span>#</span>
           &nbsp;

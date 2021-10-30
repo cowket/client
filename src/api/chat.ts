@@ -14,11 +14,11 @@ export const getPrevChannelChat = async (
 // 최근 10개의 DM 메세지를 받아옴
 export const getPrevDMChat = async (
   sender: string,
-  reciever: string,
+  receiver: string,
   team_uuid: string
 ): Promise<DetailChat[]> => {
   const response = await client.get<DetailChat[]>(
-    `/message/dm?sender=${sender}&reciever=${reciever}&team_uuid=${team_uuid}`
+    `/message/dm?sender=${sender}&receiver=${receiver}&team_uuid=${team_uuid}`
   );
 
   return response.data;
