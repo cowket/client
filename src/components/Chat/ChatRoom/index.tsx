@@ -103,11 +103,9 @@ const ChatRoom = () => {
         {!isDesktopSize && <ArrowBackIosOutlinedIcon fontSize="small" />}
         <p>
           {selectedChannel
-            ? `${
-                'team_profile' in selectedChannel
-                  ? selectedChannel.team_profile?.name ?? selectedChannel.email
-                  : selectedChannel.name
-              }님과의 채팅방`
+            ? 'team_profile' in selectedChannel
+              ? selectedChannel.team_profile?.name ?? selectedChannel.email
+              : selectedChannel.name
             : '채널을 선택해주세요'}
         </p>
       </div>

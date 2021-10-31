@@ -8,18 +8,16 @@ type ItemRrops = {
 };
 
 const Item = ({ chat }: ItemRrops) => {
+  console.log(chat);
   const { setProfileId } = useContext(profileContext);
   return (
     <div className="itemBox">
-      <div
-        className="imgBox"
-        onClick={() => setProfileId('302d64d4-fd1e-4934-a1dc-d484237e9b69')}
-      >
+      <div className="imgBox" onClick={() => setProfileId(chat.sender.uuid)}>
         <img
           src={
             chat.team_user_profile?.avatar
               ? chat.team_user_profile.avatar
-              : 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSRYqMHzMUsp7gf5ZEQmifMinddKJNovbobVOvNKJsnSPk6TW_oUIOhVqEwpWP4MvS-k8s&usqp=CAU'
+              : chat.sender.avatar
           }
         />
       </div>
