@@ -65,8 +65,14 @@ const ChatRoom = () => {
   };
 
   useEffect(() => {
-    socket?.on('newMessage', (value: any) => onAddNewMessage(value));
-    socket?.on('newDirectMessage', (value: any) => onAddNewMessage(value));
+    socket?.on('newMessage', (value: any) => {
+      console.log(value);
+      onAddNewMessage(value);
+    });
+    socket?.on('newDirectMessage', (value: any) => {
+      console.log(value);
+      onAddNewMessage(value);
+    });
   }, [chatBuffer]);
 
   useEffect(() => {

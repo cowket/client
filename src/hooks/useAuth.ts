@@ -8,7 +8,7 @@ export const postRegister = async (userInfo: {
   password: string;
 }): Promise<any> => {
   const { data } = await axios.post(
-    'https://cowket-api.stackunderflow.xyz/auth/new',
+    'https://cw.malrang.dev/auth/new',
     userInfo,
     { withCredentials: true }
   );

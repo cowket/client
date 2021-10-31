@@ -13,7 +13,7 @@ import ChatRoom from 'components/Chat/ChatRoom';
 import Profile from 'components/Profile/Tab';
 import './style.scss';
 
-const socket = socketIo('http://socket.stackunderflow.xyz/cowket', {
+const socket = socketIo('wss://socket.malrang.dev/cowket', {
   transports: ['websocket'],
 });
 
@@ -60,6 +60,12 @@ const Chat = (
       }
     }
   }, [selectedChannel]);
+
+  useEffect(() => {
+    if (socket) {
+      socket.on('errorPacket', (error) => console.log(error));
+    }
+  }, [socket]);
 
   if (isDesktopSize) {
     return (
