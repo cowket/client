@@ -1,6 +1,6 @@
 import useDesktopSize from 'hooks/useDesktopSize';
 import React, { useState, useContext } from 'react';
-import { postChannel } from 'api/channel';
+import { postChannel, inviteUserPrivateChan } from 'api/channel';
 import selectContext from 'context/select';
 import channelContext from 'context/channel';
 import { useFormik } from 'formik';
@@ -14,14 +14,15 @@ import {
   Checkbox,
 } from '@material-ui/core';
 import './style.scss';
+import AsyncMulti from '../AsyncSelect';
 
 type AddChannelProps = {
   onClose(): void;
 };
 
 const AddChannel = ({ onClose }: AddChannelProps) => {
-  const [channelName, setChannelName] = useState<string>();
   const [checked, setChecked] = useState<boolean>(false);
+  const [privateUserList, setPrivateUserList] = useState<string[]>([]);
   const isDesktopSize = useDesktopSize();
   const { setChannelList, channelList } = useContext(channelContext);
   const { selectedTeam } = useContext(selectContext);
@@ -33,21 +34,29 @@ const AddChannel = ({ onClose }: AddChannelProps) => {
     initialValues: {
       channelName: '',
       desc: '',
-      password: '',
     },
     validationSchema: Yup.object({
       channelName: Yup.string().required(''),
       desc: Yup.string().required(''),
-      password: Yup.string(),
     }),
     onSubmit: async (values) => {
       if (values.channelName && values.desc && selectedTeam) {
         postChannel({
           team_uuid: selectedTeam.uuid,
           name: values.channelName,
-          isPrivate: checked,
-          password: values.password,
-        }).then((res) => setChannelList([...channelList, res]));
+          is_private: checked,
+        }).then((res) => {
+          if (res) {
+            setChannelList([...channelList, res]);
+            if (checked && privateUserList.length > 0) {
+              inviteUserPrivateChan(
+                selectedTeam.uuid,
+                res.uuid,
+                privateUserList
+              );
+            }
+          }
+        });
       }
       onClose();
     },
@@ -114,29 +123,24 @@ const AddChannel = ({ onClose }: AddChannelProps) => {
               onChange={formik.handleChange}
               value={formik.values.desc}
             />
-            <div className="private">
-              <div className="check">
-                <Checkbox
-                  size="small"
-                  defaultChecked={checked}
-                  color="primary"
-                  onChange={onChange}
-                  inputProps={{ 'aria-label': 'secondary checkbox' }}
-                />
-                private team
-              </div>
+            <div className="check">
+              <Checkbox
+                size="small"
+                defaultChecked={checked}
+                color="primary"
+                onChange={onChange}
+                inputProps={{ 'aria-label': 'secondary checkbox' }}
+              />
+              private team
+            </div>
+            <div>
               {checked && (
-                <TextField
-                  id="password"
-                  placeholder="비밀번호를 설정해주세요"
-                  fullWidth
-                  label="비밀번호"
-                  variant="outlined"
-                  size="small"
-                  helperText={formik.errors.password}
-                  onChange={formik.handleChange}
-                  value={formik.values.password}
-                />
+                <>
+                  <p>비공개 채널에 추가하고싶은 사람을 선택하세요</p>
+                  <AsyncMulti
+                    onSelect={(value: string[]) => setPrivateUserList(value)}
+                  />
+                </>
               )}
             </div>
           </section>

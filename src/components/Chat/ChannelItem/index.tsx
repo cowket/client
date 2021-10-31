@@ -1,6 +1,7 @@
 import React, { useState, useContext, useRef } from 'react';
 import selectContext from 'context/select';
 import userContext from 'context/user';
+import LockOutlined from '@material-ui/icons/LockOutlined';
 import useOutsideClick from 'hooks/useOutsideClick';
 import DropDown from 'components/Common/DropDown';
 import AddChannel from '../AddChannel';
@@ -19,7 +20,7 @@ const ChannelItem = ({ channel }: ChannelProps) => {
   const dropdownRef = useRef<HTMLDivElement>(null);
 
   useOutsideClick(dropdownRef, () => setShowDropDown(false));
-  console.log(selectedChannel?.uuid === channel.uuid);
+  console.log(channel);
   return (
     <>
       {showModal && <AddChannel onClose={() => setShowModal(false)} />}
@@ -30,7 +31,7 @@ const ChannelItem = ({ channel }: ChannelProps) => {
         onClick={() => setSelectedChannel(channel)}
       >
         <div className="chanName">
-          <span>#</span>
+          {channel.is_private ? <LockOutlined /> : <span>#</span>}
           &nbsp;
           <div>{'email' in channel ? channel.email : channel.name}</div>
         </div>

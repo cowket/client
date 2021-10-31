@@ -7,16 +7,17 @@ declare global {
     name?: string;
     description?: string;
     password?: string;
-    isPrivate: boolean;
+    is_private: boolean;
   };
 
   type Channel = {
     uuid: string;
     owner: UserDetail;
     team: Team & {
-      is_private: true;
+      is_private: boolean;
       password: string;
     };
+    is_private: boolean;
     name: string;
     create_date: string;
     update_date: string;
