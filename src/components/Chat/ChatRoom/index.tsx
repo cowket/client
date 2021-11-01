@@ -53,9 +53,9 @@ const ChatRoom = () => {
         socket?.emit('pushDirectMessage', newMessage);
       } else {
         const newMessage = {
-          teamUuid: selectedTeam?.uuid,
-          channelUuid: selectedChannel?.uuid,
-          senderUuid: userInfo?.uuid,
+          team_uuid: selectedTeam?.uuid,
+          channel_uuid: selectedChannel?.uuid,
+          sender_uuid: userInfo?.uuid,
           content: message,
         };
         socket?.emit('pushMessage', newMessage);
