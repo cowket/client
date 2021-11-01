@@ -6,7 +6,7 @@ export default function useDesktopSize(): boolean {
   const [isDesktopSize, setIsDesktopSize] = useState<boolean>(true);
 
   const theme = useTheme();
-  const matches = useMediaQuery(theme.breakpoints.up('md'));
+  const matches = useMediaQuery(theme.breakpoints.up('sm'));
 
   useEffect(() => {
     setIsDesktopSize(matches);

@@ -65,8 +65,14 @@ const ChatRoom = () => {
   };
 
   useEffect(() => {
-    socket?.on('newMessage', (value: any) => onAddNewMessage(value));
-    socket?.on('newDirectMessage', (value: any) => onAddNewMessage(value));
+    socket?.on('newMessage', (value: any) => {
+      console.log(value);
+      onAddNewMessage(value);
+    });
+    socket?.on('newDirectMessage', (value: any) => {
+      console.log(value);
+      onAddNewMessage(value);
+    });
   }, [chatBuffer]);
 
   useEffect(() => {
@@ -97,11 +103,9 @@ const ChatRoom = () => {
         {!isDesktopSize && <ArrowBackIosOutlinedIcon fontSize="small" />}
         <p>
           {selectedChannel
-            ? `${
-                'team_profile' in selectedChannel
-                  ? selectedChannel.team_profile?.name ?? selectedChannel.email
-                  : selectedChannel.name
-              }님과의 채팅방`
+            ? 'team_profile' in selectedChannel
+              ? selectedChannel.team_profile?.name ?? selectedChannel.email
+              : selectedChannel.name
             : '채널을 선택해주세요'}
         </p>
       </div>

@@ -49,7 +49,9 @@ const Profile = () => {
         </header>
         <div className="imgBox">
           <img src={userProfile?.avatar} />
-          <div className="name">{userProfile?.name ?? '닉네임이 없습니다'}</div>
+          <div className="name">
+            {userProfile?.name ?? userInfo?.email ?? '닉네임이 없습니다'}
+          </div>
           <div className="subBox">
             {profileId && userInfo.uuid === profileId ? (
               <div className="itemBox">
@@ -76,9 +78,9 @@ const Profile = () => {
         </div>
         <ul className="detailBox">
           <li>Position</li>
-          <li>{userProfile?.position}</li>
+          <li>{userProfile?.position ?? '내용없음'}</li>
           <li>Contact</li>
-          <li>{userProfile?.contact}</li>
+          <li>{userProfile?.contact ?? '내용없음'}</li>
           <li>Email address</li>
           <li>{userInfo?.email}</li>
         </ul>

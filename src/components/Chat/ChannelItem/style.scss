@@ -23,6 +23,16 @@
     //   }
     // }
   }
+
+  &.selected {
+    background-color: $blue_2;
+    border-radius: 2px;
+  }
+
+  &.selected:hover {
+    background-color: $blue_2 !important;
+  }
+
   .chanName {
     display: flex;
     align-items: center;

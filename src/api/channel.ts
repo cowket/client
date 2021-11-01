@@ -43,3 +43,26 @@ export const joinChannel = async (
   });
   return response.data;
 };
+
+// 비공개 채널에 참여자 추가
+export const inviteUserPrivateChan = async (
+  team_uuid: string,
+  channel_uuid: string,
+  user_uuids: string[]
+): Promise<boolean> => {
+  const response = await client.post<boolean>(
+    `/channel/invite?team_uuid=${team_uuid}&channel_uuid=${channel_uuid}&user_uuids=${user_uuids}`
+  );
+  return response.data;
+};
+
+// 비공개 채널에서 소유자가 참여자를 추가시킬 때, 유저 리스트를 조회
+export const getInviteUserList = async (
+  team_uuid: string,
+  channel_uuid: string
+): Promise<User[]> => {
+  const response = await client.get<User[]>(
+    `/channel/invite/users?team_uuid=${team_uuid}&channel_uuid=${channel_uuid}`
+  );
+  return response.data;
+};

@@ -1,6 +1,7 @@
 import React, { useState, useContext, useRef } from 'react';
 import selectContext from 'context/select';
 import userContext from 'context/user';
+import LockOutlined from '@material-ui/icons/LockOutlined';
 import useOutsideClick from 'hooks/useOutsideClick';
 import DropDown from 'components/Common/DropDown';
 import AddChannel from '../AddChannel';
@@ -12,19 +13,25 @@ type ChannelProps = {
 };
 
 const ChannelItem = ({ channel }: ChannelProps) => {
-  const { setSelectedChannel } = useContext(selectContext);
+  const { setSelectedChannel, selectedChannel } = useContext(selectContext);
   const [showDropDown, setShowDropDown] = useState<boolean>(false);
   const [showModal, setShowModal] = useState<boolean>(false);
   const { userInfo } = useContext(userContext);
   const dropdownRef = useRef<HTMLDivElement>(null);
 
   useOutsideClick(dropdownRef, () => setShowDropDown(false));
+  console.log(channel);
   return (
     <>
       {showModal && <AddChannel onClose={() => setShowModal(false)} />}
-      <div className="channelItem" onClick={() => setSelectedChannel(channel)}>
+      <div
+        className={`channelItem ${
+          selectedChannel?.uuid === channel.uuid && 'selected'
+        }`}
+        onClick={() => setSelectedChannel(channel)}
+      >
         <div className="chanName">
-          <span>#</span>
+          {channel.is_private ? <LockOutlined /> : <span>#</span>}
           &nbsp;
           <div>{'email' in channel ? channel.email : channel.name}</div>
         </div>
