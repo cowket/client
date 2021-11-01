@@ -20,7 +20,6 @@ const ChannelItem = ({ channel }: ChannelProps) => {
   const dropdownRef = useRef<HTMLDivElement>(null);
 
   useOutsideClick(dropdownRef, () => setShowDropDown(false));
-  console.log(channel);
   return (
     <>
       {showModal && <AddChannel onClose={() => setShowModal(false)} />}
@@ -31,7 +30,13 @@ const ChannelItem = ({ channel }: ChannelProps) => {
         onClick={() => setSelectedChannel(channel)}
       >
         <div className="chanName">
-          {channel.is_private ? <LockOutlined /> : <span>#</span>}
+          {channel.is_private ? (
+            <div className="lockIcon">
+              <LockOutlined fontSize="small" />
+            </div>
+          ) : (
+            <span>#</span>
+          )}
           &nbsp;
           <div>{'email' in channel ? channel.email : channel.name}</div>
         </div>
@@ -40,6 +45,7 @@ const ChannelItem = ({ channel }: ChannelProps) => {
             <div
               className="button"
               onClick={(e) => {
+                console.log('여기가 나오냐???');
                 e.stopPropagation();
                 setShowDropDown(true);
               }}
@@ -54,7 +60,11 @@ const ChannelItem = ({ channel }: ChannelProps) => {
                 list={[
                   {
                     label: '수정하기',
-                    onClick: () => setShowModal(true),
+                    onClick: (e) => {
+                      e.stopPropagation();
+                      console.log('여기가 나오냐???');
+                      // setShowModal(true);
+                    },
                   },
                   {
                     label: '삭제하기',

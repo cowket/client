@@ -50,9 +50,11 @@ export const inviteUserPrivateChan = async (
   channel_uuid: string,
   user_uuids: string[]
 ): Promise<boolean> => {
-  const response = await client.post<boolean>(
-    `/channel/invite?team_uuid=${team_uuid}&channel_uuid=${channel_uuid}&user_uuids=${user_uuids}`
-  );
+  const response = await client.post<boolean>(`/channel/invite?team_uuid`, {
+    team_uuid,
+    channel_uuid,
+    user_uuids,
+  });
   return response.data;
 };
 
