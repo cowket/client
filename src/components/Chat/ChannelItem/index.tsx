@@ -19,10 +19,15 @@ const ChannelItem = ({ channel }: ChannelProps) => {
   const { userInfo } = useContext(userContext);
   const dropdownRef = useRef<HTMLDivElement>(null);
 
-  useOutsideClick(dropdownRef, () => setShowDropDown(false));
+  // useOutsideClick(dropdownRef, () => setShowDropDown(false));
   return (
     <>
-      {showModal && <AddChannel onClose={() => setShowModal(false)} />}
+      {showModal && (
+        <AddChannel
+          onClose={() => setShowModal(false)}
+          channel={channel as Channel}
+        />
+      )}
       <div
         className={`channelItem ${
           selectedChannel?.uuid === channel.uuid && 'selected'
@@ -38,16 +43,19 @@ const ChannelItem = ({ channel }: ChannelProps) => {
             <span>#</span>
           )}
           &nbsp;
-          <div>{'email' in channel ? channel.email : channel.name}</div>
+          <div>
+            {'email' in channel
+              ? channel?.team_profile?.name ?? channel.email
+              : channel.name}
+          </div>
         </div>
         {channel?.owner?.uuid === userInfo?.uuid && (
           <div className="editButton">
             <div
               className="button"
               onClick={(e) => {
-                console.log('여기가 나오냐???');
                 e.stopPropagation();
-                setShowDropDown(true);
+                setShowDropDown(!showDropDown);
               }}
               ref={dropdownRef}
             >
@@ -60,10 +68,9 @@ const ChannelItem = ({ channel }: ChannelProps) => {
                 list={[
                   {
                     label: '수정하기',
-                    onClick: (e) => {
-                      e.stopPropagation();
-                      console.log('여기가 나오냐???');
-                      // setShowModal(true);
+                    onClick: () => {
+                      setShowModal(true);
+                      setShowDropDown(false);
                     },
                   },
                   {

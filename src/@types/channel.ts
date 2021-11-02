@@ -18,6 +18,7 @@ declare global {
       password: string;
     };
     is_private: boolean;
+    description?: string;
     name: string;
     create_date: string;
     update_date: string;

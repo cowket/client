@@ -24,11 +24,19 @@ const ChatRoom = () => {
   const chatRoomRef = useRef<HTMLDivElement>(null);
   const { userInfo } = useContext(userContext);
   const { socket } = useContext(socketContext);
-
+  const channelIdRef = useRef<string>();
   const onAddNewMessage = (chat: DetailChat) => {
-    chatBuffer.current = [...chatBuffer.current, chat];
-    setChatList(chatBuffer.current);
-    chatRoomRef.current?.scrollIntoView({ behavior: 'smooth' });
+    console.log(channelIdRef.current, chat);
+    if (
+      chat.channel
+        ? channelIdRef.current === chat.channel.uuid
+        : channelIdRef.current === chat.receiver.uuid
+    ) {
+      console.log('===여기온거아님???====');
+      chatBuffer.current = [...chatBuffer.current, chat];
+      setChatList(chatBuffer.current);
+      chatRoomRef.current?.scrollIntoView({ behavior: 'smooth' });
+    }
   };
 
   const scrollToBottom = () => {
@@ -41,7 +49,6 @@ const ChatRoom = () => {
   }, [chatList]);
 
   const onSendMessage = (message: string) => {
-    console.log(message);
     if (selectedChannel) {
       if ('email' in selectedChannel) {
         const newMessage = {
@@ -66,17 +73,18 @@ const ChatRoom = () => {
 
   useEffect(() => {
     socket?.on('newMessage', (value: any) => {
-      console.log(value);
+      console.log('newMessage여기여기');
       onAddNewMessage(value);
     });
     socket?.on('newDirectMessage', (value: any) => {
-      console.log(value);
+      console.log('newDirectMessage여기여기');
       onAddNewMessage(value);
     });
   }, [chatBuffer]);
 
   useEffect(() => {
     if (selectedChannel) {
+      channelIdRef.current = selectedChannel.uuid;
       if ('email' in selectedChannel && userInfo && selectedTeam) {
         getPrevDMChat(
           userInfo.uuid,

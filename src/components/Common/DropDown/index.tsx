@@ -2,7 +2,10 @@ import React from 'react';
 import './style.scss';
 
 interface DropDownProps {
-  list: { label: string; onClick: () => void }[];
+  list: {
+    label: string;
+    onClick: () => void;
+  }[];
   top: number;
   left: number;
 }
@@ -12,8 +15,7 @@ export default function DropDown({ list, top, left }: DropDownProps) {
     <div className="dropdownContainer" style={{ top, left }}>
       {list.map((each) => (
         <div
-          onClick={(e) => {
-            e.stopPropagation();
+          onClick={() => {
             each.onClick();
           }}
           key={each.label}

@@ -1,6 +1,6 @@
 import useDesktopSize from 'hooks/useDesktopSize';
 import React, { useState, useContext } from 'react';
-import { postChannel, inviteUserPrivateChan } from 'api/channel';
+import { postChannel, inviteUserPrivateChan, editChannel } from 'api/channel';
 import selectContext from 'context/select';
 import channelContext from 'context/channel';
 import { useFormik } from 'formik';
@@ -18,10 +18,11 @@ import AsyncMulti from '../AsyncSelect';
 
 type AddChannelProps = {
   onClose(): void;
+  channel?: Channel;
 };
 
-const AddChannel = ({ onClose }: AddChannelProps) => {
-  const [checked, setChecked] = useState<boolean>(false);
+const AddChannel = ({ onClose, channel }: AddChannelProps) => {
+  const [checked, setChecked] = useState<boolean>(channel?.is_private ?? false);
   const [privateUserList, setPrivateUserList] = useState<string[]>([]);
   const isDesktopSize = useDesktopSize();
   const { setChannelList, channelList } = useContext(channelContext);
@@ -32,31 +33,50 @@ const AddChannel = ({ onClose }: AddChannelProps) => {
 
   const formik = useFormik({
     initialValues: {
-      channelName: '',
-      desc: '',
+      channelName: channel?.name ?? '',
+      desc: channel?.description ?? '',
     },
     validationSchema: Yup.object({
       channelName: Yup.string().required(''),
-      desc: Yup.string().required(''),
+      desc: Yup.string(),
     }),
     onSubmit: async (values) => {
       if (values.channelName && values.desc && selectedTeam) {
-        postChannel({
-          team_uuid: selectedTeam.uuid,
-          name: values.channelName,
-          is_private: checked,
-        }).then((res) => {
-          if (res) {
-            setChannelList([...channelList, res]);
-            if (checked && privateUserList.length > 0) {
-              inviteUserPrivateChan(
-                selectedTeam.uuid,
-                res.uuid,
-                privateUserList
-              );
+        if (channel) {
+          editChannel({
+            channel_uuid: channel.uuid,
+            name: values.channelName,
+            is_private: checked,
+            description: values.desc,
+          }).then((res) =>
+            setChannelList(
+              channelList.map((chan) => {
+                if (chan.uuid === res.uuid) {
+                  return res;
+                }
+                return chan;
+              })
+            )
+          );
+        } else {
+          postChannel({
+            team_uuid: selectedTeam.uuid,
+            name: values.channelName,
+            is_private: checked,
+            description: values.desc,
+          }).then((res) => {
+            if (res) {
+              setChannelList([...channelList, res]);
+              if (checked && privateUserList.length > 0) {
+                inviteUserPrivateChan(
+                  selectedTeam.uuid,
+                  res.uuid,
+                  privateUserList
+                );
+              }
             }
-          }
-        });
+          });
+        }
       }
       onClose();
     },
@@ -76,7 +96,7 @@ const AddChannel = ({ onClose }: AddChannelProps) => {
                 <ArrowBack fontSize="small" />
               </IconButton>
             )}
-            채널 추가하기
+            {!!channel ? '채널 수정하기' : '채널 추가하기'}
           </div>
           {isDesktopSize && (
             <IconButton size="small" onClick={onClose}>
@@ -153,9 +173,11 @@ const AddChannel = ({ onClose }: AddChannelProps) => {
               id="channelForm"
               variant="contained"
               color="primary"
-              disabled={!(formik.dirty && formik.isValid)}
+              disabled={
+                channel ? !formik.isValid : !(formik.dirty && formik.isValid)
+              }
             >
-              채널 생성
+              {channel ? '채널 수정' : '채널 생성'}
             </Button>
           </div>
         </form>

@@ -51,11 +51,13 @@ const Chat = (
   useEffect(() => {
     if (socket && selectedChannel) {
       if ('email' in selectedChannel) {
+        console.log('dm 연결됨');
         socket.emit('cowket:connection', {
           user_uuid: userInfo?.uuid,
           team_uuid: selectedTeam?.uuid,
         });
       } else {
+        console.log('채널 연결됨');
         socket.emit('joinRoom', { channel_uuid: selectedChannel.uuid });
       }
     }

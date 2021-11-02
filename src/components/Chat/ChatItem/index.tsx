@@ -33,16 +33,18 @@ const Item = ({ chat }: ItemRrops) => {
       <div className="imgBox" onClick={() => setProfileId(chat.sender.uuid)}>
         <img
           src={
-            chat.team_user_profile?.avatar
-              ? chat.team_user_profile.avatar
-              : chat.sender?.avatar
+            chat?.team_user_profile?.avatar ??
+            chat?.sender_team_user_profile?.avatar ??
+            chat.sender?.avatar
           }
         />
       </div>
       <div className="contentBox">
         <div className="userInfo">
           <p className="nickname">
-            {chat.team_user_profile?.name ?? chat.sender?.email}
+            {chat?.team_user_profile?.name ??
+              chat?.sender_team_user_profile?.name ??
+              chat.sender?.email}
           </p>
           <p className="time">{dateToTime(new Date(chat?.create_date))}</p>
         </div>

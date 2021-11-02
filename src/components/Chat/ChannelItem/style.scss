@@ -13,15 +13,17 @@
   cursor: pointer;
   &:hover {
     background-color: $gray_9;
-    // .editButton {
-    //   position: relative;
-    //   .button {
-    //     opacity: 1;
-    //     display: flex;
-    //     align-items: center;
-    //     justify-content: center;
-    //   }
-    // }
+    .editButton {
+      position: relative;
+      .button {
+        height: 24px;
+        width: 24px;
+        border-radius: 50%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+      }
+    }
   }
 
   &.selected {
@@ -38,7 +40,16 @@
     align-items: center;
     & > span {
       font-weight: 600;
+      width: 20px;
       font-size: 16px;
+      text-align: center;
+    }
+    & > .lockIcon {
+      width: 20px;
+      height: 20px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
     }
   }
   & > .editButton {
