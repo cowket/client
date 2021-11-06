@@ -1,17 +1,13 @@
 import React, { useContext, useState, useEffect, useRef } from 'react';
-import Input from '@material-ui/core/Input';
 import useDesktopSize from 'hooks/useDesktopSize';
 import selectContext from 'context/select';
 import { getPrevChannelChat, getPrevDMChat } from 'api/chat';
+import { getJoinedUsers } from 'api/channel';
 import { isFirstMessage, dateToShortDate } from 'util/dateUtil';
-import Button from '@material-ui/core/Button';
 import socketContext from 'context/socket';
 import userContext from 'context/user';
 import ChatItem from 'components/Chat/ChatItem';
 import ArrowBackIosOutlinedIcon from '@material-ui/icons/ArrowBackIosOutlined';
-import PhotoCamera from '@material-ui/icons/PhotoCamera';
-import IconButton from '@material-ui/core/IconButton';
-import Icon from '@material-ui/core/Icon';
 import EditBox from 'components/Common/EditBox';
 import './style.scss';
 
@@ -24,15 +20,16 @@ const ChatRoom = () => {
   const chatRoomRef = useRef<HTMLDivElement>(null);
   const { userInfo } = useContext(userContext);
   const { socket } = useContext(socketContext);
+  const [joinedUsers, setJoinedUsers] = useState<User[]>([]);
   const channelIdRef = useRef<string>();
   const onAddNewMessage = (chat: DetailChat) => {
     console.log(channelIdRef.current, chat);
     if (
-      chat.channel
+      (chat.channel
         ? channelIdRef.current === chat.channel.uuid
-        : channelIdRef.current === chat.receiver.uuid
+        : channelIdRef.current === chat.sender.uuid) ||
+      userInfo?.uuid === chat.sender.uuid
     ) {
-      console.log('===여기온거아님???====');
       chatBuffer.current = [...chatBuffer.current, chat];
       setChatList(chatBuffer.current);
       chatRoomRef.current?.scrollIntoView({ behavior: 'smooth' });
@@ -49,6 +46,7 @@ const ChatRoom = () => {
   }, [chatList]);
 
   const onSendMessage = (message: string) => {
+    console.log('나의 uuid', userInfo?.uuid);
     if (selectedChannel) {
       if ('email' in selectedChannel) {
         const newMessage = {
@@ -83,9 +81,9 @@ const ChatRoom = () => {
   }, [chatBuffer]);
 
   useEffect(() => {
-    if (selectedChannel) {
+    if (selectedChannel && selectedTeam) {
       channelIdRef.current = selectedChannel.uuid;
-      if ('email' in selectedChannel && userInfo && selectedTeam) {
+      if ('email' in selectedChannel && userInfo) {
         getPrevDMChat(
           userInfo.uuid,
           selectedChannel.uuid,
@@ -102,6 +100,11 @@ const ChatRoom = () => {
           setChatList(reversed);
         });
       }
+      if (selectedChannel?.owner?.uuid === userInfo?.uuid) {
+        getJoinedUsers(selectedTeam.uuid, selectedChannel.uuid).then((res) =>
+          setJoinedUsers(res)
+        );
+      }
     }
   }, [selectedChannel]);
 
@@ -116,6 +119,7 @@ const ChatRoom = () => {
               : selectedChannel.name
             : '채널을 선택해주세요'}
         </p>
+        {/* <div>{joinedUsers.map((user) => user.team_user_profile?.nickname)}</div> */}
       </div>
       <div className="messageBox" ref={chatRoomRef}>
         {chatList.length > 0 ? (

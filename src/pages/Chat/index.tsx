@@ -2,6 +2,7 @@ import React, { useEffect, useState, useContext } from 'react';
 import { RouteComponentProps } from 'react-router-dom';
 import ProfileContext from 'context/profile';
 import { getMyTeams } from 'api/team';
+import { getChatLog } from 'api/chat';
 import teamContext from 'context/team';
 import selectContext from 'context/select';
 import userContext from 'context/user';
@@ -17,6 +18,7 @@ const socket = socketIo('wss://socket.malrang.dev/cowket', {
   transports: ['websocket'],
 });
 
+socket.connect();
 const Chat = (
   props: RouteComponentProps<{
     teamId: string;
@@ -51,20 +53,25 @@ const Chat = (
   useEffect(() => {
     if (socket && selectedChannel) {
       if ('email' in selectedChannel) {
-        console.log('dm 연결됨');
-        socket.emit('cowket:connection', {
-          user_uuid: userInfo?.uuid,
-          team_uuid: selectedTeam?.uuid,
-        });
+        // console.log('dm 연결됨');
+        // socket.emit('cowket:connection', {
+        //   user_uuid: userInfo?.uuid,
+        //   team_uuid: selectedTeam?.uuid,
+        // });
       } else {
         console.log('채널 연결됨');
         socket.emit('joinRoom', { channel_uuid: selectedChannel.uuid });
       }
     }
+    getChatLog();
   }, [selectedChannel]);
 
   useEffect(() => {
-    if (socket) {
+    if (socket && userInfo) {
+      socket.emit('cowket:connection-with-auth-required', {
+        user_uuid: userInfo.uuid,
+      });
+
       socket.on('errorPacket', (error) => console.log(error));
     }
   }, [socket]);

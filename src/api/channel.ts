@@ -68,3 +68,14 @@ export const getInviteUserList = async (
   );
   return response.data;
 };
+
+// 채널에 참여가능한 유저리스트 조회
+export const getJoinedUsers = async (
+  team_uuid: string,
+  channel_uuid: string
+): Promise<User[]> => {
+  const response = await client.get<User[]>(
+    `/channel/invite/users?team_uuid=${team_uuid}&channel_uuid=${channel_uuid}`
+  );
+  return response.data;
+};
