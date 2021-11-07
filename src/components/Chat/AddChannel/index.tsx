@@ -1,8 +1,15 @@
 import useDesktopSize from 'hooks/useDesktopSize';
-import React, { useState, useContext } from 'react';
-import { postChannel, inviteUserPrivateChan, editChannel } from 'api/channel';
+import React, { useState, useContext, useEffect } from 'react';
+import {
+  postChannel,
+  inviteUserPrivateChan,
+  editChannel,
+  getJoinedUsers,
+  getChannelDetail,
+} from 'api/channel';
 import selectContext from 'context/select';
 import channelContext from 'context/channel';
+import userContext from 'context/user';
 import { useFormik } from 'formik';
 import * as Yup from 'yup';
 import { CloseOutlined, ArrowBack } from '@material-ui/icons';
@@ -24,13 +31,33 @@ type AddChannelProps = {
 const AddChannel = ({ onClose, channel }: AddChannelProps) => {
   const [checked, setChecked] = useState<boolean>(channel?.is_private ?? false);
   const [privateUserList, setPrivateUserList] = useState<string[]>([]);
+  const { userInfo } = useContext(userContext);
+  const [defaultList, setDefaultList] =
+    useState<{ label: string; value: string }[]>();
   const isDesktopSize = useDesktopSize();
   const { setChannelList, channelList } = useContext(channelContext);
-  const { selectedTeam } = useContext(selectContext);
+  const { selectedTeam, selectedChannel } = useContext(selectContext);
   const onChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     setChecked(event.target.checked);
   };
 
+  useEffect(() => {
+    if (channel?.is_private && selectedTeam && selectedChannel) {
+      getChannelDetail(selectedChannel.uuid).then((res) =>
+        setDefaultList(
+          res.members
+            .filter((part) => part.user_uuid.uuid !== userInfo?.uuid)
+            .map((part) => ({
+              label: part.team_user_profile?.nickname ?? part.user_uuid.email,
+              value: part.team_user_profile?.uuid ?? part.user_uuid.uuid,
+            }))
+        )
+      );
+    } else {
+      setDefaultList([]);
+    }
+  }, [channel]);
+  console.log(channel);
   const formik = useFormik({
     initialValues: {
       channelName: channel?.name ?? '',
@@ -41,14 +68,14 @@ const AddChannel = ({ onClose, channel }: AddChannelProps) => {
       desc: Yup.string(),
     }),
     onSubmit: async (values) => {
-      if (values.channelName && values.desc && selectedTeam) {
+      if (values.channelName && selectedTeam) {
         if (channel) {
           editChannel({
             channel_uuid: channel.uuid,
             name: values.channelName,
             is_private: checked,
             description: values.desc,
-          }).then((res) =>
+          }).then((res) => {
             setChannelList(
               channelList.map((chan) => {
                 if (chan.uuid === res.uuid) {
@@ -56,8 +83,18 @@ const AddChannel = ({ onClose, channel }: AddChannelProps) => {
                 }
                 return chan;
               })
-            )
-          );
+            );
+            if (checked && privateUserList.length > 0) {
+              inviteUserPrivateChan(
+                selectedTeam.uuid,
+                channel.uuid,
+                privateUserList.filter(
+                  (user) =>
+                    !defaultList?.map((list) => list.value).includes(user)
+                )
+              );
+            }
+          });
         } else {
           postChannel({
             team_uuid: selectedTeam.uuid,
@@ -154,11 +191,13 @@ const AddChannel = ({ onClose, channel }: AddChannelProps) => {
               private team
             </div>
             <div>
-              {checked && (
+              {checked && defaultList && (
                 <>
                   <p>비공개 채널에 추가하고싶은 사람을 선택하세요</p>
                   <AsyncMulti
+                    defaultValue={defaultList}
                     onSelect={(value: string[]) => setPrivateUserList(value)}
+                    editMode
                   />
                 </>
               )}

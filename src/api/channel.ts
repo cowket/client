@@ -1,5 +1,15 @@
 import client from 'api/client';
 
+// 채널 상세정보 조회
+export const getChannelDetail = async (
+  channel_uuid: string
+): Promise<ChannelDetail> => {
+  const response = await client.get<ChannelDetail>(
+    `/channel?uuid=${channel_uuid}`
+  );
+  return response.data;
+};
+
 // 채널 생성
 export const postChannel = async (channel: NewChannel): Promise<Channel> => {
   const response = await client.post<Channel>('/channel', channel);
@@ -58,23 +68,12 @@ export const inviteUserPrivateChan = async (
   return response.data;
 };
 
-// 비공개 채널에서 소유자가 참여자를 추가시킬 때, 유저 리스트를 조회
-export const getInviteUserList = async (
-  team_uuid: string,
-  channel_uuid: string
-): Promise<User[]> => {
-  const response = await client.get<User[]>(
-    `/channel/invite/users?team_uuid=${team_uuid}&channel_uuid=${channel_uuid}`
-  );
-  return response.data;
-};
-
 // 채널에 참여가능한 유저리스트 조회
 export const getJoinedUsers = async (
   team_uuid: string,
   channel_uuid: string
-): Promise<User[]> => {
-  const response = await client.get<User[]>(
+): Promise<ChannelUser[]> => {
+  const response = await client.get<ChannelUser[]>(
     `/channel/invite/users?team_uuid=${team_uuid}&channel_uuid=${channel_uuid}`
   );
   return response.data;

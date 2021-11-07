@@ -26,4 +26,13 @@ declare global {
     create_date?: string;
     team_uuid?: string;
   };
+
+  type ChannelUser = {
+    channel_uuid: Channel;
+    create_date: string;
+    id: number;
+    team_user_profile: User;
+    team_uuid: string;
+    user_uuid: User;
+  };
 }

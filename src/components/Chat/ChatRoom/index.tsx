@@ -100,11 +100,6 @@ const ChatRoom = () => {
           setChatList(reversed);
         });
       }
-      if (selectedChannel?.owner?.uuid === userInfo?.uuid) {
-        getJoinedUsers(selectedTeam.uuid, selectedChannel.uuid).then((res) =>
-          setJoinedUsers(res)
-        );
-      }
     }
   }, [selectedChannel]);
 
