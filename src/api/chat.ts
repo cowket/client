@@ -23,11 +23,3 @@ export const getPrevDMChat = async (
 
   return response.data;
 };
-
-// 최근 10개의 DM 메세지를 받아옴
-export const getChatLog = async (): Promise<any> => {
-  const response = await client.get<any>('/health/session');
-  console.log(response.data);
-
-  return 'test';
-};

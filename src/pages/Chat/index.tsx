@@ -2,7 +2,6 @@ import React, { useEffect, useState, useContext } from 'react';
 import { RouteComponentProps } from 'react-router-dom';
 import ProfileContext from 'context/profile';
 import { getMyTeams } from 'api/team';
-import { getChatLog } from 'api/chat';
 import teamContext from 'context/team';
 import selectContext from 'context/select';
 import userContext from 'context/user';
@@ -59,11 +58,9 @@ const Chat = (
         //   team_uuid: selectedTeam?.uuid,
         // });
       } else {
-        console.log('채널 연결됨');
         socket.emit('joinRoom', { channel_uuid: selectedChannel.uuid });
       }
     }
-    getChatLog();
   }, [selectedChannel]);
 
   useEffect(() => {
