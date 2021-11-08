@@ -2,7 +2,7 @@ import React, { useContext, useState, useEffect, useRef } from 'react';
 import useDesktopSize from 'hooks/useDesktopSize';
 import selectContext from 'context/select';
 import { getPrevChannelChat, getPrevDMChat } from 'api/chat';
-import { getJoinedUsers } from 'api/channel';
+import { getChannelDetail } from 'api/channel';
 import { isFirstMessage, dateToShortDate } from 'util/dateUtil';
 import socketContext from 'context/socket';
 import userContext from 'context/user';
@@ -20,10 +20,17 @@ const ChatRoom = () => {
   const chatRoomRef = useRef<HTMLDivElement>(null);
   const { userInfo } = useContext(userContext);
   const { socket } = useContext(socketContext);
-  const [joinedUsers, setJoinedUsers] = useState<User[]>([]);
+  const [joinedUsers, setJoinedUsers] = useState<ChannelUser[]>([]);
   const channelIdRef = useRef<string>();
+  const topChatInfo = useRef<DetailChat | undefined>();
+  const prevViewportHeight = useRef<number>(0);
+
+  const onAddPrevMessage = (chat: DetailChat[]) => {
+    setChatList((v) => [...chat.reverse(), ...v]);
+    topChatInfo.current = chat[0];
+  };
+
   const onAddNewMessage = (chat: DetailChat) => {
-    console.log(channelIdRef.current, chat);
     if (
       (chat.channel
         ? channelIdRef.current === chat.channel.uuid
@@ -41,8 +48,32 @@ const ChatRoom = () => {
       chatRoomRef.current.scrollTop = chatRoomRef.current.scrollHeight;
     }
   };
+
+  const lastScrollTop = useRef<number>(0);
+
+  // 채팅방에서 스크롤이 가장 상단에 닿은경우 데이터 더 받아오기
   useEffect(() => {
-    scrollToBottom();
+    if (chatRoomRef.current) {
+      chatRoomRef.current.addEventListener('scroll', () => {
+        if (
+          chatRoomRef.current &&
+          chatRoomRef.current.scrollTop === 0 &&
+          chatRoomRef.current.scrollTop < lastScrollTop.current
+        ) {
+          socket?.emit('loadMessage', { topMessage: topChatInfo.current });
+        }
+        lastScrollTop.current = chatRoomRef.current?.scrollTop ?? 0;
+      });
+    }
+  }, []);
+
+  useEffect(() => {
+    // scrollToBottom();
+    if (chatRoomRef.current?.scrollHeight) {
+      chatRoomRef.current.scrollTop =
+        chatRoomRef.current.scrollHeight - prevViewportHeight.current;
+      prevViewportHeight.current = chatRoomRef.current.scrollHeight;
+    }
   }, [chatList]);
 
   const onSendMessage = (message: string) => {
@@ -78,6 +109,9 @@ const ChatRoom = () => {
       console.log('newDirectMessage여기여기');
       onAddNewMessage(value);
     });
+    socket?.on('loadedScrollMessage', (value: DetailChat[]) => {
+      onAddPrevMessage(value);
+    });
   }, [chatBuffer]);
 
   useEffect(() => {
@@ -92,15 +126,24 @@ const ChatRoom = () => {
           const reversed = res.reverse();
           chatBuffer.current = reversed;
           setChatList(reversed);
+          topChatInfo.current = res[0];
         });
       } else {
         getPrevChannelChat(selectedChannel.uuid).then((res) => {
           const reversed = res.reverse();
           chatBuffer.current = reversed;
+
+          topChatInfo.current = res[0];
           setChatList(reversed);
         });
       }
+      getChannelDetail(selectedChannel.uuid).then((res) =>
+        setJoinedUsers(res.members)
+      );
     }
+
+    // 채널이 변경되면 초기화해줄것들을 여기서해주기
+    topChatInfo.current = undefined;
   }, [selectedChannel]);
 
   return (
@@ -114,7 +157,16 @@ const ChatRoom = () => {
               : selectedChannel.name
             : '채널을 선택해주세요'}
         </p>
-        {/* <div>{joinedUsers.map((user) => user.team_user_profile?.nickname)}</div> */}
+        {/* <div className="memberBox">
+          {joinedUsers.map((user) => (
+            <div className="member">
+              {user.team_user_profile?.avatar && (
+                <img src={user.team_user_profile.avatar} />
+              )}
+              <p>{user.team_user_profile?.nickname ?? user.user_uuid.email}</p>
+            </div>
+          ))}
+        </div> */}
       </div>
       <div className="messageBox" ref={chatRoomRef}>
         {chatList.length > 0 ? (

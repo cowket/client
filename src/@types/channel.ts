@@ -34,15 +34,6 @@ declare global {
     description: string;
     unique: boolean;
     is_private: boolean;
-    members: [
-      {
-        id: number;
-        user_uuid: User;
-        team_uuid: Team;
-        channel_uuid: Channel;
-        create_date: string;
-        team_user_profile: User;
-      }
-    ];
+    members: ChannelUser[];
   };
 }
