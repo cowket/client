@@ -42,6 +42,9 @@ const LoginForm = () => {
             setIsLoggedIn(true);
           } else if ('message' in res) {
             setErrorMsg('존재하지않는 사용자입니다.');
+            setTimeout(() => {
+              setErrorMsg(undefined);
+            }, 3000);
           }
         });
       }

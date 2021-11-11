@@ -27,6 +27,7 @@ const ChatRoom = () => {
 
   const onAddPrevMessage = (chat: DetailChat[]) => {
     setChatList((v) => [...chat.reverse(), ...v]);
+    scrollToPrevChat();
     topChatInfo.current = chat[0];
   };
 
@@ -37,6 +38,10 @@ const ChatRoom = () => {
         : channelIdRef.current === chat.sender.uuid) ||
       userInfo?.uuid === chat.sender.uuid
     ) {
+      if (chat.sender.uuid === userInfo?.uuid) {
+        console.log('여기가 실행되는겨???');
+        scrollToBottom();
+      }
       chatBuffer.current = [...chatBuffer.current, chat];
       setChatList(chatBuffer.current);
       chatRoomRef.current?.scrollIntoView({ behavior: 'smooth' });
@@ -45,7 +50,16 @@ const ChatRoom = () => {
 
   const scrollToBottom = () => {
     if (chatRoomRef.current) {
+      console.log(chatRoomRef.current.scrollHeight);
       chatRoomRef.current.scrollTop = chatRoomRef.current.scrollHeight;
+    }
+  };
+
+  const scrollToPrevChat = () => {
+    if (chatRoomRef.current?.scrollHeight) {
+      chatRoomRef.current.scrollTop =
+        chatRoomRef.current.scrollHeight - prevViewportHeight.current;
+      prevViewportHeight.current = chatRoomRef.current.scrollHeight;
     }
   };
 
@@ -67,14 +81,14 @@ const ChatRoom = () => {
     }
   }, []);
 
-  useEffect(() => {
-    // scrollToBottom();
-    if (chatRoomRef.current?.scrollHeight) {
-      chatRoomRef.current.scrollTop =
-        chatRoomRef.current.scrollHeight - prevViewportHeight.current;
-      prevViewportHeight.current = chatRoomRef.current.scrollHeight;
-    }
-  }, [chatList]);
+  // useEffect(() => {
+  //   // scrollToBottom();
+  //   if (chatRoomRef.current?.scrollHeight) {
+  //     chatRoomRef.current.scrollTop =
+  //       chatRoomRef.current.scrollHeight - prevViewportHeight.current;
+  //     prevViewportHeight.current = chatRoomRef.current.scrollHeight;
+  //   }
+  // }, [chatList]);
 
   const onSendMessage = (message: string) => {
     console.log('나의 uuid', userInfo?.uuid);
@@ -116,6 +130,7 @@ const ChatRoom = () => {
 
   useEffect(() => {
     if (selectedChannel && selectedTeam) {
+      scrollToBottom();
       channelIdRef.current = selectedChannel.uuid;
       if ('email' in selectedChannel && userInfo) {
         getPrevDMChat(
@@ -141,9 +156,11 @@ const ChatRoom = () => {
         setJoinedUsers(res.members)
       );
     }
-
-    // 채널이 변경되면 초기화해줄것들을 여기서해주기
-    topChatInfo.current = undefined;
+    return () => {
+      // 채널이 변경되면 초기화해줄것들을 여기서해주기
+      topChatInfo.current = undefined;
+      // chatRoomRef.current;
+    };
   }, [selectedChannel]);
 
   return (
@@ -196,34 +213,6 @@ const ChatRoom = () => {
           <div className="empty">아직 작성된 메시지가 없습니다.</div>
         )}
       </div>
-      {/* <div className="inputBox">
-        <Input
-          color="primary"
-          maxRows={2}
-          multiline
-          fullWidth
-          disableUnderline
-          placeholder="메시지를 입력하세요."
-          value={message}
-          onChange={(e) => setMessage(e.target.value)}
-        />
-        <div>
-          <IconButton
-            className="iconButton"
-            size="medium"
-            color="primary"
-            onClick={onSendMessage}
-            disabled={!message}
-          >
-            <Icon fontSize="small" color={!message ? 'disabled' : 'primary'}>
-              send
-            </Icon>
-          </IconButton>
-          <IconButton className="iconButton" size="medium" color="primary">
-            <PhotoCamera fontSize="small" color="primary" />
-          </IconButton>
-        </div>
-      </div> */}
       <EditBox onSendMessage={onSendMessage} />
     </div>
   );

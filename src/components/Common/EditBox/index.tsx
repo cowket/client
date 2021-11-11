@@ -1,58 +1,81 @@
-import React, { useEffect, useContext, useRef } from 'react';
 import selectContext from 'context/select';
-import { useEditor, EditorContent } from '@tiptap/react';
-import StarterKit from '@tiptap/starter-kit';
-import MenuBar from './MenuBar';
+import ReactQuill from 'react-quill';
+import React, { useState, useContext, useRef, useEffect } from 'react';
+import 'react-quill/dist/quill.snow.css';
 import './style.scss';
 
-interface EditBoxProps {
-  onSendMessage: (message: string) => void;
+interface TextEditorProps {
+  onSendMessage: (text: string) => void;
 }
 
-const EditBox = ({ onSendMessage }: EditBoxProps) => {
+export default function TextEditor({ onSendMessage }: TextEditorProps) {
   const { selectedChannel } = useContext(selectContext);
   // shift + enter누를때 개행되도록 처리할 flag 값
   const isShiftClicked = useRef<boolean>(false);
-
-  const editor = useEditor({
-    extensions: [
-      StarterKit.configure({
-        history: false,
-      }),
-    ],
-  });
-
   useEffect(() => {
-    if (selectedChannel && editor) {
-      editor.commands.clearContent(true);
+    if (selectedChannel) {
+      setValue('');
     }
   }, [selectedChannel]);
 
   const onSubmit = () => {
-    if (editor) {
-      onSendMessage(editor.getHTML());
-      editor.commands.clearContent(true);
-    }
+    onSendMessage(value);
+    setValue('');
   };
 
+  const [value, setValue] = useState('');
+  console.log(value);
+  const modules = {
+    toolbar: [
+      [{ header: [1, 2, 3, false] }],
+      ['bold', 'italic', 'underline', 'strike', 'blockquote', 'code'],
+      [{ list: 'ordered' }, { list: 'bullet' }],
+      ['link', 'image', 'code-block'],
+      ['clean'],
+    ],
+  };
+
+  const formats = [
+    'header',
+    'bold',
+    'italic',
+    'underline',
+    'strike',
+    'blockquote',
+    'list',
+    'bullet',
+    'link',
+    'image',
+    'code',
+    'code-block',
+  ];
   return (
-    <div className="editor">
-      {editor && <MenuBar editor={editor} onSendMessage={onSubmit} />}
-      <EditorContent
-        className="editor__content"
-        editor={editor}
-        style={{ outline: 'none', maxWidth: '90%' }}
-        placeholder="내용을 입력하세요."
-        onKeyDown={(e: any) => {
-          if (e.key === 'Shift') {
-            isShiftClicked.current = true;
+    <div className="editorBox">
+      <ReactQuill
+        theme="snow"
+        value={value}
+        onChange={(e, delta, b, c) => {
+          if (c.getText() === '') {
+            setValue('');
+            return;
           }
-          if (e.keyCode === 13) {
+          if (delta?.ops?.[1]?.insert === '\n') {
             if (isShiftClicked.current) {
               console.log('개행해야함.');
             } else {
               onSubmit();
+              return;
             }
+          }
+          setValue(e);
+        }}
+        modules={modules}
+        formats={formats}
+        className="quillBox"
+        placeholder="내용을 입력하세요."
+        onKeyDown={(e: any) => {
+          if (e.key === 'Shift') {
+            isShiftClicked.current = true;
           }
         }}
         onKeyUp={(e) => {
@@ -63,6 +86,4 @@ const EditBox = ({ onSendMessage }: EditBoxProps) => {
       />
     </div>
   );
-};
-
-export default EditBox;
+}

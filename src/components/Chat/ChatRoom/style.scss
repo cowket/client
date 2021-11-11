@@ -21,6 +21,21 @@
       line-height: 20px;
       margin-left: 5px;
     }
+    .memberBox {
+      width: 100px;
+      height: 50px;
+      background-color: bisque;
+      overflow: hidden;
+      .member {
+        width: 30px;
+        height: 30px;
+        border-radius: 50%;
+        img {
+          width: 100%;
+          height: 100%;
+        }
+      }
+    }
   }
   .messageBox {
     display: flex;

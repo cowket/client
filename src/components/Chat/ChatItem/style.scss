@@ -23,6 +23,7 @@
     display: flex;
     flex-direction: column;
     align-items: flex-start;
+    width: 100%;
     & > .userInfo {
       display: flex;
       align-items: center;
@@ -40,10 +41,38 @@
       }
     }
     & > .content {
-      font-size: 13px;
-      font-weight: 500;
       color: $gray_2;
       word-break: break-all;
+      width: 100%;
+      ol,
+      ul {
+        margin-left: 20px;
+        list-style: disc;
+      }
+      blockquote {
+        border-left: 4px solid $gray_6;
+        padding-left: 5px;
+      }
+      pre.ql-syntax {
+        background-color: $gray_1;
+        color: $gray_8;
+        font-size: 12px;
+        font-weight: 500;
+        padding: 3px;
+        box-sizing: border-box;
+        border-radius: 4px;
+        width: 100%;
+      }
+      & p {
+        font-size: 13px;
+        font-weight: 500;
+        & > code {
+          background-color: $gray_8;
+          padding: 3px;
+          color: $gray_2;
+          border-radius: 4px;
+        }
+      }
     }
   }
 }
