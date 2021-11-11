@@ -1,7 +1,8 @@
 @import 'styles/globals.scss';
 
 .channelRoomContainer {
-  width: calc(100vw - 300px);
+  // width: calc(100vw - 300px);
+  flex: 1;
   box-sizing: border-box;
   display: flex;
   flex-direction: column;

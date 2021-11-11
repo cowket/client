@@ -185,7 +185,9 @@ const EditModal = ({ onClose, profileInfo }: EditModalProps) => {
             type="submit"
             size="medium"
             className="button"
-            disabled={!(formik.dirty && formik.isValid)}
+            disabled={
+              profileInfo ? !formik.isValid : !(formik.dirty && formik.isValid)
+            }
           >
             변경사항 저장
           </Button>
