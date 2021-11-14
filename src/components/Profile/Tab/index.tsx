@@ -81,8 +81,8 @@ const Profile = () => {
           <li>{userProfile?.position ?? '내용없음'}</li>
           <li>Contact</li>
           <li>{userProfile?.contact ?? '내용없음'}</li>
-          <li>Email address</li>
-          <li>{userInfo?.email}</li>
+          {/* <li>Email address</li>
+          <li>{userInfo?.email}</li> */}
         </ul>
       </div>
     </>

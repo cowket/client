@@ -138,10 +138,14 @@ const ChatRoom = () => {
           selectedChannel.uuid,
           selectedTeam.uuid
         ).then((res) => {
-          const reversed = res.reverse();
-          chatBuffer.current = reversed;
-          setChatList(reversed);
-          topChatInfo.current = res[0];
+          if (res) {
+            const reversed = res.reverse();
+            chatBuffer.current = reversed;
+            setChatList(reversed);
+            topChatInfo.current = res[0];
+          } else {
+            setChatList([]);
+          }
         });
       } else {
         getPrevChannelChat(selectedChannel.uuid).then((res) => {
