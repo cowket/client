@@ -2,6 +2,7 @@ import React, { useContext, useState, useEffect, useRef } from 'react';
 import useDesktopSize from 'hooks/useDesktopSize';
 import selectContext from 'context/select';
 import { getPrevChannelChat, getPrevDMChat } from 'api/chat';
+import profileContext from 'context/profile';
 import { getChannelDetail } from 'api/channel';
 import { isFirstMessage, dateToShortDate } from 'util/dateUtil';
 import socketContext from 'context/socket';
@@ -17,6 +18,7 @@ const ChatRoom = () => {
   const { selectedChannel, selectedTeam } = useContext(selectContext);
   const [chatList, setChatList] = useState<DetailChat[]>([]);
   const chatBuffer = useRef<DetailChat[]>([]);
+  const { profileId } = useContext(profileContext);
   const chatRoomRef = useRef<HTMLDivElement>(null);
   const { userInfo } = useContext(userContext);
   const { socket } = useContext(socketContext);
@@ -168,7 +170,12 @@ const ChatRoom = () => {
   }, [selectedChannel]);
 
   return (
-    <div className="channelRoomContainer">
+    <div
+      className="channelRoomContainer"
+      style={{
+        width: profileId ? 'calc(100vw - 600px)' : 'calc(100vw - 300px)',
+      }}
+    >
       <div className="targetInfo">
         {!isDesktopSize && <ArrowBackIosOutlinedIcon fontSize="small" />}
         <p>

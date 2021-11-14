@@ -1,5 +1,11 @@
 import React, { useContext } from 'react';
 import profileContext from 'context/profile';
+import {
+  CommentOutlined,
+  EditOutlined,
+  DeleteForeverOutlined,
+  TagFacesOutlined,
+} from '@material-ui/icons';
 import { dateToTime } from 'util/dateUtil';
 import './style.scss';
 
@@ -52,6 +58,20 @@ const Item = ({ chat }: ItemRrops) => {
           dangerouslySetInnerHTML={{ __html: chat.content }}
           className="content"
         />
+        <ul className="additionalBox">
+          <li>
+            <TagFacesOutlined fontSize="small" htmlColor="#80808f" />
+          </li>
+          <li>
+            <CommentOutlined fontSize="small" htmlColor="#80808f" />
+          </li>
+          <li>
+            <EditOutlined fontSize="small" htmlColor="#80808f" />
+          </li>
+          <li>
+            <DeleteForeverOutlined fontSize="small" htmlColor="#80808f" />
+          </li>
+        </ul>
       </div>
     </div>
   );

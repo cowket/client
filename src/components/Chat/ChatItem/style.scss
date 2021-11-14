@@ -5,6 +5,13 @@
   align-items: flex-start;
   height: fit-content;
   width: 95%;
+  border-radius: 4px;
+  &:hover {
+    background-color: $gray_8;
+    & > .contentBox > .additionalBox {
+      display: flex;
+    }
+  }
   & > .imgBox {
     min-width: 35px;
     width: 35px;
@@ -24,6 +31,26 @@
     flex-direction: column;
     align-items: flex-start;
     width: 100%;
+    position: relative;
+    & > .additionalBox {
+      display: none;
+      position: absolute;
+      right: 0;
+      background-color: $gray_9;
+      border: 1px solid $gray_6;
+      border-radius: 6px;
+      padding: 5px;
+      top: -15px;
+      flex-direction: row;
+      column-gap: 10px;
+      & > li {
+        list-style: none;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        cursor: pointer;
+      }
+    }
     & > .userInfo {
       display: flex;
       align-items: center;
