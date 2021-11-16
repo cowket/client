@@ -1,4 +1,4 @@
-import React, { useContext } from 'react';
+import React, { useContext, useState } from 'react';
 import profileContext from 'context/profile';
 import {
   CommentOutlined,
@@ -6,6 +6,7 @@ import {
   DeleteForeverOutlined,
   TagFacesOutlined,
 } from '@material-ui/icons';
+import EmojiBox from 'components/Common/EmojiBox';
 import { dateToTime } from 'util/dateUtil';
 import './style.scss';
 
@@ -14,6 +15,10 @@ type ItemRrops = {
 };
 
 const Item = ({ chat }: ItemRrops) => {
+  const [showEmoji, setShowEmoji] = useState<boolean>(false);
+  // 텍스트에 마우스호버 || 아이콘 박스 클릭시 선택된 상태가 유지되도록 처리하기위한 값
+  const [showOptionBox, setShowOptionBox] = useState<boolean>(false);
+
   const { setProfileId } = useContext(profileContext);
   if (chat.sender === null) {
     return (
@@ -35,7 +40,15 @@ const Item = ({ chat }: ItemRrops) => {
     );
   }
   return (
-    <div className="itemBox">
+    <div
+      className={`itemBox ${showOptionBox && 'focused'}`}
+      onMouseEnter={() => setShowOptionBox(true)}
+      onMouseLeave={() => {
+        if (!showEmoji) {
+          setShowOptionBox(false);
+        }
+      }}
+    >
       <div className="imgBox" onClick={() => setProfileId(chat.sender.uuid)}>
         <img
           src={
@@ -59,7 +72,7 @@ const Item = ({ chat }: ItemRrops) => {
           className="content"
         />
         <ul className="additionalBox">
-          <li>
+          <li onClick={() => setShowEmoji(!showEmoji)}>
             <TagFacesOutlined fontSize="small" htmlColor="#80808f" />
           </li>
           <li>
@@ -71,6 +84,14 @@ const Item = ({ chat }: ItemRrops) => {
           <li>
             <DeleteForeverOutlined fontSize="small" htmlColor="#80808f" />
           </li>
+          {showEmoji && (
+            <EmojiBox
+              onSelectEmoji={(value) => {
+                console.log(value);
+                setShowEmoji(false);
+              }}
+            />
+          )}
         </ul>
       </div>
     </div>
