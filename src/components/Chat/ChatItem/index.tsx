@@ -6,6 +6,8 @@ import {
   DeleteForeverOutlined,
   TagFacesOutlined,
 } from '@material-ui/icons';
+import socketContext from 'context/socket';
+import userContext from 'context/user';
 import EmojiBox from 'components/Common/EmojiBox';
 import { dateToTime } from 'util/dateUtil';
 import './style.scss';
@@ -15,11 +17,24 @@ type ItemRrops = {
 };
 
 const Item = ({ chat }: ItemRrops) => {
+  const { userInfo } = useContext(userContext);
+  const { socket } = useContext(socketContext);
+
   const [showEmoji, setShowEmoji] = useState<boolean>(false);
   // 텍스트에 마우스호버 || 아이콘 박스 클릭시 선택된 상태가 유지되도록 처리하기위한 값
   const [showOptionBox, setShowOptionBox] = useState<boolean>(false);
 
+  const onDeleteMessage = () => {
+    if (socket) {
+      socket.emit('deleteMessage', {
+        message_uuid: chat.uuid,
+        channel_uuid: chat.channel.uuid,
+      });
+    }
+  };
+
   const { setProfileId } = useContext(profileContext);
+
   if (chat.sender === null) {
     return (
       <div className="itemBox">
@@ -78,12 +93,16 @@ const Item = ({ chat }: ItemRrops) => {
           <li>
             <CommentOutlined fontSize="small" htmlColor="#80808f" />
           </li>
-          <li>
-            <EditOutlined fontSize="small" htmlColor="#80808f" />
-          </li>
-          <li>
-            <DeleteForeverOutlined fontSize="small" htmlColor="#80808f" />
-          </li>
+          {chat.sender.uuid === userInfo?.uuid && (
+            <>
+              <li>
+                <EditOutlined fontSize="small" htmlColor="#80808f" />
+              </li>
+              <li onClick={onDeleteMessage}>
+                <DeleteForeverOutlined fontSize="small" htmlColor="#80808f" />
+              </li>
+            </>
+          )}
           {showEmoji && (
             <EmojiBox
               onSelectEmoji={(value) => {

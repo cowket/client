@@ -33,6 +33,10 @@ const ChatRoom = () => {
     topChatInfo.current = chat[0];
   };
 
+  const onDeleteMessage = (uuid: string) => {
+    setChatList((v) => v.filter((chat) => chat.uuid !== uuid));
+  };
+
   const onAddNewMessage = (chat: DetailChat) => {
     if (
       (chat.channel
@@ -128,6 +132,9 @@ const ChatRoom = () => {
     socket?.on('loadedScrollMessage', (value: DetailChat[]) => {
       onAddPrevMessage(value);
     });
+    socket?.on('deletedMessage', (value: { message_uuid: string }) =>
+      onDeleteMessage(value.message_uuid)
+    );
   }, [chatBuffer]);
 
   useEffect(() => {
