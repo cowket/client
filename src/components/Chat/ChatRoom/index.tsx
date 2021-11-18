@@ -28,13 +28,21 @@ const ChatRoom = () => {
   const prevViewportHeight = useRef<number>(0);
 
   const onAddPrevMessage = (chat: DetailChat[]) => {
-    setChatList((v) => [...chat.reverse(), ...v]);
-    scrollToPrevChat();
-    topChatInfo.current = chat[0];
+    if (chat.length) {
+      const reversedList = chat.reverse();
+      setChatList((v) => [...reversedList, ...v]);
+      chatBuffer.current = [...reversedList, ...chatBuffer.current];
+      scrollToPrevChat();
+      topChatInfo.current = reversedList[0];
+    }
   };
 
   const onDeleteMessage = (uuid: string) => {
-    setChatList((v) => v.filter((chat) => chat.uuid !== uuid));
+    const filteredList = chatBuffer.current.filter(
+      (chat) => chat.uuid !== uuid
+    );
+    chatBuffer.current = filteredList;
+    setChatList(filteredList);
   };
 
   const onAddNewMessage = (chat: DetailChat) => {
@@ -171,10 +179,11 @@ const ChatRoom = () => {
     }
     return () => {
       // 채널이 변경되면 초기화해줄것들을 여기서해주기
+      chatBuffer.current = [];
       topChatInfo.current = undefined;
       // chatRoomRef.current;
     };
-  }, [selectedChannel]);
+  }, [selectedChannel?.uuid]);
 
   return (
     <div
