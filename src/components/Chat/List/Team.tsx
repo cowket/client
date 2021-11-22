@@ -40,7 +40,7 @@ const Team = () => {
         <div>소속된 팀이 없습니다</div>
       )}
       <div className="settingButton" onClick={() => history.push('/team')}>
-        <Settings htmlColor="white" />
+        <Settings htmlColor="#80808f" />
       </div>
     </div>
   );
