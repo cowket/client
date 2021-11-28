@@ -45,6 +45,14 @@ const ChatRoom = () => {
     setChatList(filteredList);
   };
 
+  const onUpdateMessage = (message: DetailChat) => {
+    const filteredList = chatBuffer.current.map((chat) =>
+      chat.uuid !== message.uuid ? chat : message
+    );
+    chatBuffer.current = filteredList;
+    setChatList(filteredList);
+  };
+
   const onAddNewMessage = (chat: DetailChat) => {
     if (
       (chat.channel
@@ -143,6 +151,9 @@ const ChatRoom = () => {
     socket?.on('deletedMessage', (value: { message_uuid: string }) =>
       onDeleteMessage(value.message_uuid)
     );
+    socket?.on('updatedReactionMessage', (value: any) => {
+      onUpdateMessage(value);
+    });
   }, [chatBuffer]);
 
   useEffect(() => {

@@ -6,6 +6,7 @@
   height: fit-content;
   width: 95%;
   border-radius: 4px;
+  padding: 3px;
   &.focused {
     background-color: $gray_8;
     & > .contentBox > .additionalBox {
@@ -32,6 +33,30 @@
     align-items: flex-start;
     width: 100%;
     position: relative;
+    & > .reactionBox {
+      padding: 4px 7px;
+      box-sizing: border-box;
+      background-color: $gray_6;
+      border-radius: 10px;
+      display: flex;
+      align-items: center;
+      column-gap: 5px;
+      .reaction {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        text-align: center;
+        & > p {
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          // width: 12px;
+          // // height: 14px;
+          // font-size: 12px;
+          // line-height: 12px;
+        }
+      }
+    }
     & > .additionalBox {
       display: none;
       position: absolute;

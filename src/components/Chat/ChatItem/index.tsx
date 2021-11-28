@@ -1,4 +1,4 @@
-import React, { useContext, useState } from 'react';
+import React, { useContext, useState, useEffect } from 'react';
 import profileContext from 'context/profile';
 import {
   CommentOutlined,
@@ -19,7 +19,6 @@ type ItemRrops = {
 const Item = ({ chat }: ItemRrops) => {
   const { userInfo } = useContext(userContext);
   const { socket } = useContext(socketContext);
-
   const [showEmoji, setShowEmoji] = useState<boolean>(false);
   // 텍스트에 마우스호버 || 아이콘 박스 클릭시 선택된 상태가 유지되도록 처리하기위한 값
   const [showOptionBox, setShowOptionBox] = useState<boolean>(false);
@@ -73,6 +72,7 @@ const Item = ({ chat }: ItemRrops) => {
           }
         />
       </div>
+
       <div className="contentBox">
         <div className="userInfo">
           <p className="nickname">
@@ -86,6 +86,20 @@ const Item = ({ chat }: ItemRrops) => {
           dangerouslySetInnerHTML={{ __html: chat.content }}
           className="content"
         />
+
+        {chat.reactions.length > 0 && (
+          <div className="reactionBox">
+            {chat.reactions.map((react) => (
+              <div
+                dangerouslySetInnerHTML={{
+                  __html: `<p>&#x${react.reaction_item.content};</p>`,
+                }}
+                className="reaction"
+              />
+            ))}
+          </div>
+        )}
+
         <ul className="additionalBox">
           <li onClick={() => setShowEmoji(!showEmoji)}>
             <TagFacesOutlined fontSize="small" htmlColor="#80808f" />
@@ -105,8 +119,8 @@ const Item = ({ chat }: ItemRrops) => {
           )}
           {showEmoji && (
             <EmojiBox
+              messageInfo={chat}
               onSelectEmoji={(value) => {
-                console.log(value);
                 setShowEmoji(false);
               }}
             />
