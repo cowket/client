@@ -1,8 +1,12 @@
 @import 'styles/globals.scss';
 
 .teamContainer {
+  background-color: $base;
+  min-height: 100%;
   & > .searchBox {
-    background-color: $blue_2;
+    background-color: $white;
+
+    border-bottom: 2px solid $gray_7;
     height: 60px;
     display: flex;
     align-items: center;
