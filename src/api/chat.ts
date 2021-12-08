@@ -18,7 +18,14 @@ export const getPrevDMChat = async (
   team_uuid: string
 ): Promise<DetailChat[]> => {
   const response = await client.get<DetailChat[]>(
-    `/message/dm?sender=${sender}&receiver=${receiver}&team_uuid=${team_uuid}`
+    '/message', {
+      params: {
+        sender_uuid: sender,
+        receiver_uuid: receiver,
+        team_uuid,
+        message_type: 'direct_message'
+      }
+    }
   );
 
   return response.data;
