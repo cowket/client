@@ -24,7 +24,7 @@ export const getTeamParticipants = async (
 
 // 유저의 팀 조회
 export const getMyTeams = async (): Promise<MyTeam[]> => {
-  const { data: team } = await client.get<MyTeam[]>('/users/grant/team');
+  const { data: team } = await client.get<MyTeam[]>('/user/grant/team');
   console.log(team);
   return team;
 };
