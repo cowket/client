@@ -7,7 +7,8 @@ services:
       - /etc/letsencrypt:/etc/letsencrypt
       - /var/log/nginx:/var/log/nginx
     ports:
-      - 13001:443
+      - 13001:80
+      - 13002:443
     networks:
       - frontend
     environment:
