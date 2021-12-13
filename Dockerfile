@@ -7,7 +7,7 @@ RUN yarn build
 
 FROM nginx:latest
 
-COPY --from-builder /app/default /etc/nginx/sites-available/
+COPY --from=builder /app/default /etc/nginx/sites-available/
 COPY --from=builder /app/build /usr/share/nginx/html
 
 EXPOSE 13001
