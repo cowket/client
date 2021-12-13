@@ -4,7 +4,6 @@ services:
   front:
     build: .
     volumes:
-      - /etc/nginx:/etc/nginx
       - /etc/letsencrypt:/etc/letsencrypt
       - /var/log/nginx:/var/log/nginx
     ports:
