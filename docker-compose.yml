@@ -1,0 +1,18 @@
+version: '3.9'
+
+services:
+  front:
+    build: .
+    volumes:
+      - /etc/nginx:/etc/nginx
+      - /etc/letsencrypt:/etc/letsencrypt
+      - /var/log/nginx:/var/log/nginx
+    ports:
+      - 13001:443
+    networks:
+      - frontend
+    environment:
+      - NODE_ENV=production
+
+networks:
+  frontend:
