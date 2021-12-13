@@ -1,15 +1,9 @@
 FROM node:14-alpine as builder
 WORKDIR /app
 
-COPY package.json ./
-COPY yarn.lock ./
-
-RUN npm i -g yarn
-RUN yarn install
-
 COPY . .
 
-RUN npm run build
+RUN yarn build
 
 FROM nginx:latest
 
