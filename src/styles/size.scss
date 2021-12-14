@@ -3,3 +3,11 @@ $large: 56.25em;
 $medium: 37.5em;
 $small: 31.25em;
 $smallest: 25em;
+
+$breakpoint-mobile-min: 320px;
+$breakpoint-mobile-max: 480px;
+$breakpoint-tablet-min: 481px;
+$breakpoint-tablet-max: 768px;
+$breakpoint-laptop-min: 1025px;
+$breakpoint-laptop-max: 1200px;
+$breakpoint-desktop: 1201px;

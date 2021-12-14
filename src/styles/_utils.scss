@@ -1,0 +1,25 @@
+@import './size';
+
+@mixin mobile {
+  @media (min-width: #{$breakpoint-mobile-min}) and (max-width: #{$breakpoint-mobile-max}) {
+    @content;
+  }
+}
+
+@mixin tablet {
+  @media (min-width: #{$breakpoint-laptop-min}) and (max-width: #{$breakpoint-tablet-max}) {
+    @content;
+  }
+}
+
+@mixin laptop {
+  @media (min-width: #{$breakpoint-laptop-min}) and (max-width: #{$breakpoint-laptop-max}) {
+    @content;
+  }
+}
+
+@mixin desktop {
+  @media (min-width: #{$breakpoint-desktop}) {
+    @content;
+  }
+}

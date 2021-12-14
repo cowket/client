@@ -8,6 +8,8 @@ import { postLogin } from 'api/auth';
 import { useFormik } from 'formik';
 import * as Yup from 'yup';
 import './style.scss';
+import { Divider, InputAdornment, Paper } from '@material-ui/core';
+import { Person, VpnKey } from '@material-ui/icons';
 
 const LoginForm = () => {
   const { setIsLoggedIn } = useContext(authContext);
@@ -52,44 +54,76 @@ const LoginForm = () => {
   });
 
   return (
-    <div className="loginContainer">
-      <p className="title">로그인</p>
+    <Paper elevation={4} className="loginContainer">
+      {/* <p className="title">로그인</p> */}
+      <div className="title">Login</div>
       <form className="form" id="LoginForm" onSubmit={formik.handleSubmit}>
-        <TextField
-          id="email"
-          label="이메일을 입력해주세요"
-          color="secondary"
-          type="email"
-          helperText={formik.errors.email}
-          onChange={formik.handleChange}
-          value={formik.values.email}
-        />
-        <TextField
-          id="password"
-          label="비밀번호를 입력해주세요"
-          type="password"
-          color="secondary"
-          helperText={formik.errors.password}
-          onChange={formik.handleChange}
-          value={formik.values.password}
-        />
-        <Button
-          id="LoginForm"
-          type="submit"
-          variant="outlined"
-          size="medium"
-          color="primary"
-          className="button"
-          disabled={!(formik.dirty && formik.isValid)}
-        >
-          로그인
-        </Button>
+        <div className="form-area">
+          <TextField
+            label="이메일"
+            id="email"
+            color="primary"
+            type="email"
+            helperText={formik.errors.email}
+            onChange={formik.handleChange}
+            value={formik.values.email}
+            name="email"
+            hiddenLabel
+            variant="outlined"
+            placeholder="abc@example.com"
+            InputProps={{
+              startAdornment: (
+                <InputAdornment position="start">
+                  <Person />
+                </InputAdornment>
+              ),
+            }}
+            fullWidth
+            margin="normal"
+          />
+        </div>
+        <div className="form-area">
+          <TextField
+            label="비밀번호"
+            id="password"
+            type="password"
+            color="primary"
+            helperText={formik.errors.password}
+            onChange={formik.handleChange}
+            value={formik.values.password}
+            name="password"
+            hiddenLabel
+            placeholder="abcdefghijk"
+            variant="outlined"
+            InputProps={{
+              startAdornment: (
+                <InputAdornment position="start">
+                  <VpnKey />
+                </InputAdornment>
+              ),
+            }}
+            fullWidth
+            margin="normal"
+          />
+        </div>
       </form>
+      <Button
+        id="LoginForm"
+        type="submit"
+        variant="outlined"
+        color="primary"
+        className="button"
+        disabled={!(formik.dirty && formik.isValid)}
+        fullWidth
+      >
+        로그인
+      </Button>
+      <Divider variant="middle" style={{ margin: '1rem 0'}} />
       {errorMsg && <div className="error">{errorMsg}</div>}
       <div className="redirectLink" onClick={() => history.push('/register')}>
         회원가입하기
       </div>
-    </div>
+    </Paper>
   );
 };
 

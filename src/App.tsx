@@ -12,8 +12,31 @@ import RegisterForm from 'components/RegisterForm';
 import LoginForm from 'components/LoginForm';
 import { QueryClient, QueryClientProvider } from 'react-query';
 import { BrowserRouter, Switch, Route, Redirect } from 'react-router-dom';
+import { createTheme, MuiThemeProvider } from '@material-ui/core';
 
 const queryClient = new QueryClient();
+
+const theme = createTheme({
+  typography: {
+    fontFamily: [
+      'Pretendard',
+      '-apple-system',
+      'BlinkMacSystemFont',
+      'Roboto',
+      '"Helvetica Neue"',
+      'Arial',
+      'sans-serif',
+      '"Apple Color Emoji"',
+      '"Segoe UI Emoji"',
+      '"Segoe UI Symbol"',
+    ].join(','),
+  },
+  palette: {
+    primary: {
+      main: '#64485b'
+    }
+  }
+});
 
 export default function App(): JSX.Element {
   const [isLoggedIn, setIsLoggedIn] = useState<boolean>(false);
@@ -43,41 +66,47 @@ export default function App(): JSX.Element {
   }, []);
 
   return (
-    <BrowserRouter>
-      <QueryClientProvider client={queryClient}>
-        <AuthContext.Provider value={{ isLoggedIn, setIsLoggedIn }}>
-          <UserContext.Provider value={{ userInfo, setUserInfo }}>
-            {/* 인증결과에따라 다른 layout을 보여줌 */}
-            {isLoggedIn ? (
-              <TeamContext.Provider value={{ teamList, setTeamList }}>
-                <SelectContext.Provider
-                  value={{
-                    selectedTeam,
-                    selectedChannel,
-                    setSelectedTeam,
-                    setSelectedChannel,
-                  }}
-                >
-                  <BaseLayout>
-                    <Route path="/team" component={Team} />
-                    <Route path="/chat" component={Chat} />
-                  </BaseLayout>
-                </SelectContext.Provider>
-              </TeamContext.Provider>
-            ) : (
-              <AuthLayout>
-                <Switch>
-                  <Route path="/register" component={RegisterForm} />
-                  <Route path="/login" component={LoginForm} />
-                </Switch>
-              </AuthLayout>
-            )}
-            <Route exact path="*">
-              {isLoggedIn ? <Redirect to="/chat" /> : <Redirect to="/login" />}
-            </Route>
-          </UserContext.Provider>
-        </AuthContext.Provider>
-      </QueryClientProvider>
-    </BrowserRouter>
+    <MuiThemeProvider theme={theme}>
+      <BrowserRouter>
+        <QueryClientProvider client={queryClient}>
+          <AuthContext.Provider value={{ isLoggedIn, setIsLoggedIn }}>
+            <UserContext.Provider value={{ userInfo, setUserInfo }}>
+              {/* 인증결과에따라 다른 layout을 보여줌 */}
+              {isLoggedIn ? (
+                <TeamContext.Provider value={{ teamList, setTeamList }}>
+                  <SelectContext.Provider
+                    value={{
+                      selectedTeam,
+                      selectedChannel,
+                      setSelectedTeam,
+                      setSelectedChannel,
+                    }}
+                  >
+                    <BaseLayout>
+                      <Route path="/team" component={Team} />
+                      <Route path="/chat" component={Chat} />
+                    </BaseLayout>
+                  </SelectContext.Provider>
+                </TeamContext.Provider>
+              ) : (
+                <AuthLayout>
+                  <Switch>
+                    <Route path="/register" component={RegisterForm} />
+                    <Route path="/login" component={LoginForm} />
+                  </Switch>
+                </AuthLayout>
+              )}
+              <Route exact path="*">
+                {isLoggedIn ? (
+                  <Redirect to="/chat" />
+                ) : (
+                  <Redirect to="/login" />
+                )}
+              </Route>
+            </UserContext.Provider>
+          </AuthContext.Provider>
+        </QueryClientProvider>
+      </BrowserRouter>
+    </MuiThemeProvider>
   );
 }

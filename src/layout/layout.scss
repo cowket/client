@@ -1,20 +1,31 @@
+// .authLayout {
+//   width: 100vw;
+//   height: 100vh;
+//   display: flex;
+//   align-items: center;
+//   justify-content: center;
+//   background: #e4dcda; /* fallback for old browsers */
+//   background: -webkit-linear-gradient(
+//     to right,
+//     #e1e2eb,
+//     #cad0e4
+//   ); /* Chrome 10-25, Safari 5.1-6 */
+//   background: linear-gradient(
+//     to right,
+//     #96a0cf,
+//     #e2e2e2
+//   ); /* W3C, IE 10+/ Edge, Firefox 16+, Chrome 26+, Opera 12+, Safari 7+ */
+// }
+
 .authLayout {
   width: 100vw;
   height: 100vh;
+  background: url('../styles/base-background.svg');
+  background-repeat: no-repeat;
+  background-size: cover;
   display: flex;
-  align-items: center;
   justify-content: center;
-  background: #e4dcda; /* fallback for old browsers */
-  background: -webkit-linear-gradient(
-    to right,
-    #e1e2eb,
-    #cad0e4
-  ); /* Chrome 10-25, Safari 5.1-6 */
-  background: linear-gradient(
-    to right,
-    #96a0cf,
-    #e2e2e2
-  ); /* W3C, IE 10+/ Edge, Firefox 16+, Chrome 26+, Opera 12+, Safari 7+ */
+  align-items: center;
 }
 
 .baseLayout {
