@@ -2,10 +2,9 @@ import React, { useContext } from 'react';
 import teamContext from 'context/team';
 import selectContext from 'context/select';
 import { useHistory } from 'react-router-dom';
-import Select from '@material-ui/core/Select';
-import MenuItem from '@material-ui/core/MenuItem';
-import Settings from '@material-ui/icons/Settings';
 import './style.scss';
+import { Avatar } from '@material-ui/core';
+import { Add } from '@material-ui/icons';
 
 const Team = () => {
   const history = useHistory();
@@ -14,34 +13,24 @@ const Team = () => {
 
   return (
     <div className="roomList">
-      {selectedTeam && teamList.length > 0 ? (
-        <Select
-          labelId="demo-simple-select-label"
-          className="teamSelect"
-          disableUnderline
-          autoWidth
-          defaultValue={selectedTeam.uuid}
-          onChange={(e) => {
-            const targetTeam = teamList?.find(
-              (item) => e.target.value === item.uuid
-            );
-            if (targetTeam) {
-              setSelectedTeam(targetTeam);
-            }
-          }}
-        >
-          {teamList.length > 0
-            ? teamList.map((team) => (
-                <MenuItem value={team.uuid}>{team.name}</MenuItem>
-              ))
-            : '팀 없음'}
-        </Select>
-      ) : (
-        <div>소속된 팀이 없습니다</div>
-      )}
-      <div className="settingButton" onClick={() => history.push('/team')}>
-        <Settings htmlColor="#80808f" />
-      </div>
+      {selectedTeam &&
+        teamList.length > 0 &&
+        teamList.map((team) => (
+          <Avatar
+            key={team.uuid}
+            src={team.avatar}
+            variant="rounded"
+            className="teamAvatar"
+            onClick={(e) => setSelectedTeam(team)}
+          />
+        ))}
+      <Avatar
+        variant="rounded"
+        className="teamAvatar addTeam"
+        onClick={() => history.push('/team')}
+      >
+        <Add />
+      </Avatar>
     </div>
   );
 };

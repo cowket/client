@@ -83,3 +83,27 @@
     }
   }
 }
+
+.roomList {
+  max-width: 40px;
+  min-width: 40px;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start;
+  padding: 10px;
+  border-right: 1px solid $gray_7;
+
+  .teamAvatar {
+    margin-bottom: 10px;
+    cursor: pointer;
+
+    &.addTeam {
+      transition: background-color 250ms ease;
+      background-color: $blue_1;
+
+      &:hover {
+        background-color: $blue_3;
+      }
+    }
+  }
+}
