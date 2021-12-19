@@ -27,6 +27,12 @@ const ChatRoom = () => {
   const topChatInfo = useRef<DetailChat | undefined>();
   const prevViewportHeight = useRef<number>(0);
 
+  const scrollToBottom = () => {
+    if (chatRoomRef.current) {
+      chatRoomRef.current.scrollTop = chatRoomRef.current.scrollHeight;
+    }
+  };
+
   const onAddPrevMessage = (chat: DetailChat[]) => {
     if (chat.length) {
       const reversedList = chat.reverse();
@@ -60,20 +66,14 @@ const ChatRoom = () => {
         : channelIdRef.current === chat.sender.uuid) ||
       userInfo?.uuid === chat.sender.uuid
     ) {
+      chatBuffer.current = [...chatBuffer.current, chat];
+      setChatList(chatBuffer.current);
+      chatRoomRef.current?.scrollIntoView({ behavior: 'smooth' });
+
       if (chat.sender.uuid === userInfo?.uuid) {
         console.log('여기가 실행되는겨???');
         scrollToBottom();
       }
-      chatBuffer.current = [...chatBuffer.current, chat];
-      setChatList(chatBuffer.current);
-      chatRoomRef.current?.scrollIntoView({ behavior: 'smooth' });
-    }
-  };
-
-  const scrollToBottom = () => {
-    if (chatRoomRef.current) {
-      console.log(chatRoomRef.current.scrollHeight);
-      chatRoomRef.current.scrollTop = chatRoomRef.current.scrollHeight;
     }
   };
 
@@ -142,7 +142,6 @@ const ChatRoom = () => {
       onAddNewMessage(value);
     });
     socket?.on('newDirectMessage', (value: any) => {
-      console.log('newDirectMessage여기여기');
       onAddNewMessage(value);
     });
     socket?.on('loadedScrollMessage', (value: DetailChat[]) => {
@@ -158,36 +157,36 @@ const ChatRoom = () => {
 
   useEffect(() => {
     if (selectedChannel && selectedTeam) {
-      scrollToBottom();
       channelIdRef.current = selectedChannel.uuid;
       if ('email' in selectedChannel && userInfo) {
-        getPrevDMChat(
-          userInfo.uuid,
-          selectedChannel.uuid,
-          selectedTeam.uuid
-        ).then((res) => {
-          if (res) {
+        getPrevDMChat(userInfo.uuid, selectedChannel.uuid, selectedTeam.uuid)
+          .then((res) => {
+            if (res) {
+              const reversed = res.reverse();
+              chatBuffer.current = reversed;
+              setChatList(reversed);
+              topChatInfo.current = res[0];
+            } else {
+              setChatList([]);
+            }
+          })
+          .then(() => scrollToBottom());
+      } else {
+        getPrevChannelChat(selectedChannel.uuid)
+          .then((res) => {
             const reversed = res.reverse();
             chatBuffer.current = reversed;
-            setChatList(reversed);
-            topChatInfo.current = res[0];
-          } else {
-            setChatList([]);
-          }
-        });
-      } else {
-        getPrevChannelChat(selectedChannel.uuid).then((res) => {
-          const reversed = res.reverse();
-          chatBuffer.current = reversed;
 
-          topChatInfo.current = res[0];
-          setChatList(reversed);
-        });
+            topChatInfo.current = res[0];
+            setChatList(reversed);
+          })
+          .then(() => scrollToBottom());
       }
       getChannelDetail(selectedChannel.uuid).then((res) =>
         setJoinedUsers(res.members)
       );
     }
+
     return () => {
       // 채널이 변경되면 초기화해줄것들을 여기서해주기
       chatBuffer.current = [];

@@ -43,7 +43,7 @@ const Item = ({ chat }: ItemRrops) => {
         <div className="contentBox">
           <div className="userInfo">
             <p className="nickname">관리자</p>
-            <p className="time">{dateToTime(new Date(chat?.create_date))}</p>
+            <p className="time">{dateToTime(new Date(chat.create_date))}</p>
           </div>
           <div
             dangerouslySetInnerHTML={{ __html: chat.content }}
