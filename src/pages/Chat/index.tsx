@@ -82,12 +82,7 @@ const Chat = (
             setProfileId,
           }}
         >
-          <div
-            className="chatContainer"
-            style={{
-              gridTemplateColumns: `300px 4fr ${profileId ? 'auto' : ''}`,
-            }}
-          >
+          <div className="chatContainer">
             <ListBox />
             {selectedChannel && <ChatRoom />}
             {profileId !== undefined && <Profile />}

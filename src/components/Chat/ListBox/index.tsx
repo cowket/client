@@ -31,8 +31,8 @@ const ListBox = () => {
 
   return (
     <ChannelContext.Provider value={{ setChannelList, channelList }}>
+      <Team />
       <div className="channelListContainer">
-        <Team />
         <div className="channelList">
           <Channel title="Channel" channelList={channelList} />
           <Channel title="Direct Message" channelList={teamDMList} />
