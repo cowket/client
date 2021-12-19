@@ -21,7 +21,7 @@ const AddTeam = ({ onClose, teamInfo }: AddTeamProps) => {
     joinTeam(teamInfo.uuid, password).then((res) => {
       getMyTeams()
         .then((res) => {
-          setTeamList(res.map((team) => team.team_uuid));
+          setTeamList(res.map((grant) => grant.team));
         })
         .catch((error) => console.log(error));
     });

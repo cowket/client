@@ -28,11 +28,11 @@ declare global {
   };
 
   type ChannelUser = {
-    channel_uuid: Channel;
+    channel: Channel;
     create_date: string;
     id: number;
     team_user_profile: User;
     team_uuid: string;
-    user_uuid: User;
+    user: User;
   };
 }

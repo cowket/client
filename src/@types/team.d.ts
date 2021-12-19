@@ -13,11 +13,11 @@ declare global {
   };
 
   type MyTeam = {
-    channel_uuid: Channel;
+    channel: Channel;
     create_date: string;
     id: number;
-    team_uuid: Team;
-    user_uuid: User;
+    team: Team;
+    user: User;
   };
 
   type TeamParticipant = Team & {

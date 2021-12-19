@@ -42,9 +42,9 @@ const Chat = (
 
   useEffect(() => {
     getMyTeams().then((res) => {
-      setTeamList(res.map((team) => team.team_uuid));
+      setTeamList(res.map((grant) => grant.team));
       if (res.length > 0) {
-        setSelectedTeam(res[0].team_uuid);
+        setSelectedTeam(res[0].team);
       }
     });
   }, []);

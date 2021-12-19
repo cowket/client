@@ -61,7 +61,7 @@ const SearchChannel = ({ onClose }: SearchChannelProps) => {
         <section>
           <div className="channel">
             {publicChanList.map((chan) => (
-              <div className="item">
+              <div className="item" key={chan.uuid}>
                 <p>{chan.name}</p>
                 {alreadyJoined.includes(chan.uuid) ? (
                   <Button>탈퇴</Button>
@@ -74,7 +74,7 @@ const SearchChannel = ({ onClose }: SearchChannelProps) => {
                             if (res) {
                               getChannel(selectedTeam.uuid).then((res) => {
                                 setChannelList(
-                                  res.map((value) => value.channel_uuid)
+                                  res.map((value) => value.channel)
                                 );
                               });
                             }

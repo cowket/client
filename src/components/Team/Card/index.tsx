@@ -88,7 +88,7 @@ const RoomItem = ({ teamInfo, join }: RoomCardProps) => {
               } else {
                 joinTeam(teamInfo.uuid).then((res) => {
                   getMyTeams().then((res) => {
-                    setTeamList(res.map((team) => team.team_uuid));
+                    setTeamList(res.map((grant) => grant.team));
                   });
                 });
               }

@@ -22,9 +22,9 @@ const ListBox = () => {
       });
       getChannel(selectedTeam.uuid).then((res) => {
         if (res.length > 0) {
-          setSelectedChannel(res[0].channel_uuid);
+          setSelectedChannel(res[0].channel);
         }
-        setChannelList(res.map((value) => value.channel_uuid));
+        setChannelList(res.map((value) => value.channel));
       });
     }
   }, [selectedTeam]);

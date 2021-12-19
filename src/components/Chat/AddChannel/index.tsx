@@ -46,10 +46,10 @@ const AddChannel = ({ onClose, channel }: AddChannelProps) => {
       getChannelDetail(selectedChannel.uuid).then((res) =>
         setDefaultList(
           res.members
-            .filter((part) => part.user_uuid.uuid !== userInfo?.uuid)
+            .filter((part) => part.user.uuid !== userInfo?.uuid)
             .map((part) => ({
-              label: part.team_user_profile?.nickname ?? part.user_uuid.email,
-              value: part.team_user_profile?.uuid ?? part.user_uuid.uuid,
+              label: part.team_user_profile?.nickname ?? part.user.email,
+              value: part.team_user_profile?.uuid ?? part.user.uuid,
             }))
         )
       );

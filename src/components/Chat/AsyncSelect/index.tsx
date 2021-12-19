@@ -46,14 +46,14 @@ function AsyncMulti({
           res
             .filter(
               (each) =>
-                each.user_uuid.uuid !== userInfo?.uuid &&
+                each.user.uuid !== userInfo?.uuid &&
                 (
-                  each.team_user_profile?.nickname ?? each.user_uuid.email
+                  each.team_user_profile?.nickname ?? each.user.email
                 ).includes(inputValue)
             )
             .map((each) => ({
-              label: each.team_user_profile?.nickname ?? each.user_uuid.email,
-              value: each.user_uuid.uuid,
+              label: each.team_user_profile?.nickname ?? each.user.email,
+              value: each.user.uuid,
             }))
       );
     }
