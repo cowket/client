@@ -44,8 +44,8 @@ const ChannelItem = ({ channel }: ChannelProps) => {
           )}
           &nbsp;
           <div>
-            {'email' in channel
-              ? channel?.team_profile?.name ?? channel.email
+            {'team_user_profile' in channel
+              ? channel?.team_user_profile?.name ?? channel.user.email
               : channel.name}
           </div>
         </div>

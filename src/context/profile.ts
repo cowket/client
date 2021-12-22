@@ -1,13 +1,13 @@
 import React from 'react';
 
 type ProfileContextType = {
-  profileId?: string;
-  setProfileId: React.Dispatch<React.SetStateAction<string | undefined>>;
+  profile?: TeamProfile;
+  setProfile: React.Dispatch<React.SetStateAction<TeamProfile | undefined>>;
 };
 
 const initialValue: ProfileContextType = {
-  setProfileId: () => undefined,
-  profileId: undefined,
+  setProfile: () => undefined,
+  profile: undefined,
 };
 
 const profileContext = React.createContext<ProfileContextType>(initialValue);

@@ -30,7 +30,7 @@ const Chat = (
     },
   } = props;
   const isDesktopSize = useDesktopSize();
-  const [profileId, setProfileId] = useState<string>();
+  const [profile, setProfile] = useState<TeamProfile>();
   const { setTeamList } = useContext(teamContext);
   const { userInfo } = useContext(userContext);
   const { setSelectedTeam, selectedTeam, selectedChannel } =
@@ -78,14 +78,14 @@ const Chat = (
       <SocketContext.Provider value={{ socket }}>
         <ProfileContext.Provider
           value={{
-            profileId,
-            setProfileId,
+            profile,
+            setProfile,
           }}
         >
           <div className="chatContainer">
             <ListBox />
             {selectedChannel && <ChatRoom />}
-            {profileId !== undefined && <Profile />}
+            {profile !== undefined && <Profile />}
           </div>
         </ProfileContext.Provider>
       </SocketContext.Provider>
@@ -96,8 +96,8 @@ const Chat = (
     <SocketContext.Provider value={{ socket }}>
       <ProfileContext.Provider
         value={{
-          profileId,
-          setProfileId,
+          profile,
+          setProfile,
         }}
       >
         <div
@@ -107,9 +107,9 @@ const Chat = (
           }}
         >
           {/* 조건문을 수정할수있을듯 */}
-          {profileId && <Profile />}
-          {!profileId && channelId && <ChatRoom />}
-          {!profileId && !channelId && <ListBox />}
+          {profile && <Profile />}
+          {!profile && channelId && <ChatRoom />}
+          {!profile && !channelId && <ListBox />}
         </div>
       </ProfileContext.Provider>
     </SocketContext.Provider>

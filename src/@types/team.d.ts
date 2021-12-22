@@ -22,6 +22,10 @@ declare global {
 
   type TeamParticipant = Team & {
     email: string;
-    team_profile: TeamUser;
+    channel: Channel;
+    id: number;
+    team: string;
+    team_user_profile: TeamProfile;
+    user: UserDetail;
   };
 }

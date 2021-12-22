@@ -1,7 +1,7 @@
 import React, { useEffect, useState, useContext } from 'react';
-import profileContext from 'context/profile';
 import userContext from 'context/user';
 import selectContext from 'context/select';
+import profileContext from 'context/profile';
 import useDesktopSize from 'hooks/useDesktopSize';
 import { putUserInfo, postUserInfo } from 'api/user';
 import { uploadFile } from 'api/file';
@@ -12,14 +12,14 @@ import { IconButton, Button, Input, TextField } from '@material-ui/core';
 import './style.scss';
 
 type EditModalProps = {
-  onClose(info?: TeamUser): void;
-  profileInfo?: TeamUser;
+  onClose(info?: TeamProfile): void;
+  profileInfo?: TeamProfile;
 };
 
 const EditModal = ({ onClose, profileInfo }: EditModalProps) => {
   const { userInfo } = useContext(userContext);
-
   const { selectedTeam } = useContext(selectContext);
+
   if (!userInfo || !selectedTeam) {
     return <div>사용자 정보가 없습니다</div>;
   }
@@ -36,13 +36,13 @@ const EditModal = ({ onClose, profileInfo }: EditModalProps) => {
       contact: profileInfo?.contact,
     },
     validationSchema: Yup.object({
-      name: Yup.string().required(''),
-      position: Yup.string().required(''),
-      contact: Yup.string(),
+      name: Yup.string().min(2).required(''),
+      position: Yup.string().min(2).required(''),
+      contact: Yup.string().min(10).max(11),
     }),
     onSubmit: async (values) => {
       if (values.name && values.position) {
-        let response: TeamUser;
+        let response: TeamProfile;
         console.log(userInfo);
         if (profileInfo?.name) {
           response = await putUserInfo({
@@ -62,7 +62,7 @@ const EditModal = ({ onClose, profileInfo }: EditModalProps) => {
           });
         }
 
-        onClose(response);
+        onClose({ ...profileInfo, ...response });
       }
     },
   });
@@ -137,13 +137,7 @@ const EditModal = ({ onClose, profileInfo }: EditModalProps) => {
           </section>
           <section className="imgBox">
             <p className="title">프로필 사진</p>
-            <img
-              src={
-                fileUrl
-                  ? `https://cw.malrang.dev/uploads/${fileUrl}`
-                  : userInfo.avatar
-              }
-            />
+            <img src={fileUrl} />
             <label htmlFor="contained-button-file">
               <input
                 accept="image/*"
@@ -152,8 +146,10 @@ const EditModal = ({ onClose, profileInfo }: EditModalProps) => {
                 // onSelect={(e) => console.log(e)}
                 onChange={async (e: any) => {
                   if (e !== null) {
+                    console.log(e.currentTarget.files[0]);
                     const response = await uploadFile(e.currentTarget.files[0]);
                     if (response.uploads) {
+                      console.log(response.uploads);
                       setFileUrl(response.uploads);
                     }
                   }

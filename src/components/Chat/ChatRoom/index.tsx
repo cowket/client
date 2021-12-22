@@ -18,7 +18,7 @@ const ChatRoom = () => {
   const { selectedChannel, selectedTeam } = useContext(selectContext);
   const [chatList, setChatList] = useState<DetailChat[]>([]);
   const chatBuffer = useRef<DetailChat[]>([]);
-  const { profileId } = useContext(profileContext);
+  const { profile } = useContext(profileContext);
   const chatRoomRef = useRef<HTMLDivElement>(null);
   const { userInfo } = useContext(userContext);
   const { socket } = useContext(socketContext);
@@ -103,6 +103,19 @@ const ChatRoom = () => {
     }
   }, []);
 
+  useEffect(() => {
+    if (profile && profile.uuid) {
+      const updateProfile = [...chatList].map((chat) => {
+        if (chat.sender?.uuid === profile.uuid) {
+          const tmp = { ...chat };
+          tmp.sender_team_user_profile = profile;
+          return tmp;
+        }
+        return chat;
+      });
+      setChatList(updateProfile);
+    }
+  }, [profile]);
   // useEffect(() => {
   //   // scrollToBottom();
   //   if (chatRoomRef.current?.scrollHeight) {
@@ -174,6 +187,7 @@ const ChatRoom = () => {
       } else {
         getPrevChannelChat(selectedChannel.uuid)
           .then((res) => {
+            console.log(res);
             const reversed = res.reverse();
             chatBuffer.current = reversed;
 
@@ -199,15 +213,16 @@ const ChatRoom = () => {
     <div
       className="channelRoomContainer"
       style={{
-        width: profileId ? 'calc(100vw - 600px)' : 'calc(100vw - 300px)',
+        width: profile ? 'calc(100vw - 600px)' : 'calc(100vw - 300px)',
       }}
     >
       <div className="targetInfo">
         {!isDesktopSize && <ArrowBackIosOutlinedIcon fontSize="small" />}
         <p>
           {selectedChannel
-            ? 'team_profile' in selectedChannel
-              ? selectedChannel.team_profile?.name ?? selectedChannel.email
+            ? 'team_user_profile' in selectedChannel
+              ? selectedChannel.team_user_profile?.name ??
+                selectedChannel.user.email
               : selectedChannel.name
             : '채널을 선택해주세요'}
         </p>

@@ -7,10 +7,12 @@ import {
   TagFacesOutlined,
 } from '@material-ui/icons';
 import socketContext from 'context/socket';
+import selectContext from 'context/select';
 import userContext from 'context/user';
 import EmojiBox from 'components/Common/EmojiBox';
 import { dateToTime } from 'util/dateUtil';
 import './style.scss';
+import { getUserDetail } from 'api/user';
 
 type ItemRrops = {
   chat: DetailChat;
@@ -22,6 +24,7 @@ const Item = ({ chat }: ItemRrops) => {
   const [showEmoji, setShowEmoji] = useState<boolean>(false);
   // 텍스트에 마우스호버 || 아이콘 박스 클릭시 선택된 상태가 유지되도록 처리하기위한 값
   const [showOptionBox, setShowOptionBox] = useState<boolean>(false);
+  const { selectedTeam } = useContext(selectContext);
 
   const onDeleteMessage = () => {
     if (socket) {
@@ -32,7 +35,15 @@ const Item = ({ chat }: ItemRrops) => {
     }
   };
 
-  const { setProfileId } = useContext(profileContext);
+  const { setProfile } = useContext(profileContext);
+
+  const onSelectProfile = (profileId: string) => {
+    if (selectedTeam) {
+      getUserDetail(selectedTeam.uuid, profileId).then((res) => {
+        setProfile({ ...res, uuid: profileId });
+      });
+    }
+  };
 
   if (chat.sender === null) {
     return (
@@ -63,7 +74,12 @@ const Item = ({ chat }: ItemRrops) => {
         }
       }}
     >
-      <div className="imgBox" onClick={() => setProfileId(chat.sender.uuid)}>
+      <div
+        className="imgBox"
+        onClick={() => {
+          onSelectProfile(chat.sender.uuid);
+        }}
+      >
         <img
           src={
             chat?.team_user_profile?.avatar ??

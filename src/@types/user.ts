@@ -17,13 +17,15 @@ declare global {
     statusCode: number;
   };
 
-  type TeamUser = {
+  type TeamProfile = {
     id?: number;
     name?: string;
     position?: string;
+    email?: string;
     avatar?: string;
     contact?: string;
     create_date?: string;
+    uuid?: string;
     team_uuid?: string;
   };
 

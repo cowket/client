@@ -1,9 +1,7 @@
 import React, { useContext, useState, useEffect } from 'react';
-import profileContext from 'context/profile';
 import Modal from '../EditModal';
 import userContext from 'context/user';
-import selectContext from 'context/select';
-import { getUserDetail } from 'api/user';
+import profileContext from 'context/profile';
 import {
   CloseOutlined,
   MoreVert,
@@ -15,45 +13,35 @@ import './style.scss';
 
 const Profile = () => {
   const [showModal, setShowModal] = useState<boolean>(false);
-  const [userProfile, setUserProfile] = useState<TeamUser>();
-  const { setProfileId, profileId } = useContext(profileContext);
+  const { setProfile, profile } = useContext(profileContext);
   const { userInfo } = useContext(userContext);
-  const { selectedTeam } = useContext(selectContext);
 
-  useEffect(() => {
-    if (selectedTeam?.uuid && profileId) {
-      getUserDetail(selectedTeam.uuid, profileId).then((res) =>
-        setUserProfile(res)
-      );
-    }
-  }, [profileId]);
-
-  if (!userInfo) {
+  if (!profile) {
     return <div>사용자 정보가 없습니다.</div>;
   }
-  const onClose = (response: TeamUser) => {
-    if (response) {
-      setUserProfile(response);
-    }
+
+  const onClose = (response: TeamProfile) => {
+    setProfile(response);
     setShowModal(false);
   };
+  console.log(userInfo?.uuid, profile);
   return (
     <>
-      {showModal && <Modal onClose={onClose} profileInfo={userProfile} />}
+      {showModal && <Modal onClose={onClose} profileInfo={profile} />}
       <div className="profileContainer">
         <header>
           <p>프로필</p>
-          <div onClick={() => setProfileId(undefined)} className="closeButton">
+          <div onClick={() => setProfile(undefined)} className="closeButton">
             <CloseOutlined />
           </div>
         </header>
         <div className="imgBox">
-          <img src={userProfile?.avatar} />
+          <img src={profile?.avatar} />
           <div className="name">
-            {userProfile?.name ?? userInfo?.email ?? '닉네임이 없습니다'}
+            {profile?.name ?? profile?.email ?? '닉네임이 없습니다'}
           </div>
           <div className="subBox">
-            {profileId && userInfo.uuid === profileId ? (
+            {profile && userInfo?.uuid === profile.uuid ? (
               <div className="itemBox">
                 <IconButton onClick={() => setShowModal(true)}>
                   <CreateOutlined fontSize="small" />
@@ -78,9 +66,9 @@ const Profile = () => {
         </div>
         <ul className="detailBox">
           <li>Position</li>
-          <li>{userProfile?.position ?? '내용없음'}</li>
+          <li>{profile?.position ?? '내용없음'}</li>
           <li>Contact</li>
-          <li>{userProfile?.contact ?? '내용없음'}</li>
+          <li>{profile?.contact ?? '내용없음'}</li>
           {/* <li>Email address</li>
           <li>{userInfo?.email}</li> */}
         </ul>

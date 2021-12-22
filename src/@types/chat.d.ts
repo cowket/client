@@ -21,8 +21,8 @@ declare global {
     sender: UserDetail;
     receiver: UserDetail;
     team: Team;
-    team_user_profile: TeamUser;
-    sender_team_user_profile: TeamUser;
+    team_user_profile: TeamProfile;
+    sender_team_user_profile: TeamProfile;
     update_date: string;
     uuid: string;
   };
