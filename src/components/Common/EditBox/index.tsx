@@ -1,7 +1,9 @@
 import selectContext from 'context/select';
 import ReactQuill from 'react-quill';
 import React, { useState, useContext, useRef, useEffect } from 'react';
+import Tooltip from 'components/Common/Tooltip';
 import 'react-quill/dist/quill.snow.css';
+import SearchMember from './SearchMember';
 import './style.scss';
 
 interface TextEditorProps {
@@ -9,7 +11,14 @@ interface TextEditorProps {
 }
 
 export default function TextEditor({ onSendMessage }: TextEditorProps) {
+  const [showTooltip, setShowTooltip] = useState<boolean>(false);
+  const [tooltipPosition, setTooltipPosition] = useState<{
+    x: number;
+    y: number;
+  }>({ x: 0, y: 0 });
+
   const { selectedChannel } = useContext(selectContext);
+  const domRef = useRef<HTMLDivElement>(null);
   // shift + enter누를때 개행되도록 처리할 flag 값
   const isShiftClicked = useRef<boolean>(false);
   useEffect(() => {
@@ -24,7 +33,6 @@ export default function TextEditor({ onSendMessage }: TextEditorProps) {
   };
 
   const [value, setValue] = useState('');
-  console.log(value);
   const modules = {
     toolbar: [
       [{ header: [1, 2, 3, false] }],
@@ -50,21 +58,29 @@ export default function TextEditor({ onSendMessage }: TextEditorProps) {
     'code-block',
   ];
   return (
-    <div className="editorBox">
+    <div className="editorBox" ref={domRef}>
       <ReactQuill
         theme="snow"
         value={value}
         onChange={(e, delta, b, c) => {
-          if (c.getText() === '') {
-            setValue('');
-            return;
+          if (e.includes('@')) {
+            setShowTooltip(true);
+          } else {
+            setShowTooltip(false);
           }
-          if (delta?.ops?.[1]?.insert === '\n') {
-            if (isShiftClicked.current) {
-              console.log('개행해야함.');
-            } else {
-              onSubmit();
+          if (!showTooltip) {
+            if (c.getText() === '') {
+              setValue('');
               return;
+            }
+
+            if (delta?.ops?.[1]?.insert === '\n') {
+              if (isShiftClicked.current) {
+                console.log('개행해야함.');
+              } else {
+                onSubmit();
+                return;
+              }
             }
           }
           setValue(e);
@@ -73,7 +89,12 @@ export default function TextEditor({ onSendMessage }: TextEditorProps) {
         formats={formats}
         className="quillBox"
         placeholder="내용을 입력하세요."
-        onKeyDown={(e: any) => {
+        onKeyDown={(e: KeyboardEvent) => {
+          if (e.key === '@' && domRef.current) {
+            setShowTooltip(true);
+            const { x, y } = domRef.current.getBoundingClientRect();
+            setTooltipPosition({ x, y });
+          }
           if (e.key === 'Shift') {
             isShiftClicked.current = true;
           }
@@ -84,6 +105,7 @@ export default function TextEditor({ onSendMessage }: TextEditorProps) {
           }
         }}
       />
+      {showTooltip && <SearchMember tooltipPosition={tooltipPosition} />}
     </div>
   );
 }

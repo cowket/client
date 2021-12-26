@@ -1,3 +1,5 @@
+@import 'styles/globals.scss';
+
 .editorBox {
   margin: 20px;
   margin-top: 10px;
@@ -5,5 +7,24 @@
   .ql-editor {
     min-height: 100px;
     max-height: 300px;
+  }
+}
+.tooltipBox {
+  width: 300px;
+  height: fit-content;
+  padding: 10px 0;
+  background-color: $white;
+  border: 1px solid rgba(151, 151, 151, 0.3);
+  border-radius: 4px;
+  box-shadow: 0px 0px 10px 3px rgba(124, 124, 124, 0.2);
+  & > .item {
+    width: 100%;
+    height: 30px;
+    padding: 2px 5px;
+    box-sizing: border-box;
+    cursor: pointer;
+    &:hover {
+      background-color: $gray_9;
+    }
   }
 }
