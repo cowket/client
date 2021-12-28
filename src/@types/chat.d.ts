@@ -26,4 +26,11 @@ declare global {
     update_date: string;
     uuid: string;
   };
+
+  type Mention = {
+    type: 'member' | 'system';
+    text: string;
+    avatar?: string;
+    desc: string;
+  };
 }

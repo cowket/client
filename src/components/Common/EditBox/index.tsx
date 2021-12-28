@@ -16,6 +16,7 @@ export default function TextEditor({ onSendMessage }: TextEditorProps) {
     x: number;
     y: number;
   }>({ x: 0, y: 0 });
+  const [value, setValue] = useState('');
 
   const { selectedChannel } = useContext(selectContext);
   const domRef = useRef<HTMLDivElement>(null);
@@ -32,7 +33,6 @@ export default function TextEditor({ onSendMessage }: TextEditorProps) {
     setValue('');
   };
 
-  const [value, setValue] = useState('');
   const modules = {
     toolbar: [
       [{ header: [1, 2, 3, false] }],
@@ -64,7 +64,7 @@ export default function TextEditor({ onSendMessage }: TextEditorProps) {
         value={value}
         onChange={(e, delta, b, c) => {
           if (e.includes('@')) {
-            setShowTooltip(true);
+            // setShowTooltip(true);
           } else {
             setShowTooltip(false);
           }
@@ -105,7 +105,19 @@ export default function TextEditor({ onSendMessage }: TextEditorProps) {
           }
         }}
       />
-      {showTooltip && <SearchMember tooltipPosition={tooltipPosition} />}
+      {showTooltip && selectedChannel && (
+        <SearchMember
+          tooltipPosition={tooltipPosition}
+          channelId={selectedChannel.uuid}
+          onSelect={(member: Mention) => {
+            const targetIndex = value.indexOf('@');
+            const plate = value.split('');
+            plate.splice(targetIndex + 1, 0, member.text);
+            setValue(plate.join(''));
+            setShowTooltip(false);
+          }}
+        />
+      )}
     </div>
   );
 }

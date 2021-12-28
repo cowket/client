@@ -7,6 +7,7 @@ declare global {
     email: string;
     avatar: string;
     nickname?: string;
+    name?: string;
     position?: string;
     contact?: string;
   };
