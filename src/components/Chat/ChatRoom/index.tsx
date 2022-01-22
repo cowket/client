@@ -24,7 +24,7 @@ const ChatRoom = () => {
   const { socket } = useContext(socketContext);
   const [joinedUsers, setJoinedUsers] = useState<ChannelUser[]>([]);
   const channelIdRef = useRef<string>();
-  const topChatInfo = useRef<DetailChat | undefined>();
+  const topChatInfo = useRef<DetailChat>();
   const prevViewportHeight = useRef<number>(0);
 
   const scrollToBottom = () => {
@@ -35,7 +35,7 @@ const ChatRoom = () => {
 
   const onAddPrevMessage = (chat: DetailChat[]) => {
     if (chat.length) {
-      const reversedList = chat.reverse();
+      const reversedList = chat?.reverse();
       setChatList((v) => [...reversedList, ...v]);
       chatBuffer.current = [...reversedList, ...chatBuffer.current];
       scrollToPrevChat();
@@ -171,11 +171,15 @@ const ChatRoom = () => {
   useEffect(() => {
     if (selectedChannel && selectedTeam) {
       channelIdRef.current = selectedChannel.uuid;
-      if ('email' in selectedChannel && userInfo) {
+      if (
+        'channel' in selectedChannel &&
+        selectedChannel.channel === null &&
+        userInfo
+      ) {
         getPrevDMChat(userInfo.uuid, selectedChannel.uuid, selectedTeam.uuid)
           .then((res) => {
             if (res) {
-              const reversed = res.reverse();
+              const reversed = res?.reverse();
               chatBuffer.current = reversed;
               setChatList(reversed);
               topChatInfo.current = res[0];
@@ -188,7 +192,7 @@ const ChatRoom = () => {
         getPrevChannelChat(selectedChannel.uuid)
           .then((res) => {
             console.log(res);
-            const reversed = res.reverse();
+            const reversed = res?.reverse();
             chatBuffer.current = reversed;
 
             topChatInfo.current = res[0];
